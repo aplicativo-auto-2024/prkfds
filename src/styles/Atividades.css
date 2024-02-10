@@ -1,0 +1,35 @@
+#main-container-add-itens {
+    margin-bottom: 350px;
+    text-align: center;
+    font-size: 20px;
+}
+
+#main-container-add-itens div {
+    margin: 40px 0;
+    display: grid;
+    grid-template-columns: 4fr 4fr;
+    margin: 50px auto;
+    justify-content: center;
+    width: 100%;
+}
+
+#main-container-add-itens div a {
+    text-decoration: none;
+    color: black;
+}
+
+
+#main-container-add-itens img {
+    width: 50px;
+}
+
+.container-apresentacao {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    /* padding-top: 150px;
+    margin-bottom: 150px; */
+    width: 100%;
+    font-size: 20px;
+    font-weight: 600;
+}

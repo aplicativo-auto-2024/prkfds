@@ -1,0 +1,10 @@
+#container-apresentacao p {
+    margin: 50px;
+}
+
+#container-apresentacao img {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    margin: auto;
+}

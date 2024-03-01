@@ -27,6 +27,11 @@ function App() {
         };
     }, [running]);
 
+    useEffect(() => {
+        // Inicia o cronômetro automaticamente quando a página carregar
+        setRunning(true);
+    }, []);
+
     const handleStartStop = () => {
         setRunning(!running);
     };

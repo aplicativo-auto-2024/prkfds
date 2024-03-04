@@ -354,6 +354,47 @@ export default function ModeloFinal() {
     }
 
 
+    const generateRandomId = () => {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let randomId = "";
+        for (let i = 0; i < 10; i++) {
+            randomId += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return randomId;
+    };
+
+    const isIdUnique = (newId, items) => {
+        return items.every(item => item.id !== newId);
+    };
+
+    const handleChangeId = async (itemId, newId) => {
+        try {
+            // Verifica se o novo ID é único
+            if (!isIdUnique(newId, items)) {
+                alert("O novo ID não é único. Por favor, tente novamente.");
+                return;
+            }
+
+            // Atualizar o ID no Firestore
+            await db.collection("seuColecao").doc(itemId).update({ id: newId });
+
+            // Atualizar localmente
+            const updatedItems = items.map(item => {
+                if (item.id === itemId) {
+                    return { ...item, id: newId };
+                } else {
+                    return item;
+                }
+            });
+            setItems(updatedItems);
+            alert("ID atualizado com sucesso!");
+        } catch (error) {
+            console.error("Erro ao atualizar ID: ", error);
+            alert(`Ocorreu um erro ao atualizar o ID: ${error.message}`);
+        }
+    };
+
+
 
     return (
         <div className="container">
@@ -469,11 +510,37 @@ export default function ModeloFinal() {
                     {items.map(item => (
                         <li key={item.id}>
                             {item.id}
-                            <button className="btn btn-secondary ms-2" onClick={() => handlePresent(item.id)}>Apresentar</button>
+                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula">Apresentar</a></button>
+                            <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id, generateRandomId())} >Trocar ID</button>
                         </li>
                     ))}
                 </ul>
             </div>
+
+            {/* <div id="aulas-disponiveis">
+                <h2 className="mt-4">Aulas Disponíveis:</h2>
+                <ul>
+                    {items.map(item => (
+                        <li key={item.id}>
+                            {item.id}
+                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula">Apresentar</a></button>
+                            <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id)} >Trocar ID</button>
+                        </li>
+                    ))}
+                </ul>
+            </div> */}
+
+            {/* <div id="aulas-disponiveis">
+                <h2 className="mt-4">Aulas Disponíveis:</h2>
+                <ul>
+                    {items.map(item => (
+                        <li key={item.id}>
+                            {item.id}
+                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula">Apresentar</a></button>
+                        </li>
+                    ))}
+                </ul>
+            </div> */}
 
             <div id="apresentacao-aula"></div>
 

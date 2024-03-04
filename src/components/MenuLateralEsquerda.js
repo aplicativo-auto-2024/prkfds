@@ -129,7 +129,7 @@ export const MenuLateralEsquerdo = () => {
                 Início
               </a>
             </ListGroup.Item>
-            <h3 style={{ marginTop: "20px" }}>Minhas escolas</h3>
+            {/* <h3 style={{ marginTop: "20px" }}>Minhas escolas</h3>
             {turmas.map((turma) => (
               <ListGroup.Item
                 key={turma.id}
@@ -154,7 +154,7 @@ export const MenuLateralEsquerdo = () => {
                   {turma.turma}
                 </a>
               </ListGroup.Item>
-            ))}
+            ))} */}
             <h3 style={{ marginTop: "20px" }}>Funcionalidades</h3>
             <div style={{ display: "flex", alignItems: "center" }}>
               <Stopwatch
@@ -241,6 +241,29 @@ export const MenuLateralEsquerdo = () => {
                 }}
               >
                 Frenquência Cardiaca
+              </a>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Clock
+                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
+              />
+              <a
+                href="/VISU"
+                style={{
+                  marginLeft: "18px",
+                  fontSize: "22px",
+                  listStyle: "none",
+                  textDecoration: "none",
+                  color: 'black'
+                }}
+              >
+                Visualizar Aulas
               </a>
             </div>
           </ListGroup>

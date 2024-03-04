@@ -5,6 +5,9 @@ import "../styles/Home.css";
 import NavigationForClass from "./NavigationForClass";
 import { TfiMenuAlt } from "react-icons/tfi";
 
+import { GrAdd } from "react-icons/gr";
+
+
 export default function Home() {
   const [user, setUser] = useState(null);
   const [containerLogin, setContainerLogin] = useState(true); // Alterado para true
@@ -82,6 +85,8 @@ export default function Home() {
     } catch (error) {
       console.error("Erro ao adicionar turma:", error);
     }
+
+    setCriarTurma('none')
   };
 
   const handleLoginWithEmail = async () => {
@@ -105,8 +110,13 @@ export default function Home() {
     }
   };
 
+  const [criarTurma, setCriarTurma] = useState('none');
+
   return (
     <main>
+      <GrAdd size={32} onClick={() => setCriarTurma('block')} style={{ position: 'absolute', right: '4px', top: '3px' }} />
+
+
       <div id="main-content">
         {user ? (
           <>
@@ -114,7 +124,7 @@ export default function Home() {
               Seja bem-vindo, {user.displayName || "Usuário"}!
             </h3>
             {/* Formulário para criar nova turma */}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} style={{ display: criarTurma }}>
               <div className="mb-3">
                 <input
                   type="text"
@@ -219,6 +229,8 @@ export default function Home() {
           </div>
         )}
 
+
+
         {/* Exibição das turmas existentes */}
         {classes.map((classe) => (
           <div
@@ -246,6 +258,8 @@ export default function Home() {
               </Link>
               <TfiMenuAlt onClick={() => toggleClassExpansion(classe.id)} />
             </div>
+
+
 
             {expandedClass === classe.id && (
               <div>

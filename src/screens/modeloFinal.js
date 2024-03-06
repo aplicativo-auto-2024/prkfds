@@ -6,6 +6,8 @@ import Metronomo from "../funcionalidades/metronomo/metronomo"; // Importe o com
 import FlashCard from "../funcionalidades/flashCard/flashCard"; // Importe o componente FlashCard
 import ReactDOM from "react-dom";
 import "./sa.css"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import IconTexto from "../icons/icon-texto.png";
 import IconImage from "../icons/icon-image.png";
@@ -13,6 +15,7 @@ import IconVideo from "../icons/icon-video.png";
 import IconCronometro from "../icons/icon-cronometro.png";
 import IconMetronomo from "../icons/icon-metronomo.png";
 import IconFlashCard from "../icons/icon-flash-card.png";
+import IconDeitarTela from "../icons/icon-deitar-tela.png";
 
 export default function ModeloFinal() {
     const [imagem1, setImagem1] = useState(null);
@@ -49,6 +52,8 @@ export default function ModeloFinal() {
     const [tempoFlashCard2, setTempoFlashCard2] = useState(0);
     const [tempoFlashCard3, setTempoFlashCard3] = useState(0);
 
+    const [containerNone, setContainerNone] = useState(false);
+
     const [items, setItems] = useState([]);
 
     useEffect(() => {
@@ -68,7 +73,10 @@ export default function ModeloFinal() {
         const item = items.find(item => item.id === itemId);
         if (item) {
             apresentarItem(item);
+            setContainerNone(!containerNone);
+
         }
+
     };
 
     const apresentarItem = async (item) => {
@@ -269,10 +277,10 @@ export default function ModeloFinal() {
             setTempoFlashCard2(0);
             setTempoFlashCard3(0);
 
-            alert("Dados enviados com sucesso!");
+            toast.success("Aula criada com sucesso!");
         } catch (error) {
             console.error("Erro ao enviar para o Firestore: ", error);
-            alert("Ocorreu um erro ao enviar os dados. Por favor, tente novamente mais tarde.");
+            toast.error("Ocorreu um erro ao enviar os dados. Por favor, tente novamente mais tarde.");
         }
     };
 
@@ -387,17 +395,26 @@ export default function ModeloFinal() {
                 }
             });
             setItems(updatedItems);
-            alert("ID atualizado com sucesso!");
+            toast.success("ID atualizado com sucesso!");
         } catch (error) {
             console.error("Erro ao atualizar ID: ", error);
-            alert(`Ocorreu um erro ao atualizar o ID: ${error.message}`);
+            toast.success(`Ocorreu um erro ao atualizar o ID: ${error.message}`);
         }
     };
 
 
+    const [setVirarAula, virarAula] = useState(false)
+
+    const [rotacao, setRotacao] = useState(0); // Estado para controlar a rotação
+
+    const toggleRotacao = () => {
+        setRotacao(rotacao === 0 ? 90 : 0); // Alterna entre 0 e 90 graus
+    };
+
 
     return (
         <div className="container">
+            <ToastContainer />
             <div id="contianer-icons">
                 <a href="#textos" onClick={functionClickText}>
                     <img src={IconTexto} style={{ width: "40px", cursor: 'pointer' }} />
@@ -510,7 +527,7 @@ export default function ModeloFinal() {
                     {items.map(item => (
                         <li key={item.id}>
                             {item.id}
-                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula">Apresentar</a></button>
+                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#subir">Apresentar</a></button>
                             <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id, generateRandomId())} >Trocar ID</button>
                         </li>
                     ))}
@@ -542,33 +559,43 @@ export default function ModeloFinal() {
                 </ul>
             </div> */}
 
-            <div id="apresentacao-aula"></div>
+            {/* <button onClick={() => setVirarAula(!virarAula)}>Virar Aula</button> */}
 
-            {/* Divs para os cronômetros */}
-            <div id="apresentacao-cronometro-1" className="mt-4" style={{ display: "none" }}>
-                <Cronometro />
-            </div>
-            <div id="apresentacao-cronometro-2" style={{ display: "none" }}>
-                <Cronometro />
-            </div>
-            <div id="apresentacao-cronometro-3" style={{ display: "none" }}>
-                <Cronometro />
-            </div>
 
-            {/* Divs para os metrônomos */}
-            <div id="apresentacao-metronomo-1" className="mt-4" style={{ display: "none" }}>
-                <Metronomo />
-            </div>
-            <div id="apresentacao-metronomo-2" style={{ display: "none" }}>
-                <Metronomo />
-            </div>
-            <div id="apresentacao-metronomo-3" style={{ display: "none" }}>
-                <Metronomo />
-            </div>
+            <div id="subir" style={{ marginLeft: '-7px', background: 'white', height: '100%', width: '100%', position: 'absolute', top: '0px', zIndex: '0', display: containerNone ? 'block' : 'none' }}>
+                <div id="apresentacao-aula" style={{ transform: `rotate(${rotacao}deg)`, marginTop: '200px' }} ></div>
 
-            {/* Divs para os FlashCards */}
-            <div id="apresentacao-flashcard-1" style={{ display: "none" }}>
-                <FlashCard />
+                {/* Divs para os cronômetros */}
+                <div id="apresentacao-cronometro-1" className="mt-4" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }} >
+                    <Cronometro />
+                </div>
+                <div id="apresentacao-cronometro-2" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <Cronometro />
+                </div>
+                <div id="apresentacao-cronometro-3" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <Cronometro />
+                </div>
+
+                {/* Divs para os metrônomos */}
+
+                <div id="apresentacao-metronomo-1" className="mt-4" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <Metronomo />
+                </div>
+                <div id="apresentacao-metronomo-2" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <Metronomo />
+                </div>
+                <div id="apresentacao-metronomo-3" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <Metronomo />
+                </div>
+
+                {/* Divs para os FlashCards */}
+                <div id="apresentacao-flashcard-1" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCard />
+                </div>
+
+                <button onClick={toggleRotacao} style={{ bottom: '0px', position: 'absolute' }}>
+                    <img src={IconDeitarTela} />
+                </button> {/* Botão para alternar a rotação */}
             </div>
             {/* Divs para os FlashCards 2 e 3 */}
         </div>

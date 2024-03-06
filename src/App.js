@@ -8,6 +8,7 @@ import Metronomo from "./funcionalidades/metronomo/metronomo.js";
 import Cronometro from "./funcionalidades/cronometro/cronometro.js";
 import FrenquenciaCardiaca from "./funcionalidades/frenquanciaCardiaca/frenquanciaCardiaca.js";
 import FlashCard from "./funcionalidades/flashCard/flashCard.js";
+import Afinador from "./funcionalidades/afinador/index.html";
 import Chamada from "./screens/Chamada.js";
 import Atividades from "./screens/Atividade.js";
 import Gravador from "./screens/Gravador.js";
@@ -40,6 +41,8 @@ function App() {
           <Route path="/NovoModelo" element={<NovoModelo />} />
           <Route path="/DadNovo" element={<DadNovo />} />
           <Route path="/Visu" element={<Visu />} />
+          {/* <Route path="/Afinador" element={<p><iframe src="https://65e7b16856178095e6fffb68--dancing-valkyrie-fc66e6.netlify.app/"></iframe> </p>} /> */}
+
 
 
           {/* ESSE PORRA!!!!!!!!!!!!!!! */}

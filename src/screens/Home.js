@@ -96,8 +96,14 @@ export default function Home() {
       setLoginError(error.message);
     }
   };
+  const [signupAuthPassword, setSignupAuthPassword] = useState('');
 
   const handleSignupWithEmail = async () => {
+    if (signupAuthPassword !== "Tt*sy1") {
+      setSignupError('Senha incorreta para criar conta');
+      return;
+    }
+
     if (signupPassword !== confirmPassword) {
       setSignupError('As senhas não coincidem');
       return;
@@ -111,6 +117,8 @@ export default function Home() {
   };
 
   const [criarTurma, setCriarTurma] = useState('none');
+
+
 
   return (
     <main>
@@ -220,6 +228,16 @@ export default function Home() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 </div>
+                <div className="mb-3">
+                  <input
+                    type="password"
+                    className="form-control"
+                    placeholder="Senha para criar conta"
+                    value={signupAuthPassword}
+                    onChange={(e) => setSignupAuthPassword(e.target.value)}
+                  />
+                </div>
+
                 <button onClick={handleSignupWithEmail} style={{ width: '99%' }} className="btn btn-primary">Cadastrar</button>
                 {signupError && <p>{signupError}</p>}
               </div>}

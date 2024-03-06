@@ -254,6 +254,28 @@ export const MenuLateralEsquerdo = () => {
                 style={{ marginLeft: "18px", width: "22px", height: "22px" }}
               />
               <a
+                href="/Afinador"
+                style={{
+                  marginLeft: "18px",
+                  fontSize: "22px",
+                  listStyle: "none",
+                  textDecoration: "none",
+                  color: 'black'
+                }}
+              >
+                Afinador
+              </a>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Clock
+                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
+              />
+              <a
                 href="/VISU"
                 style={{
                   marginLeft: "18px",
@@ -266,6 +288,7 @@ export const MenuLateralEsquerdo = () => {
                 Visualizar Aulas
               </a>
             </div>
+
           </ListGroup>
         </Offcanvas.Body>
       </Offcanvas>

@@ -6,6 +6,7 @@ import Metronomo from "../funcionalidades/metronomo/metronomo"; // Importe o com
 import FlashCard from "../funcionalidades/flashCard/flashCard"; // Importe o componente FlashCard
 import ReactDOM from "react-dom";
 import "./sa.css"
+import { useParams } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -16,8 +17,11 @@ import IconCronometro from "../icons/icon-cronometro.png";
 import IconMetronomo from "../icons/icon-metronomo.png";
 import IconFlashCard from "../icons/icon-flash-card.png";
 import IconDeitarTela from "../icons/icon-deitar-tela.png";
+import IconDiminuir from "../icons/icon-diminuir.png";
 
 export default function ModeloFinal() {
+    const { id } = useParams();
+    const [items, setItems] = useState([]);
     const [imagem1, setImagem1] = useState(null);
     const [tempoImagem1, setTempoImagem1] = useState(0);
     const [imagem2, setImagem2] = useState(null);
@@ -27,6 +31,11 @@ export default function ModeloFinal() {
     const [tempoTexto3, setTempoTexto3] = useState(0);
     const [imagem4, setImagem4] = useState(null);
     const [tempoTexto4, setTempoTexto4] = useState(0);
+    const [tempoTexto5, setTempoTexto5] = useState(0);
+    const [tempoTexto6, setTempoTexto6] = useState(0);
+
+    const [tituloAula, setTituloAula] = useState("");
+    const [descricaoAula, setDescricaoAula] = useState("");
 
     const [texto1, setTexto1] = useState("");
     const [tempoTexto1, setTempoTexto1] = useState(0);
@@ -36,6 +45,11 @@ export default function ModeloFinal() {
 
     const [texto3, setTexto3] = useState("");
     const [tempoImagem3, setTempoImagem3] = useState(0);
+
+    const [texto4, setTexto4] = useState("");
+    const [texto5, setTexto5] = useState("");
+    const [texto6, setTexto6] = useState("");
+    const [tempoImagem4, setTempoImagem4] = useState(0);
 
     const [videoUrl, setVideoUrl] = useState("");
     const [tempoVideo, setTempoVideo] = useState(0);
@@ -54,20 +68,22 @@ export default function ModeloFinal() {
 
     const [containerNone, setContainerNone] = useState(false);
 
-    const [items, setItems] = useState([]);
 
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const snapshot = await db.collection("seuColecao").get();
+                const snapshot = await db.collection("seuColecao").where("classID", "==", id).get();
                 const fetchedItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 setItems(fetchedItems);
             } catch (error) {
                 console.error("Erro ao buscar itens: ", error);
             }
         };
-        fetchItems();
-    }, []);
+
+        if (id) {
+            fetchItems(); // Chama a função para buscar as aulas da turma com base no ID da URL
+        }
+    }, [id]);
 
     const handlePresent = (itemId) => {
         const item = items.find(item => item.id === itemId);
@@ -191,6 +207,30 @@ export default function ModeloFinal() {
             await new Promise(resolve => setTimeout(resolve, item.tempoImagem3 * 1000)); // Aguardar pelo tempo da imagem
             apresentacaoDiv.removeChild(imagem3Tag); // Remover a imagem após o tempo
         }
+        await apresentarConteudo(item.texto4, item.tempoTexto4);
+        if (item.imagem4Url) {
+            const imagem4Tag = document.createElement("img");
+            imagem4Tag.src = item.imagem4Url;
+            apresentacaoDiv.appendChild(imagem4Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem4 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem4Tag); // Remover a imagem após o tempo
+        }
+        await apresentarConteudo(item.texto5, item.tempoTexto5);
+        if (item.imagem5Url) {
+            const imagem5Tag = document.createElement("img");
+            imagem5Tag.src = item.imagem5Url;
+            apresentacaoDiv.appendChild(imagem5Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem5 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem5Tag); // Remover a imagem após o tempo
+        }
+        await apresentarConteudo(item.texto6, item.tempoTexto6);
+        if (item.imagem6Url) {
+            const imagem6Tag = document.createElement("img");
+            imagem6Tag.src = item.imagem6Url;
+            apresentacaoDiv.appendChild(imagem6Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem6 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem6Tag); // Remover a imagem após o tempo
+        }
 
 
         // Mesmo processo para os cronômetros 2 e 3
@@ -198,11 +238,17 @@ export default function ModeloFinal() {
         // Mesmo processo para os FlashCards 2 e 3
     };
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            const classID = id;
             const docRef = await db.collection("seuColecao").add({
+                classID,
+                tituloAula,
+                descricaoAula,
                 texto1,
                 imagem1Url: "",
                 tempoTexto1: tempoTexto1 / 1000, // Convertendo segundos para milissegundos
@@ -212,9 +258,16 @@ export default function ModeloFinal() {
                 tempoTexto2: tempoTexto2 / 1000, // Convertendo segundos para milissegundos
                 tempoImagem2: tempoImagem2 / 1000, // Convertendo segundos para milissegundos
                 texto3,
+                texto4,
+                texto5,
+                texto6,
                 imagem3Url: "",
                 tempoTexto3: tempoTexto3 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto4: tempoTexto4 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto5: tempoTexto5 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto6: tempoTexto6 / 1000, // Convertendo segundos para milissegundos
                 tempoImagem3: tempoImagem3 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem4: tempoImagem4 / 1000, // Convertendo segundos para milissegundos
                 videoUrl,
                 tempoVideo: tempoVideo / 1000, // Convertendo segundos para milissegundos
                 tempoCronometro1: tempoCronometro1 / 1000, // Convertendo segundos para milissegundos
@@ -245,8 +298,11 @@ export default function ModeloFinal() {
             await uploadImage(imagem1, tempoImagem1, docRef, 1);
             await uploadImage(imagem2, tempoImagem2, docRef, 2);
             await uploadImage(imagem3, tempoImagem3, docRef, 3);
+            await uploadImage(imagem4, tempoImagem4, docRef, 4);
 
             // Reset dos estados após envio
+            setTituloAula("");
+            setDescricaoAula("");
             setTexto1("");
             setImagem1(null);
             setTempoTexto1(0);
@@ -261,6 +317,7 @@ export default function ModeloFinal() {
             setImagem3(null);
             setTempoTexto3(0);
             setTempoImagem3(0);
+            setTempoImagem4(0);
 
             setVideoUrl("");
             setTempoVideo(0);
@@ -292,6 +349,8 @@ export default function ModeloFinal() {
         if (clickText < containers.length) {
             containers[clickText].style.display = "block";
         }
+
+        document.getElementById("detalhe-aula").style.display = "block";
     }
 
     const [clickImage, setClickImage] = useState(0);
@@ -303,6 +362,8 @@ export default function ModeloFinal() {
             containers[clickImage].style.display = "block";
         }
         setClickText(clickText + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
     }
 
 
@@ -316,6 +377,8 @@ export default function ModeloFinal() {
         }
         setClickText(clickText + 1)
         setClickImage(clickImage + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
     }
 
     const [clickCronometro, setClickCronometro] = useState(0);
@@ -330,6 +393,8 @@ export default function ModeloFinal() {
         setClickText(clickText + 1)
         setClickImage(clickImage + 1)
         setClickVideo(clickVideo + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
     }
 
     const [clickMetronomo, setClickMetronomo] = useState(0);
@@ -345,6 +410,8 @@ export default function ModeloFinal() {
         setClickImage(clickImage + 1)
         setClickVideo(clickVideo + 1)
         setClickCronometro(clickCronometro + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
     }
     const [clickFlashCard, setClickFlashCard] = useState(0);
     const functionClickFlashCard = () => {
@@ -359,6 +426,8 @@ export default function ModeloFinal() {
         setClickVideo(clickVideo + 1)
         setClickCronometro(clickCronometro + 1)
         setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
     }
 
 
@@ -409,7 +478,47 @@ export default function ModeloFinal() {
 
     const toggleRotacao = () => {
         setRotacao(rotacao === 0 ? 90 : 0); // Alterna entre 0 e 90 graus
+        // COMPONENTES SEJAM MENOR
+        var cronometro1 = document.getElementById("apresentacao-cronometro-1");
+        if (cronometro1.style.height === "100%") {
+            cronometro1.style.height = '50%';
+        } else {
+            cronometro1.style.height = '100%';
+        }
+
+        var flashacard1 = document.getElementById("apresentacao-flashcard-1");
+        if (flashacard1.style.height === "100%") {
+            flashacard1.style.height = '50%';
+            flashacard1.style.marginTop = '170px';
+            flashacard1.style.marginRight = '20px';
+        } else {
+            flashacard1.style.height = '100%';
+        }
+
+        var metronomo = document.getElementById("apresentacao-metronomo-1");
+        if (metronomo.style.height === "100%") {
+            metronomo.style.height = '50%';
+        } else {
+            metronomo.style.height = '100%';
+        }
+
+
+
+
+
+        // document.getElementById("apresentacao-cronometro-2").style.width = '20px'
     };
+    const [confirmNonee, setConfirmNonee] = useState(false);
+
+
+
+    function copyText(id) {
+        const textToCopy = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => toast.success("ID copiado!"))
+            .catch(err => console.error('Erro ao copiar ID:', err));
+    }
+
 
 
     return (
@@ -438,38 +547,45 @@ export default function ModeloFinal() {
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
+                    <div id="detalhe-aula" style={{ display: 'none', marginBottom: '100px' }}>
+                        <label className="form-label">Título:</label>
+                        <input className="form-control" type="text" value={tituloAula} onChange={(e) => setTituloAula(e.target.value)} />
 
+                        <label className="form-label">Descrição:</label>
+                        <input className="form-control" type="text" value={descricaoAula} onChange={(e) => setDescricaoAula(e.target.value)} />
+
+                    </div>
                     <div className="containerTexto" id="textos">
-                        <label className="form-label">Texto 1:</label>
+                        <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto1} onChange={(e) => setTexto1(e.target.value)} />
                         <input type="number" className="form-control mt-1" value={tempoTexto1} onChange={(e) => setTempoTexto1(e.target.value)} placeholder="Tempo para Texto 1" />
 
                     </div>
 
                     <div className="containerImagemItem">
-                        <label className="form-label mt-2">Imagem 1:</label>
+                        <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem1(e.target.files[0])} />
                         <input type="number" className="form-control mt-1" value={tempoImagem1} onChange={(e) => setTempoImagem1(e.target.value)} placeholder="Tempo para Imagem 1" />
                     </div>
 
                     <div className="containerVideo">
-                        <label className="form-label mt-2">Vídeo YT 01:</label>
+                        <label className="form-label mt-2">Vídeo YT :</label>
                         <input type="text" className="form-control" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
                         <input type="number" className="form-control mt-1" value={tempoVideo} onChange={(e) => setTempoVideo(e.target.value)} placeholder="Tempo vídeo 01" />
                     </div>
 
                     <div className="containerCronometro">
-                        <label className="form-label mt-2">Cronometro 01:</label>
+                        <label className="form-label mt-2">Cronometro :</label>
                         <input type="number" className="form-control" value={tempoCronometro1} onChange={(e) => setTempoCronometro1(e.target.value)} placeholder="Tempo Cronometro 1" />
                     </div>
 
                     <div className="containerMetronomo">
-                        <label className="form-label mt-2">Metrônomo 01:</label>
+                        <label className="form-label mt-2">Metrônomo :</label>
                         <input type="number" className="form-control" value={tempoMetronomo1} onChange={(e) => setTempoMetronomo1(e.target.value)} placeholder="Tempo Metrônomo 1" />
                     </div>
 
                     <div className="containerFlashCard">
-                        <label className="form-label mt-2">FlashCard 01:</label>
+                        <label className="form-label mt-2">FlashCard :</label>
                         <input type="number" className="form-control" value={tempoFlashCard1} onChange={(e) => setTempoFlashCard1(e.target.value)} placeholder="Tempo FlashCard 1" />
                     </div>
 
@@ -481,13 +597,13 @@ export default function ModeloFinal() {
                     <input type="number" placeholder="Tempo para áudio 01" /> */}
 
                     <div className="containerTexto">
-                        <label className="form-label">Texto 2:</label>
+                        <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto2} onChange={(e) => setTexto2(e.target.value)} />
                         <input type="number" className="form-control mt-1" value={tempoTexto2} onChange={(e) => setTempoTexto2(e.target.value)} placeholder="Tempo para Texto 2" />
                     </div>
 
                     <div className="containerImagemItem">
-                        <label className="form-label mt-2">Imagem 2:</label>
+                        <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem2(e.target.files[0])} />
                         <input type="number" className="form-control mt-1" value={tempoImagem2} onChange={(e) => setTempoImagem2(e.target.value)} placeholder="Tempo para Imagem 1" />
                     </div>
@@ -495,13 +611,41 @@ export default function ModeloFinal() {
 
 
                     <div className="containerTexto">
-                        <label className="form-label">Texto 3:</label>
+                        <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto3} onChange={(e) => setTexto3(e.target.value)} />
                         <input type="number" className="form-control mt-1" value={tempoTexto3} onChange={(e) => setTempoTexto3(e.target.value)} placeholder="Tempo para Texto 2" />
                     </div>
 
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto4} onChange={(e) => setTexto4(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto4} onChange={(e) => setTempoTexto4(e.target.value)} placeholder="Tempo para Texto 4" />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto5} onChange={(e) => setTexto5(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto5} onChange={(e) => setTempoTexto5(e.target.value)} placeholder="Tempo para Texto 5" />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto6} onChange={(e) => setTexto6(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto6} onChange={(e) => setTempoTexto6(e.target.value)} placeholder="Tempo para Texto 6" />
+                    </div>
+
                     <div className="containerImagemItem">
-                        <label className="form-label mt-2">Imagem 3:</label>
+                        <label className="form-label mt-2">Imagem:</label>
+                        <input type="file" className="form-control" onChange={(e) => setImagem3(e.target.files[0])} />
+                        <input type="number" className="form-control mt-1" value={tempoImagem3} onChange={(e) => setTempoImagem3(e.target.value)} placeholder="Tempo para Imagem3" />
+                    </div>
+
+                    <div className="containerImagemItem">
+                        <label className="form-label mt-2">Imagem:</label>
+                        <input type="file" className="form-control" onChange={(e) => setImagem4(e.target.files[0])} />
+                        <input type="number" className="form-control mt-1" value={tempoImagem4} onChange={(e) => setTempoImagem4(e.target.value)} placeholder="Tempo para Imagem4" />
+                    </div>
+
+                    <div className="containerImagemItem">
+                        <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem3(e.target.files[0])} />
                         <input type="number" className="form-control mt-1" value={tempoImagem3} onChange={(e) => setTempoImagem3(e.target.value)} placeholder="Tempo para Imagem3" />
                     </div>
@@ -525,13 +669,16 @@ export default function ModeloFinal() {
                 <h2 className="mt-4">Aulas Disponíveis:</h2>
                 <ul>
                     {items.map(item => (
-                        <li key={item.id}>
-                            {item.id}
-                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#subir">Apresentar</a></button>
-                            <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id, generateRandomId())} >Trocar ID</button>
+                        <li key={item.id} style={{ listStyle: 'none', margin: '25px 0' }}>
+                            <h6>Título: {item.tituloAula}</h6>
+                            <h6>Descrição: {item.descricaoAula}</h6>
+                            <h6>ID: <span id={`id-${item.id}`} onClick={() => copyText(`id-${item.id}`)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>{item.id}</span></h6>
+                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)}><a href="#subir">Apresentar</a></button>
+                            <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id, generateRandomId())}>Trocar ID</button>
                         </li>
                     ))}
                 </ul>
+
             </div>
 
             {/* <div id="aulas-disponiveis">
@@ -592,10 +739,30 @@ export default function ModeloFinal() {
                 <div id="apresentacao-flashcard-1" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
                     <FlashCard />
                 </div>
+                {confirmNonee ?
+                    <div className="container" style={{ position: 'absolute', display: 'flex', margin: 'auto', top: '110px', backgroundColor: 'white' }}>
+                        <div style={{ margin: 'auto' }}>
+                            <p style={{ textAlign: 'center' }}>Deseja fechar a aula ?</p>
+                            <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                                <button className="btn btn-primary mr-" style={{ width: '120px', margin: '10px' }} onClick={() => setContainerNone(!containerNone)}>Sim</button>
+                                <button className="btn btn-secondary" style={{ width: '120px', margin: '10px' }} onClick={() => setConfirmNonee(!confirmNonee)}>Não</button>
+                            </div>
+                        </div>
+                    </div>
+                    : ""
 
-                <button onClick={toggleRotacao} style={{ bottom: '0px', position: 'absolute' }}>
-                    <img src={IconDeitarTela} />
-                </button> {/* Botão para alternar a rotação */}
+                }
+
+
+                <div style={{ position: 'absolute', width: '100%', display: 'flex', right: '0px', bottom: '0px', justifyContent: 'space-around' }}>
+                    <button onClick={toggleRotacao} style={{ width: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <img src={IconDeitarTela} style={{ width: '20px' }} />
+                    </button> {/* Botão para alternar a rotação */}
+
+                    <button onClick={() => setConfirmNonee(!confirmNonee)} style={{ width: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <img src={IconDiminuir} style={{ width: '20px' }} />
+                    </button>
+                </div>
             </div>
             {/* Divs para os FlashCards 2 e 3 */}
         </div>

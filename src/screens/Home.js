@@ -136,14 +136,14 @@ export default function Home() {
               <div className="mb-3">
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control" style={{ width: '97%', margin: 'auto' }}
                   placeholder="Nome da Turma"
                   value={turmaNome}
                   onChange={(e) => setTurmaNome(e.target.value)}
                 />
               </div>
               <div className="mb-3">
-                <input
+                <input style={{ width: '97%', margin: 'auto' }}
                   type="text"
                   className="form-control"
                   placeholder="Descrição"
@@ -152,7 +152,7 @@ export default function Home() {
                 />
               </div>
               <div className="mb-3">
-                <input
+                <input style={{ width: '97%', margin: 'auto' }}
                   type="text"
                   className="form-control"
                   placeholder="Matéria"
@@ -161,7 +161,7 @@ export default function Home() {
                 />
               </div>
               <div className="mb-3">
-                <input
+                <input style={{ width: '97%', margin: 'auto' }}
                   type="text"
                   className="form-control"
                   placeholder="Sala"
@@ -169,7 +169,7 @@ export default function Home() {
                   onChange={(e) => setTurmaSala(e.target.value)}
                 />
               </div>
-              <button type="submit" className="btn btn-primary">Criar Turma</button>
+              <button type="submit" className="btn btn-primary" style={{ marginLeft: '10px' }}>Criar Turma</button>
             </form>
           </>
         ) : (

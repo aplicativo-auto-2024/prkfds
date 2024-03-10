@@ -78,55 +78,68 @@ const ChamadaTurma = () => {
     };
 
     const handleGeneratePDF = async () => {
-        const pdf = new jsPDF();
-        pdf.text("Lista de Presença", 20, 10);
-
-        students.forEach((student, index) => {
-            if (student.isPresent) {
-                pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 20, 20 + index * 10);
-            }
-        });
-
-        const timestamp = moment().format("YYYY-MM-DD HH:mm:ss");
-        pdf.text(`Data e Hora: ${timestamp}`, 20, pdf.internal.pageSize.height - 10);
-
-        const pdfBlob = pdf.output("blob");
-
         try {
-            const storageRef = storage.ref();
-            const pdfRef = storageRef.child(`pdfs/${id}/lista_presenca_${timestamp}.pdf`);
-            await pdfRef.put(pdfBlob);
+            // Obter o documento da classe do Firebase
+            const classDoc = await db.collection("classes").doc(id).get();
 
-            const pdfInfo = {
-                timestamp: new Date(),
-                classId: id,
-                pdfUrl: await pdfRef.getDownloadURL(),
-            };
+            // Verificar se o documento existe
+            if (classDoc.exists) {
+                // Obter o nome da escola do campo 'turma' do documento
+                const nomeEscola = classDoc.data().turma;
 
-            await db.collection("pdfs").add(pdfInfo);
+                const pdf = new jsPDF();
+                pdf.text("Lista de Presença", 20, 10);
+                pdf.text(`Escola: ${nomeEscola}`, 20, 20); // Imprime o nome da escola
 
-            setPdfs((prevPdfs) => [
-                ...prevPdfs,
-                pdfInfo,
-            ]);
+                students.forEach((student, index) => {
+                    if (student.isPresent) {
+                        pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 20, 30 + index * 10);
+                    }
+                });
 
-            // Save the updated attendance counts in Firebase
-            await db.collection("classes").doc(id).update({
-                attendanceCounts,
-            });
+                const timestamp = moment().format("YYYY-MM-DD HH:mm:ss");
+                pdf.text(`Data e Hora: ${timestamp}`, 20, pdf.internal.pageSize.height - 10);
 
-            // Increment the call count in Firebase
-            await db.collection("classes").doc(id).update({
-                callCount: firebase.firestore.FieldValue.increment(1),
-            });
+                const pdfBlob = pdf.output("blob");
 
-            toast.success("PDF gerado e informações salvas com sucesso!");
+                const storageRef = storage.ref();
+                const pdfRef = storageRef.child(`pdfs/${id}/lista_presenca_${timestamp}.pdf`);
+                await pdfRef.put(pdfBlob);
 
+                const pdfInfo = {
+                    timestamp: new Date(),
+                    classId: id,
+                    pdfUrl: await pdfRef.getDownloadURL(),
+                };
+
+                await db.collection("pdfs").add(pdfInfo);
+
+                setPdfs((prevPdfs) => [
+                    ...prevPdfs,
+                    pdfInfo,
+                ]);
+
+                // Save the updated attendance counts in Firebase
+                await db.collection("classes").doc(id).update({
+                    attendanceCounts,
+                });
+
+                // Increment the call count in Firebase
+                await db.collection("classes").doc(id).update({
+                    callCount: firebase.firestore.FieldValue.increment(1),
+                });
+
+                toast.success("PDF gerado e informações salvas com sucesso!");
+            } else {
+                console.error("Documento da classe não encontrado");
+                toast.error("Erro ao gerar PDF: Documento da classe não encontrado");
+            }
         } catch (error) {
             console.error("Erro ao gerar PDF e salvar informações: ", error);
             toast.error("Erro ao gerar PDF e salvar informações");
         }
     };
+
 
     const handleAddStudent = async () => {
         if (newStudentName.trim() !== "") {
@@ -249,7 +262,7 @@ const ChamadaTurma = () => {
                     value={newStudentName}
                     onChange={(e) => setNewStudentName(e.target.value)}
                 />
-                <input type="file" accept="image/*" className="form-control input-add-image-aluno" onChange={handlePhotoChange} style={{ height: '40px' }} />
+                <input type="file" accept="image/*" className="form-control input-add-image-aluno" onChange={handlePhotoChange} style={{ height: '40px', marginLeft: '0px' }} />
                 <button onClick={handleAddStudent} className="btn btn-success" style={{ width: '100%', margin: '20px 0' }}>Adicionar Aluno</button>
             </div>
 

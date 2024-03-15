@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { db, storage } from "../../firebase"; // Importe o módulo firestore e storage do seu arquivo firebase.js
+import { db, storage } from "../../firebase";
 
 export default function FlashCard() {
     const [pergunta, setPergunta] = useState("");
     const [resposta, setResposta] = useState("");
-    const [imagemResposta, setImagemResposta] = useState(null); // Alteração para armazenar o arquivo de imagem
+    const [imagemResposta, setImagemResposta] = useState(null);
     const [perguntaAtual, setPerguntaAtual] = useState("");
     const [respostaAtual, setRespostaAtual] = useState("");
+    const [imagemRespostaAtual, setImagemRespostaAtual] = useState("");
     const [mostrarResposta, setMostrarResposta] = useState(false);
     const [mostrarContainerCriarPergunta, setMostrarContainerCriarPergunta] = useState(false);
-    const [tempoParaMostrarResposta, setTempoParaMostrarResposta] = useState(1000); // Tempo padrão de 1 segundo
+    const [tempoParaMostrarResposta, setTempoParaMostrarResposta] = useState(1000);
 
     useEffect(() => {
         obterPerguntaAleatoria();
@@ -23,15 +24,13 @@ export default function FlashCard() {
             const perguntaAleatoria = perguntas[Math.floor(Math.random() * perguntas.length)];
             setPerguntaAtual(perguntaAleatoria.pergunta);
             setRespostaAtual(perguntaAleatoria.resposta);
-            setImagemResposta(perguntaAleatoria.imagemResposta || null);
+            setImagemRespostaAtual(perguntaAleatoria.imagemResposta || null);
 
             const tempo = perguntaAleatoria.tempoParaMostrarResposta || tempoParaMostrarResposta;
 
-            // Definindo mostrarResposta como verdadeiro após o tempo especificado
             setTimeout(() => {
                 setMostrarResposta(true);
 
-                // Ocultando a resposta após o tempo especificado
                 setTimeout(() => {
                     setMostrarResposta(false);
                     obterPerguntaAleatoria();
@@ -59,7 +58,6 @@ export default function FlashCard() {
             let urlImagem = null;
 
             if (imagemResposta) {
-                // Faz o upload da imagem e obtém a URL
                 urlImagem = await uploadImagem(imagemResposta);
             }
 
@@ -67,7 +65,7 @@ export default function FlashCard() {
                 pergunta: pergunta,
                 resposta: resposta,
                 imagemResposta: urlImagem,
-                tempoParaMostrarResposta: tempoParaMostrarResposta, // Salvar o tempo no Firebase
+                tempoParaMostrarResposta: tempoParaMostrarResposta,
             });
 
             setPergunta("");
@@ -95,10 +93,10 @@ export default function FlashCard() {
 
             <div className="card p-4">
                 <h2 className="mb-3">Pergunta: {perguntaAtual}</h2>
+                {imagemRespostaAtual && <img src={imagemRespostaAtual} alt="Imagem Resposta" className="img-fluid mx-auto d-block" style={{ width: "300px" }} />}
                 {mostrarResposta && (
                     <>
-                        <h3 className="mb-3">Resposta: {respostaAtual}</h3>
-                        {imagemResposta && <img src={imagemResposta} alt="Imagem Resposta" className="img-fluid mx-auto d-block" style={{ width: "300px" }} />}
+                        {/* <h3 className="mb-3">Resposta: {respostaAtual}</h3> */}
                     </>
                 )}
             </div>
@@ -113,20 +111,20 @@ export default function FlashCard() {
                         <label htmlFor="pergunta" className="form-label">
                             Pergunta:
                         </label>
-                        <input type="text" id="pergunta" className="form-control" value={pergunta} onChange={(e) => setPergunta(e.target.value)} />
+                        <div className="mb-3">
+                            <label htmlFor="imagemPergunta" className="form-label">
+                                Escolher Imagem da Pergunta:
+                            </label>
+                            <input type="file" id="imagemResposta" className="form-control" accept="image/*" onChange={handleFileChange} />
+                        </div>
+                        {/* <input type="text" id="pergunta" className="form-control" value={pergunta} onChange={(e) => setPergunta(e.target.value)} /> */}
                     </div>
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                         <label htmlFor="resposta" className="form-label">
                             Resposta:
                         </label>
                         <input type="text" id="resposta" className="form-control" value={resposta} onChange={(e) => setResposta(e.target.value)} />
-                    </div>
-                    <div className="mb-3">
-                        <label htmlFor="imagemResposta" className="form-label">
-                            Escolher Imagem da Resposta:
-                        </label>
-                        <input type="file" id="imagemResposta" className="form-control" accept="image/*" onChange={handleFileChange} />
-                    </div>
+                    </div> */}
                     <div className="mb-3">
                         <label htmlFor="tempoParaMostrarResposta" className="form-label">
                             Tempo para mostrar resposta (ms):
@@ -136,7 +134,7 @@ export default function FlashCard() {
                             id="tempoParaMostrarResposta"
                             className="form-control"
                             value={tempoParaMostrarResposta}
-                            onChange={(e) => setTempoParaMostrarResposta(parseInt(e.target.value))} // Convertendo para um número inteiro
+                            onChange={(e) => setTempoParaMostrarResposta(parseInt(e.target.value))}
                         />
                     </div>
 

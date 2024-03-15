@@ -19,6 +19,9 @@ import NovoModelo from "./screens/novoModelo.js";
 import DadNovo from "./screens/dadNovo.js";
 import ModeloFinal from "./screens/modeloFinal.js";
 import Visu from "./screens/Visu.js";
+import ChamaAluno from "./screens/ChamaAluno.js";
+import ModeloFinalLite from "./screens/modeloFinalLite.js";
+import FlashcardNovomodel from "./funcionalidades/flashCard/as.js";
 
 function App() {
   return (
@@ -35,12 +38,15 @@ function App() {
           <Route path="/FrenquenciaCardiaca" element={<FrenquenciaCardiaca />} />
           <Route path="/FlashCard" element={<FlashCard />} />
           <Route path="/Chamada/:id" element={<Chamada />} />
+          <Route path="/ChamaAluno" element={<ChamaAluno />} />
           {/* <Route path="/Atividades/:id" element={<Atividades />} /> */}
           <Route path="/Gravador" element={<Gravador />} />
           <Route path="/ModeloAntigo" element={<ModeloAntigo />} />
           <Route path="/NovoModelo" element={<NovoModelo />} />
           <Route path="/DadNovo" element={<DadNovo />} />
           <Route path="/Visu" element={<Visu />} />
+          <Route path="/ModeloFinalLite/:id" element={<ModeloFinalLite />} />
+          <Route path="/FlashcardNovomodel" element={<FlashcardNovomodel />} />
           {/* <Route path="/Afinador" element={<p><iframe src="https://65e7b16856178095e6fffb68--dancing-valkyrie-fc66e6.netlify.app/"></iframe> </p>} /> */}
 
 

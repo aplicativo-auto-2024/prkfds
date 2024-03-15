@@ -44,14 +44,14 @@
     display: none;
 }
 
-#apresentacao-aula {
-    font-size: 20px;
-    font-weight: 600;
-
-    /* margin-top: 320px; */
-    /* height: 100vh; */
+.containerVideoLocalItem {
+    display: none;
 }
 
+#apresentacao-aula {
+    font-size: 24px;
+    font-weight: 600;
+}
 
 #apresentacao-aula img {
     width: 100%;

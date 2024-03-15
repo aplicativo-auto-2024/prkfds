@@ -12,6 +12,7 @@ import "firebase/firestore";
 
 const ChamadaTurma = () => {
     const { id } = useParams();
+    const [classId, setClassId] = useState("");
     const [students, setStudents] = useState([]);
     const [pdfs, setPdfs] = useState([]);
     const [newStudentName, setNewStudentName] = useState("");
@@ -21,7 +22,7 @@ const ChamadaTurma = () => {
     useEffect(() => {
         const fetchStudents = async () => {
             try {
-                const studentsCollection = await db.collection("students").where("classId", "==", id).get();
+                const studentsCollection = await db.collection("students").where("classId", "==", classId).get();
                 const studentsData = studentsCollection.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
@@ -30,7 +31,7 @@ const ChamadaTurma = () => {
                 setStudents(studentsData);
 
                 // Load attendance counts from Firebase
-                const classDoc = await db.collection("classes").doc(id).get();
+                const classDoc = await db.collection("classes").doc(classId).get();
                 const classData = classDoc.data();
                 if (classData && classData.attendanceCounts) {
                     setAttendanceCounts(classData.attendanceCounts);
@@ -42,7 +43,7 @@ const ChamadaTurma = () => {
 
         const fetchPDFs = async () => {
             try {
-                const pdfsCollection = await db.collection("pdfs").where("classId", "==", id).get();
+                const pdfsCollection = await db.collection("pdfs").where("classId", "==", classId).get();
                 const pdfsData = pdfsCollection.docs.map((doc) => ({
                     id: doc.id,
                     ...doc.data(),
@@ -53,9 +54,11 @@ const ChamadaTurma = () => {
             }
         };
 
-        fetchStudents();
-        fetchPDFs();
-    }, [id]);
+        if (classId) {
+            fetchStudents();
+            fetchPDFs();
+        }
+    }, [classId]);
 
     const handleTogglePresence = async (id) => {
         setStudents((prevStudents) => {
@@ -80,7 +83,7 @@ const ChamadaTurma = () => {
     const handleGeneratePDF = async () => {
         try {
             // Obter o documento da classe do Firebase
-            const classDoc = await db.collection("classes").doc(id).get();
+            const classDoc = await db.collection("classes").doc(classId).get();
 
             // Verificar se o documento existe
             if (classDoc.exists) {
@@ -103,12 +106,12 @@ const ChamadaTurma = () => {
                 const pdfBlob = pdf.output("blob");
 
                 const storageRef = storage.ref();
-                const pdfRef = storageRef.child(`pdfs/${id}/lista_presenca_${timestamp}.pdf`);
+                const pdfRef = storageRef.child(`pdfs/${classId}/lista_presenca_${timestamp}.pdf`);
                 await pdfRef.put(pdfBlob);
 
                 const pdfInfo = {
                     timestamp: new Date(),
-                    classId: id,
+                    classId: classId,
                     pdfUrl: await pdfRef.getDownloadURL(),
                 };
 
@@ -120,12 +123,12 @@ const ChamadaTurma = () => {
                 ]);
 
                 // Save the updated attendance counts in Firebase
-                await db.collection("classes").doc(id).update({
+                await db.collection("classes").doc(classId).update({
                     attendanceCounts,
                 });
 
                 // Increment the call count in Firebase
-                await db.collection("classes").doc(id).update({
+                await db.collection("classes").doc(classId).update({
                     callCount: firebase.firestore.FieldValue.increment(1),
                 });
 
@@ -147,7 +150,7 @@ const ChamadaTurma = () => {
                 const photoUrl = await uploadStudentPhoto();
                 const newStudentRef = await db.collection("students").add({
                     name: newStudentName,
-                    classId: id,
+                    classId: classId,
                     photoUrl: photoUrl,
                 });
                 setStudents((prevStudents) => [
@@ -166,7 +169,7 @@ const ChamadaTurma = () => {
         try {
             if (newStudentPhoto) {
                 const storageRef = storage.ref();
-                const photoRef = storageRef.child(`photos/${id}/${newStudentName}_${moment().format("YYYY-MM-DD_HH:mm:ss")}.jpg`);
+                const photoRef = storageRef.child(`photos/${classId}/${newStudentName}_${moment().format("YYYY-MM-DD_HH:mm:ss")}.jpg`);
                 await photoRef.put(newStudentPhoto);
                 return await photoRef.getDownloadURL();
             }
@@ -199,12 +202,12 @@ const ChamadaTurma = () => {
 
         try {
             const storageRef = storage.ref();
-            const pdfRef = storageRef.child(`pdfs/${id}/lista_consolidada_${timestamp}.pdf`);
+            const pdfRef = storageRef.child(`pdfs/${classId}/lista_consolidada_${timestamp}.pdf`);
             await pdfRef.put(pdfBlob);
 
             const pdfInfo = {
                 timestamp: new Date(),
-                classId: id,
+                classId: classId,
                 pdfUrl: await pdfRef.getDownloadURL(),
             };
 
@@ -223,19 +226,18 @@ const ChamadaTurma = () => {
         }
     };
 
-
-    const handleCopyID = () => {
-        // Copia o ID da turma para a área de transferência
-        navigator.clipboard.writeText(id);
-        toast.info("ID da turma copiado para a área de transferência!");
-    };
-
-
     return (
         <div className="container">
             <ToastContainer />
-            <h2 className="text-center" onClick={handleCopyID} style={{ cursor: 'pointer' }}>ID da turma: {id}</h2> {/* Adicionando evento de clique para copiar o ID */}
-            {/* <h2 className="text-center">ID da turma: {id}</h2> */}
+            <h2 className="text-center">ID da Turma:</h2>
+            <input
+                type="text" className="form-control"
+                value={classId}
+                onChange={(e) => setClassId(e.target.value)}
+                placeholder="Digite o ID da turma"
+            />
+            <button onClick={() => setClassId(classId)} className="btn btn-primary" style={{ marginTop: '10px', width: '100%' }}>Buscar Alunos</button>
+
             <h2 className="text-center">Lista de Chamada</h2>
 
             <table className="table table-bordered main-table-chamada">
@@ -263,7 +265,7 @@ const ChamadaTurma = () => {
             </table>
             <button onClick={handleGeneratePDF} className="btn btn-primary" style={{ width: '100%' }}>Gerar PDF</button>
 
-            <div>
+            {/* <div>
                 <h2 className="text-center">Adicionar Novo Aluno</h2>
                 <input
                     className="form-control input-add-new-aluno"
@@ -274,7 +276,7 @@ const ChamadaTurma = () => {
                 />
                 <input type="file" accept="image/*" className="form-control input-add-image-aluno" onChange={handlePhotoChange} style={{ height: '40px', marginLeft: '0px' }} />
                 <button onClick={handleAddStudent} className="btn btn-success" style={{ width: '100%', margin: '20px 0' }}>Adicionar Aluno</button>
-            </div>
+            </div> */}
 
             <div id="lista-de-PDFS">
                 <h2>Lista de Presenças</h2>

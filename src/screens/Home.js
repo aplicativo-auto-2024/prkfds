@@ -241,7 +241,7 @@ export default function Home() {
                 <button onClick={handleSignupWithEmail} style={{ width: '99%' }} className="btn btn-primary">Cadastrar</button>
                 {signupError && <p>{signupError}</p>}
               </div>}
-            <p style={{ textAlign: 'start', marginTop: '10px', cursor: 'pointer' }} onClick={() => setContainerLogin(!containerLogin)}>Realizar Cadastro</p>
+            <p style={{ textAlign: 'start', marginTop: '10px', cursor: 'pointer' }} onClick={() => setContainerLogin(!containerLogin)}>{containerLogin ? ('Realizar Cadastro') : 'Realizar Login'}  </p>
 
 
           </div>

@@ -221,7 +221,7 @@ export const MenuLateralEsquerdo = () => {
               </a>
             </div>
 
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -242,9 +242,9 @@ export const MenuLateralEsquerdo = () => {
               >
                 Frenquência Cardiaca
               </a>
-            </div>
+            </div> */}
 
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -265,7 +265,7 @@ export const MenuLateralEsquerdo = () => {
               >
                 Afinador
               </a>
-            </div>
+            </div> */}
             <div
               style={{
                 display: "flex",
@@ -286,6 +286,28 @@ export const MenuLateralEsquerdo = () => {
                 }}
               >
                 Visualizar Aulas
+              </a>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Clock
+                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
+              />
+              <a
+                href="/ChamaAluno"
+                style={{
+                  marginLeft: "18px",
+                  fontSize: "22px",
+                  listStyle: "none",
+                  textDecoration: "none",
+                  color: 'black'
+                }}
+              >
+                Chamada
               </a>
             </div>
 

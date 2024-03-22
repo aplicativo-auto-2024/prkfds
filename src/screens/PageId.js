@@ -110,7 +110,7 @@ export default function HelloWorld() {
 
             <div className="mt-3">
                 <div className="d-flex justify-content-between">
-                    <Link to={`/Atividades/${id}`} className="btn btn-primary" style={{ width: "90%", margin: 'auto' }}>Atividade</Link>
+                    <Link to={`/Atividades/${id}`} className="btn btn-primary" style={{ width: "90%", margin: 'auto' }}>Criar Atividade</Link>
                 </div>
                 <div className="d-flex justify-content-between mt-3">
                     <Link to={`/Chamada/${id}`} className="btn btn-primary" style={{ width: "90%", margin: 'auto' }}>Chamada</Link>

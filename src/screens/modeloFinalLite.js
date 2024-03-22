@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db, storage } from "../firebase";
 import Cronometro from "../funcionalidades/cronometro/cronometro"; // Importe o componente Cronometro
 import Metronomo from "../funcionalidades/metronomo/metronomo"; // Importe o componente Metronomo
-import FlashCard from "../funcionalidades/flashCard/flashCard"; // Importe o componente FlashCard
+import FlashCard from "../funcionalidades/flashCard/flashCardImagem"; // Importe o componente FlashCard
 import ReactDOM from "react-dom";
 import "./sa.css"
 import { useParams } from "react-router-dom"

@@ -1,29 +1,26 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Offcanvas, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Offcanvas, ListGroup } from "react-bootstrap";
 import {
   House,
   Clock,
-  PersonCircle,
   Stopwatch,
   List as ListIcon,
 } from "react-bootstrap-icons";
-import { toast } from "react-toastify";
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
-  addDoc,
   onSnapshot,
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDfjQWgESRPJ9-25gui7Xg-Se6ggPSmmrg",
-  authDomain: "prof-bruno.firebaseapp.com",
-  projectId: "prof-bruno",
-  storageBucket: "prof-bruno.appspot.com",
-  messagingSenderId: "668359353020",
-  appId: "1:668359353020:web:ea3b9b16082435074c66b9",
+  apiKey: "AIzaSyBLCKgRLmvT2RkJUjgKOa1GaEkSMBOWaiU",
+  authDomain: "visu-new-7729d.firebaseapp.com",
+  projectId: "visu-new-7729d",
+  storageBucket: "visu-new-7729d.appspot.com",
+  messagingSenderId: "390611655815",
+  appId: "1:390611655815:web:5685885c5fd3e47a46ac22"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -31,7 +28,6 @@ const db = getFirestore(app);
 
 export const MenuLateralEsquerdo = () => {
   const [containerNewClass, setContainerNewClass] = useState(false);
-  const [menu, setMenu] = useState(false);
   const [turmas, setTurmas] = useState([]);
 
   useEffect(() => {
@@ -48,33 +44,6 @@ export const MenuLateralEsquerdo = () => {
 
     return () => unsubscribe();
   }, [db]);
-
-  function createNewClass(e) {
-    e.preventDefault();
-
-    let nomeTurma = document.getElementById("nameClasse").value;
-    let materia = document.getElementById("materia").value;
-    let descricao = document.getElementById("descricao").value;
-    let sala = document.getElementById("sala").value;
-
-    addDoc(collection(db, "classes"), {
-      turma: nomeTurma,
-      materia: materia,
-      descricao: descricao,
-      sala: sala,
-    })
-      .then(() => {
-        // Class added successfully, show toast notification
-        toast.success("Sala criada com sucesso");
-
-        // Close the menu for creating a new class
-        setContainerNewClass(false);
-      })
-      .catch((error) => {
-        // Handle errors if needed
-        console.error("Error creating class:", error);
-      });
-  }
 
   return (
     <div>
@@ -197,6 +166,28 @@ export const MenuLateralEsquerdo = () => {
               </a>
             </div>
 
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Clock
+                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
+              />
+              <a
+                href="/FlashCardTexto"
+                style={{
+                  marginLeft: "18px",
+                  fontSize: "22px",
+                  listStyle: "none",
+                  textDecoration: "none",
+                  color: 'black'
+                }}
+              >
+                Flash Card - Texto
+              </a>
+            </div>
 
             <div
               style={{
@@ -208,7 +199,7 @@ export const MenuLateralEsquerdo = () => {
                 style={{ marginLeft: "18px", width: "22px", height: "22px" }}
               />
               <a
-                href="/FlashCard"
+                href="/FlashCardImagem"
                 style={{
                   marginLeft: "18px",
                   fontSize: "22px",
@@ -217,11 +208,11 @@ export const MenuLateralEsquerdo = () => {
                   color: 'black'
                 }}
               >
-                Flash Card
+                Flash Card - Imagem
               </a>
             </div>
 
-            {/* <div
+            <div
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -231,7 +222,7 @@ export const MenuLateralEsquerdo = () => {
                 style={{ marginLeft: "18px", width: "22px", height: "22px" }}
               />
               <a
-                href="/FrenquenciaCardiaca"
+                href="/FlashCardAudio"
                 style={{
                   marginLeft: "18px",
                   fontSize: "22px",
@@ -240,32 +231,10 @@ export const MenuLateralEsquerdo = () => {
                   color: 'black'
                 }}
               >
-                Frenquência Cardiaca
+                Flash Card - Áudio
               </a>
-            </div> */}
+            </div>
 
-            {/* <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <Clock
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
-              <a
-                href="/Afinador"
-                style={{
-                  marginLeft: "18px",
-                  fontSize: "22px",
-                  listStyle: "none",
-                  textDecoration: "none",
-                  color: 'black'
-                }}
-              >
-                Afinador
-              </a>
-            </div> */}
             <div
               style={{
                 display: "flex",
@@ -310,7 +279,6 @@ export const MenuLateralEsquerdo = () => {
                 Chamada
               </a>
             </div>
-
           </ListGroup>
         </Offcanvas.Body>
       </Offcanvas>

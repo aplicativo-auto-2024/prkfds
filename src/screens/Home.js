@@ -247,9 +247,6 @@ export default function Home() {
           </div>
         )}
 
-
-
-        {/* Exibição das turmas existentes */}
         {classes.map((classe) => (
           <div
             key={classe.id}

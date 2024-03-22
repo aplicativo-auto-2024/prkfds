@@ -7,7 +7,9 @@ import PageId from "./screens/PageId.js";
 import Metronomo from "./funcionalidades/metronomo/metronomo.js";
 import Cronometro from "./funcionalidades/cronometro/cronometro.js";
 import FrenquenciaCardiaca from "./funcionalidades/frenquanciaCardiaca/frenquanciaCardiaca.js";
-import FlashCard from "./funcionalidades/flashCard/flashCard.js";
+import FlashCardImagem from "./funcionalidades/flashCard/flashCardImagem.js";
+import FlashCardTexto from "./funcionalidades/flashCard/flashCardTexto.js";
+import FlashCardAudio from "./funcionalidades/flashCard/FlashCardAudio.js";
 import Afinador from "./funcionalidades/afinador/index.html";
 import Chamada from "./screens/Chamada.js";
 import Atividades from "./screens/Atividade.js";
@@ -26,7 +28,9 @@ import FlashcardNovomodel from "./funcionalidades/flashCard/as.js";
 function App() {
   return (
     <>
-      <MenuLateralEsquerdo />
+      <div style={{ position: 'fixed', top: '0px', background: 'white', width: '100%' }}>
+        <MenuLateralEsquerdo />
+      </div>
       {/* <MenuLateralDireito /> */}
 
       <Router>
@@ -36,7 +40,9 @@ function App() {
           <Route path="/Cronometro" element={<Cronometro />} />
           <Route path="/Metronomo" element={<Metronomo />} />
           <Route path="/FrenquenciaCardiaca" element={<FrenquenciaCardiaca />} />
-          <Route path="/FlashCard" element={<FlashCard />} />
+          <Route path="/FlashCardImagem" element={<FlashCardImagem />} />
+          <Route path="/FlashCardTexto" element={<FlashCardTexto />} />
+          <Route path="/FlashCardAudio" element={<FlashCardAudio />} />
           <Route path="/Chamada/:id" element={<Chamada />} />
           <Route path="/ChamaAluno" element={<ChamaAluno />} />
           {/* <Route path="/Atividades/:id" element={<Atividades />} /> */}

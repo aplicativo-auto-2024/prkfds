@@ -17,6 +17,7 @@ const ChamadaTurma = () => {
     const [newStudentName, setNewStudentName] = useState("");
     const [newStudentPhoto, setNewStudentPhoto] = useState(null);
     const [attendanceCounts, setAttendanceCounts] = useState({});
+    const [contChamada, setContChamada] = useState(0); // Inicialize o estado do contador
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -29,7 +30,6 @@ const ChamadaTurma = () => {
                 }));
                 setStudents(studentsData);
 
-                // Load attendance counts from Firebase
                 const classDoc = await db.collection("classes").doc(id).get();
                 const classData = classDoc.data();
                 if (classData && classData.attendanceCounts) {
@@ -53,8 +53,21 @@ const ChamadaTurma = () => {
             }
         };
 
+        const fetchCallCount = async () => {
+            try {
+                const classDoc = await db.collection("classes").doc(id).get();
+                const classData = classDoc.data();
+                if (classData && classData.callCount) {
+                    setContChamada(classData.callCount);
+                }
+            } catch (error) {
+                console.error("Error fetching call count: ", error);
+            }
+        };
+
         fetchStudents();
         fetchPDFs();
+        fetchCallCount();
     }, [id]);
 
     const handleTogglePresence = async (id) => {
@@ -65,7 +78,6 @@ const ChamadaTurma = () => {
                     newAttendanceCounts[id] = (newAttendanceCounts[id] || 0) + (student.isPresent ? -1 : 1);
                     setAttendanceCounts(newAttendanceCounts);
 
-                    // Save the updated attendance count for this student in Firebase
                     db.collection("students").doc(id).update({
                         attendanceCount: newAttendanceCounts[id] || 0,
                     });
@@ -76,20 +88,16 @@ const ChamadaTurma = () => {
             });
         });
     };
-
     const handleGeneratePDF = async () => {
         try {
-            // Obter o documento da classe do Firebase
             const classDoc = await db.collection("classes").doc(id).get();
 
-            // Verificar se o documento existe
             if (classDoc.exists) {
-                // Obter o nome da escola do campo 'turma' do documento
                 const nomeEscola = classDoc.data().turma;
 
                 const pdf = new jsPDF();
                 pdf.text("Lista de Presença", 20, 10);
-                pdf.text(`Escola: ${nomeEscola}`, 20, 20); // Imprime o nome da escola
+                pdf.text(`Escola: ${nomeEscola}`, 20, 20);
 
                 students.forEach((student, index) => {
                     if (student.isPresent) {
@@ -119,17 +127,19 @@ const ChamadaTurma = () => {
                     pdfInfo,
                 ]);
 
-                // Save the updated attendance counts in Firebase
                 await db.collection("classes").doc(id).update({
                     attendanceCounts,
                 });
 
-                // Increment the call count in Firebase
+                // Incrementa o contador de chamadas em 1
                 await db.collection("classes").doc(id).update({
                     callCount: firebase.firestore.FieldValue.increment(1),
                 });
 
                 toast.success("PDF gerado e informações salvas com sucesso!");
+
+                // Recarrega a página
+                window.location.reload();
             } else {
                 console.error("Documento da classe não encontrado");
                 toast.error("Erro ao gerar PDF: Documento da classe não encontrado");
@@ -139,6 +149,54 @@ const ChamadaTurma = () => {
             toast.error("Erro ao gerar PDF e salvar informações");
         }
     };
+
+
+
+
+    const handleGenerateConsolidatedPDF = async () => {
+        const pdf = new jsPDF();
+        pdf.text("Lista Consolidada de Presenças", 20, 10);
+
+        students.forEach((student, index) => {
+            let porcentagem = 0;
+            if (attendanceCounts[student.id] && contChamada !== 0) {
+                porcentagem = (attendanceCounts[student.id] / contChamada) * 100;
+            }
+            // pdf.text(`${index + 1}. ${student.name} - Total de Presenças: ${attendanceCounts[student.id] || 0} vezes de ${contChamada} (${porcentagem.toFixed(2)}%)`, 20, 20 + index * 10);
+            pdf.text(`Aluno ${student.name} - Total de Presenças:  ${porcentagem.toFixed(2)}%`, 20, 20 + index * 10);
+        });
+
+        const timestamp = moment().format("YYYY-MM-DD HH:mm:ss");
+        pdf.text(`Data e Hora: ${timestamp}`, 20, pdf.internal.pageSize.height - 10);
+
+        const pdfBlob = pdf.output("blob");
+
+        try {
+            const storageRef = storage.ref();
+            const pdfRef = storageRef.child(`pdfs/${id}/lista_consolidada_${timestamp}.pdf`);
+            await pdfRef.put(pdfBlob);
+
+            const pdfInfo = {
+                timestamp: new Date(),
+                classId: id,
+                pdfUrl: await pdfRef.getDownloadURL(),
+            };
+
+            await db.collection("pdfs").add(pdfInfo);
+
+            setPdfs((prevPdfs) => [
+                ...prevPdfs,
+                pdfInfo,
+            ]);
+
+            toast.success("PDF consolidado gerado e informações salvas com sucesso!");
+
+        } catch (error) {
+            console.error("Erro ao gerar PDF consolidado e salvar informações: ", error);
+            toast.error("Erro ao gerar PDF consolidado e salvar informações");
+        }
+    };
+
 
 
     const handleAddStudent = async () => {
@@ -184,48 +242,9 @@ const ChamadaTurma = () => {
         }
     };
 
-    const handleGenerateConsolidatedPDF = async () => {
-        const pdf = new jsPDF();
-        pdf.text("Lista Consolidada de Presenças", 20, 10);
-
-        students.forEach((student, index) => {
-            pdf.text(`${index + 1}. ${student.name} - Total de Presenças: ${attendanceCounts[student.id] || 0} vezes`, 20, 20 + index * 10);
-        });
-
-        const timestamp = moment().format("YYYY-MM-DD HH:mm:ss");
-        pdf.text(`Data e Hora: ${timestamp}`, 20, pdf.internal.pageSize.height - 10);
-
-        const pdfBlob = pdf.output("blob");
-
-        try {
-            const storageRef = storage.ref();
-            const pdfRef = storageRef.child(`pdfs/${id}/lista_consolidada_${timestamp}.pdf`);
-            await pdfRef.put(pdfBlob);
-
-            const pdfInfo = {
-                timestamp: new Date(),
-                classId: id,
-                pdfUrl: await pdfRef.getDownloadURL(),
-            };
-
-            await db.collection("pdfs").add(pdfInfo);
-
-            setPdfs((prevPdfs) => [
-                ...prevPdfs,
-                pdfInfo,
-            ]);
-
-            toast.success("PDF consolidado gerado e informações salvas com sucesso!");
-
-        } catch (error) {
-            console.error("Erro ao gerar PDF consolidado e salvar informações: ", error);
-            toast.error("Erro ao gerar PDF consolidado e salvar informações");
-        }
-    };
 
 
     const handleCopyID = () => {
-        // Copia o ID da turma para a área de transferência
         navigator.clipboard.writeText(id);
         toast.info("ID da turma copiado para a área de transferência!");
     };
@@ -234,8 +253,7 @@ const ChamadaTurma = () => {
     return (
         <div className="container">
             <ToastContainer />
-            <h2 className="text-center" onClick={handleCopyID} style={{ cursor: 'pointer' }}>ID da turma: {id}</h2> {/* Adicionando evento de clique para copiar o ID */}
-            {/* <h2 className="text-center">ID da turma: {id}</h2> */}
+            <h2 className="text-center" onClick={handleCopyID} style={{ cursor: 'pointer' }}>ID da turma: {id}</h2>
             <h2 className="text-center">Lista de Chamada</h2>
 
             <table className="table table-bordered main-table-chamada">
@@ -272,7 +290,7 @@ const ChamadaTurma = () => {
                     value={newStudentName}
                     onChange={(e) => setNewStudentName(e.target.value)}
                 />
-                <input type="file" accept="image/*" className="form-control input-add-image-aluno" onChange={handlePhotoChange} style={{ height: '40px', marginLeft: '0px' }} />
+                <input type="file" className="form-control input-add-image-aluno" onChange={handlePhotoChange} style={{ height: '40px', marginLeft: '0px' }} />
                 <button onClick={handleAddStudent} className="btn btn-success" style={{ width: '100%', margin: '20px 0' }}>Adicionar Aluno</button>
             </div>
 
@@ -296,7 +314,6 @@ const ChamadaTurma = () => {
             </div>
 
             <div className="text-center">
-                {/* <button onClick={handleGeneratePDF} className="btn btn-primary">Gerar PDF</button> */}
                 <button onClick={handleGenerateConsolidatedPDF} style={{ width: '100%' }} className="btn btn-info">Gerar PDF Consolidado</button>
             </div>
         </div>
@@ -304,3 +321,4 @@ const ChamadaTurma = () => {
 };
 
 export default ChamadaTurma;
+

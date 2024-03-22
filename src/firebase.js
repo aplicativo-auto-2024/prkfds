@@ -4,12 +4,12 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDfjQWgESRPJ9-25gui7Xg-Se6ggPSmmrg",
-    authDomain: "prof-bruno.firebaseapp.com",
-    projectId: "prof-bruno",
-    storageBucket: "prof-bruno.appspot.com",
-    messagingSenderId: "668359353020",
-    appId: "1:668359353020:web:ea3b9b16082435074c66b9"
+    apiKey: "AIzaSyBLCKgRLmvT2RkJUjgKOa1GaEkSMBOWaiU",
+    authDomain: "visu-new-7729d.firebaseapp.com",
+    projectId: "visu-new-7729d",
+    storageBucket: "visu-new-7729d.appspot.com",
+    messagingSenderId: "390611655815",
+    appId: "1:390611655815:web:5685885c5fd3e47a46ac22"
 };
 
 const app = firebase.initializeApp(firebaseConfig);
@@ -20,6 +20,6 @@ const auth = app.auth();
 
 const provider = new firebase.auth.GoogleAuthProvider();
 
-export { db, storage, auth, provider, firebase as default };    
+export { db, storage, auth, provider, firebase as default };
 
 

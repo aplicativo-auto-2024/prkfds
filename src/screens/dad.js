@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Cronometro from "../funcionalidades/cronometro/cronometro";
 import Metronomo from "../funcionalidades/metronomo/metronomo";
-import FlashCard from "../funcionalidades/flashCard/flashCard";
+import FlashCard from "../funcionalidades/flashCard/flashCardImagem";
 import "../styles/Atividades.css";
 import iconTexto from "../icons/icon-texto.png";
 import iconImage from "../icons/icon-image.png";
@@ -662,7 +662,7 @@ export default function Atividades() {
                     </div>
                 ) : ''}
 
-          
+
 
             </div>
 

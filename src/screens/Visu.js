@@ -159,6 +159,10 @@ export default function Visu() {
         }
     };
 
+    const [mudarTamanho, setMudarTamanho] = useState(true);
+    const [aparecerContainer, setAparecerContainer] = useState(false);
+
+
     return (
         <div className="container">
             <div style={{ marginTop: '40px' }}>
@@ -174,19 +178,25 @@ export default function Visu() {
                         <li key={item.id} style={{ display: 'none' }} id="aulaa">
                             {item.id}
                             {/* <button className="btn btn-secondary ms-2" onClick={() => handlePresent(item.id)}>Apresentar</button> */}
-                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula">Apresentar</a></button>
+                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula" onClick={() => setAparecerContainer(!aparecerContainer)}>Apresentar</a></button>
 
                         </li>
                     ))}
                 </ul>
             </div>
 
-            <div id="apresentacao-aula"></div>
-
-            {/* Divs para os cronômetros */}
-            <div id="apresentacao-cronometro-1" className="mt-4" style={{ display: "none" }}>
-                <Cronometro />
+            {/* <button onClick={() => setMudarTamanho(!mudarTamanho)} >Virar</button> */}
+            {/* <div id="apresentacao-aula" style={{ marginTop: '100px', rotate: mudarTamanho ? '0deg' : '90deg', width: mudarTamanho ? 'absolute' : 'absolute', width: '100%', left: '0px', top: '0px', paddingTop: '52%', height: mudarTamanho ? '90vh' : '50vh', boxShadow: aparecerContainer ? '5px 5px 10px black' : '' }} >
+            </div> */}
+            <div id="apresentacao-aula" style={{ marginTop: '100px' }}>
             </div>
+
+            {/* <button onClick={() => setMudarTamanho(!mudarTamanho)}> Sair</button> */}
+            {/* Divs para os cronômetros */}
+            < div id="apresentacao-cronometro-1" className="mt-4" style={{ display: "none" }
+            }>
+                <Cronometro />
+            </div >
             <div id="apresentacao-cronometro-2" style={{ display: "none" }}>
                 <Cronometro />
             </div>
@@ -210,6 +220,6 @@ export default function Visu() {
                 <FlashCard />
             </div>
             {/* Divs para os FlashCards 2 e 3 */}
-        </div>
+        </div >
     );
 }

@@ -4,10 +4,14 @@ import Cronometro from "../funcionalidades/cronometro/cronometro"; // Importe o 
 import Metronomo from "../funcionalidades/metronomo/metronomo"; // Importe o componente Metronomo
 import FlashCard from "../funcionalidades/flashCard/flashCardImagem"; // Importe o componente FlashCard
 import ReactDOM from "react-dom";
+import { Modal, Button } from "react-bootstrap";
 import "./sa.css"
 import { useParams } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { FaSpinner } from 'react-icons/fa';
+
 
 import IconTexto from "../icons/icon-texto.png";
 import IconImage from "../icons/icon-image.png";
@@ -30,6 +34,8 @@ export default function ModeloFinalLite() {
 
 
     const [imagem3, setImagem3] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     const [tempoTexto3, setTempoTexto3] = useState(0);
 
     const [tituloAula, setTituloAula] = useState("");
@@ -204,8 +210,10 @@ export default function ModeloFinalLite() {
     const [videoFile, setVideoFile] = useState(null);
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Inicia o carregamento
 
         try {
+
             const classID = id;
             const docRef = await db.collection("seuColecao").add({
                 classID,
@@ -277,9 +285,11 @@ export default function ModeloFinalLite() {
             // Limpar outros estados, se necessário
 
             toast.success("Aula criada com sucesso!");
+            setLoading(false);
         } catch (error) {
             console.error("Erro ao enviar para o Firestore: ", error);
             toast.error("Ocorreu um erro ao enviar os dados. Por favor, tente novamente mais tarde.");
+            setLoading(false);
         }
     };
 
@@ -464,12 +474,36 @@ export default function ModeloFinalLite() {
 
 
 
+
+
     function copyText(id) {
         const textToCopy = document.getElementById(id).innerText;
         navigator.clipboard.writeText(textToCopy)
             .then(() => toast.success("ID copiado!"))
             .catch(err => console.error('Erro ao copiar ID:', err));
     }
+
+
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [itemIdToDelete, setItemIdToDelete] = useState(null);
+
+    const handleDelete = async () => {
+        try {
+            // Exclua o documento do Firestore usando o ID da aula
+            await db.collection("seuColecao").doc(itemIdToDelete).delete();
+
+            // Atualize o estado para refletir a exclusão da aula
+            setItems(prevItems => prevItems.filter(item => item.id !== itemIdToDelete));
+
+            toast.success("Aula excluída com sucesso!");
+        } catch (error) {
+            console.error("Erro ao excluir aula: ", error);
+            toast.error("Ocorreu um erro ao excluir a aula. Por favor, tente novamente mais tarde.");
+        }
+
+        // Fechar o modal de confirmação
+        setShowConfirmation(false);
+    };
 
     const [newStudentVideo, setNewStudentVideo] = useState(null);
     return (
@@ -557,7 +591,20 @@ export default function ModeloFinalLite() {
                         <input type="number" className="form-control" value={tempoFlashCard1} onChange={(e) => setTempoFlashCard1(e.target.value)} placeholder="Tempo FlashCard 1" />
                     </div>
                 </div>
-                <button type="submit" className="btn btn-primary">Salvar</button>
+                {/* <button type="submit" className="btn btn-primary">Salvar</button> */}
+                <button type="submit" className="btn btn-primary" disabled={loading}>
+                    {loading ? (
+
+                        // <img src={require('../images/')} alt="Spinner animado" />
+                        <FaSpinner className="spinner" />
+
+                        // <img src={iconCarregamento} />
+                        // <i className="fa fa-spinner fa-spin"></i> 
+                    ) : (
+                        "Salvar"
+                    )}
+                </button>
+
             </form>
 
             <div id="aulas-disponiveis">
@@ -570,6 +617,25 @@ export default function ModeloFinalLite() {
                             <h6>ID: <span id={`id-${item.id}`} onClick={() => copyText(`id-${item.id}`)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>{item.id}</span></h6>
                             <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)}><a href="#subir">Apresentar</a></button>
                             <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id, generateRandomId())}>Trocar ID</button>
+                            <Button className="btn-danger" onClick={() => { setShowConfirmation(true); setItemIdToDelete(item.id); }}>
+                                Excluir Turma
+                            </Button>
+
+                            <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Confirmação</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>Deseja realmente apagar essa turma? </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
+                                        Cancelar
+                                    </Button>
+                                    <Button variant="primary" onClick={handleDelete}>
+                                        Confirmar
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                            {/* <button className="btn btn-danger ms-2 style-button" onClick={() => handleDelete(item.id)}>Excluirr</button> Botão de Excluir */}
                         </li>
                     ))}
                 </ul>

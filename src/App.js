@@ -53,7 +53,7 @@ function App() {
           <Route path="/Visu" element={<Visu />} />
           <Route path="/ModeloFinalLite/:id" element={<ModeloFinalLite />} />
           <Route path="/FlashcardNovomodel" element={<FlashcardNovomodel />} />
-          {/* <Route path="/Afinador" element={<p><iframe src="https://65e7b16856178095e6fffb68--dancing-valkyrie-fc66e6.netlify.app/"></iframe> </p>} /> */}
+          {/* <Route path="/Afinador" element={<p><iframe src="https://resilient-sawine-66cd63.netlify.app/"></iframe> </p>} /> */}
 
 
 

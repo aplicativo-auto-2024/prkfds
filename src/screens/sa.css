@@ -7,6 +7,20 @@
     font-size: 26px;
 } */
 
+.spinner {
+    animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 
 #contianer-icons {
     display: grid;
@@ -49,7 +63,7 @@
 }
 
 #apresentacao-aula {
-    font-size: 24px;
+    font-size: 78px;
     font-weight: 600;
     text-align: center;
 }

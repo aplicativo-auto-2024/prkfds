@@ -3,14 +3,17 @@ import React, { useState, useEffect } from "react";
 import { db, storage } from "../firebase";
 import Cronometro from "../funcionalidades/cronometro/cronometro"; // Importe o componente Cronometro
 import Metronomo from "../funcionalidades/metronomo/metronomo"; // Importe o componente Metronomo
+import MetronomoDE120 from "../funcionalidades/metronomo/metronomode120"; // Importe o componente Metronomo
 import FlashCardImagem from "../funcionalidades/flashCard/flashCardImagem"; // Importe o componente FlashCard
 import FlashCardTexto from "../funcionalidades/flashCard/flashCardTexto"; // Importe o componente FlashCard
 import FlashCardAudio from "../funcionalidades/flashCard/FlashCardAudio"; // Importe o componente FlashCard
 import ReactDOM from "react-dom";
 import "./sa.css"
+import { Modal, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaSpinner } from 'react-icons/fa';
 
 import IconTexto from "../icons/icon-texto.png";
 import IconImage from "../icons/icon-image.png";
@@ -22,17 +25,19 @@ import IconDeitarTela from "../icons/icon-deitar-tela.png";
 import IconPlay from "../icons/icon-play.png";
 import IconDiminuir from "../icons/icon-diminuir.png";
 import iconVideoDois from "../icons/icon-video.png";
+import iconReload from "../icons/icon-reload.png";
+import Metronomode120 from "../funcionalidades/metronomo/metronomode120";
 
 export default function ModeloFinal() {
     const { id } = useParams();
     const [items, setItems] = useState([]);
     const [imagem1, setImagem1] = useState(null);
-    const [tempoImagem1, setTempoImagem1] = useState(0);
+    const [tempoImagem1, setTempoImagem1] = useState();
     const [imagem2, setImagem2] = useState(null);
-    const [tempoImagem2, setTempoImagem2] = useState(0);
+    const [tempoImagem2, setTempoImagem2] = useState();
 
     const [imagem3, setImagem3] = useState(null);
-    const [tempoTexto3, setTempoTexto3] = useState(0);
+    const [tempoTexto3, setTempoTexto3] = useState();
     const [imagem4, setImagem4] = useState(null);
     const [imagem5, setImagem5] = useState(null);
     const [imagem6, setImagem6] = useState(null);
@@ -40,25 +45,35 @@ export default function ModeloFinal() {
     const [imagem8, setImagem8] = useState(null);
     const [imagem9, setImagem9] = useState(null);
     const [imagem10, setImagem10] = useState(null);
-    const [tempoTexto4, setTempoTexto4] = useState(0);
-    const [tempoTexto5, setTempoTexto5] = useState(0);
-    const [tempoTexto6, setTempoTexto6] = useState(0);
-    const [tempoTexto7, setTempoTexto7] = useState(0);
-    const [tempoTexto8, setTempoTexto8] = useState(0);
-    const [tempoTexto9, setTempoTexto9] = useState(0);
-    const [tempoTexto10, setTempoTexto10] = useState(0);
+    const [tempoTexto4, setTempoTexto4] = useState();
+    const [tempoTexto5, setTempoTexto5] = useState();
+    const [tempoTexto6, setTempoTexto6] = useState();
+    const [tempoTexto7, setTempoTexto7] = useState();
+    const [tempoTexto8, setTempoTexto8] = useState();
+    const [tempoTexto9, setTempoTexto9] = useState();
+    const [tempoTexto10, setTempoTexto10] = useState();
+    const [tempoTexto11, setTempoTexto11] = useState();
+    const [tempoTexto12, setTempoTexto12] = useState();
+    const [tempoTexto13, setTempoTexto13] = useState();
+    const [tempoTexto14, setTempoTexto14] = useState();
+    const [tempoTexto15, setTempoTexto15] = useState();
+    const [tempoTexto16, setTempoTexto16] = useState();
+    const [tempoTexto17, setTempoTexto17] = useState();
+    const [tempoTexto18, setTempoTexto18] = useState();
+    const [tempoTexto19, setTempoTexto19] = useState();
+    const [tempoTexto20, setTempoTexto20] = useState();
 
     const [tituloAula, setTituloAula] = useState("");
     const [descricaoAula, setDescricaoAula] = useState("");
 
     const [texto1, setTexto1] = useState("");
-    const [tempoTexto1, setTempoTexto1] = useState(0);
+    const [tempoTexto1, setTempoTexto1] = useState();
 
     const [texto2, setTexto2] = useState("");
-    const [tempoTexto2, setTempoTexto2] = useState(0);
+    const [tempoTexto2, setTempoTexto2] = useState();
 
     const [texto3, setTexto3] = useState("");
-    const [tempoImagem3, setTempoImagem3] = useState(0);
+    const [tempoImagem3, setTempoImagem3] = useState();
 
     const [texto4, setTexto4] = useState("");
     const [texto5, setTexto5] = useState("");
@@ -67,33 +82,50 @@ export default function ModeloFinal() {
     const [texto8, setTexto8] = useState("");
     const [texto9, setTexto9] = useState("");
     const [texto10, setTexto10] = useState("");
-    const [tempoImagem4, setTempoImagem4] = useState(0);
-    const [tempoImagem5, setTempoImagem5] = useState(0);
-    const [tempoImagem6, setTempoImagem6] = useState(0);
-    const [tempoImagem7, setTempoImagem7] = useState(0);
-    const [tempoImagem8, setTempoImagem8] = useState(0);
-    const [tempoImagem9, setTempoImagem9] = useState(0);
-    const [tempoImagem10, setTempoImagem10] = useState(0);
+    const [texto11, setTexto11] = useState("");
+    const [texto12, setTexto12] = useState("");
+    const [texto13, setTexto13] = useState("");
+    const [texto14, setTexto14] = useState("");
+    const [texto15, setTexto15] = useState("");
+    const [texto16, setTexto16] = useState("");
+    const [texto17, setTexto17] = useState("");
+    const [texto18, setTexto18] = useState("");
+    const [texto19, setTexto19] = useState("");
+    const [texto20, setTexto20] = useState("");
+    const [tempoImagem4, setTempoImagem4] = useState();
+    const [tempoImagem5, setTempoImagem5] = useState();
+    const [tempoImagem6, setTempoImagem6] = useState();
+    const [tempoImagem7, setTempoImagem7] = useState();
+    const [tempoImagem8, setTempoImagem8] = useState();
+    const [tempoImagem9, setTempoImagem9] = useState();
+    const [tempoImagem10, setTempoImagem10] = useState();
 
     const [videoUrl, setVideoUrl] = useState("");
-    const [tempoVideo, setTempoVideo] = useState(0);
+    const [tempoVideo, setTempoVideo] = useState();
     const [videoUrl2, setVideoUrl2] = useState("");
-    const [tempoVideo2, setTempoVideo2] = useState(0);
+    const [tempoVideo2, setTempoVideo2] = useState();
 
-    const [tempoCronometro1, setTempoCronometro1] = useState(0);
-    const [tempoCronometro2, setTempoCronometro2] = useState(0);
-    const [tempoCronometro3, setTempoCronometro3] = useState(0);
-    const [tempoCronometro4, setTempoCronometro4] = useState(0);
+    const [tempoCronometro1, setTempoCronometro1] = useState();
+    const [tempoCronometro2, setTempoCronometro2] = useState();
+    const [tempoCronometro3, setTempoCronometro3] = useState();
+    const [tempoCronometro4, setTempoCronometro4] = useState();
 
-    const [tempoMetronomo1, setTempoMetronomo1] = useState(0);
-    const [tempoMetronomo2, setTempoMetronomo2] = useState(0);
-    const [tempoMetronomo3, setTempoMetronomo3] = useState(0);
-    const [tempoMetronomo4, setTempoMetronomo4] = useState(0);
+    const [tempoMetronomo1, setTempoMetronomo1] = useState();
+    const [tempoMetronomo1DE120, setTempoMetronomo1DE120] = useState();
+    const [tempoMetronomo2, setTempoMetronomo2] = useState();
+    const [tempoMetronomo3, setTempoMetronomo3] = useState();
+    const [tempoMetronomo4, setTempoMetronomo4] = useState();
 
-    const [tempoFlashCard1, setTempoFlashCard1] = useState(0);
-    const [tempoFlashCard2, setTempoFlashCard2] = useState(0);
-    const [tempoFlashCard3, setTempoFlashCard3] = useState(0);
-    const [tempoFlashCard4, setTempoFlashCard4] = useState(0);
+    const [tempoFlashCard1, setTempoFlashCard1] = useState();
+    const [tempoFlashCard2, setTempoFlashCard2] = useState();
+    const [tempoFlashCard3, setTempoFlashCard3] = useState();
+    const [tempoFlashCard4, setTempoFlashCard4] = useState();
+    const [tempoFlashCard5, setTempoFlashCard5] = useState();
+    const [tempoFlashCard6, setTempoFlashCard6] = useState();
+    const [tempoFlashCard7, setTempoFlashCard7] = useState();
+    const [tempoFlashCard8, setTempoFlashCard8] = useState();
+    const [tempoFlashCard9, setTempoFlashCard9] = useState();
+    const [tempoFlashCard10, setTempoFlashCard10] = useState();
 
     const [containerNone, setContainerNone] = useState(false);
 
@@ -196,6 +228,26 @@ export default function ModeloFinal() {
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo1 * 1000));
 
             apresentacaoMetronomo1.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
+        }
+        if (item.tempoMetronomo1DE120) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
+
+            const apresentacaoMetronomo1DE120 = document.getElementById("apresentacao-metronomo-1DE120");
+            apresentacaoMetronomo1DE120.innerHTML = ""; // Remover o componente Metrônomo 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Metrônomo 1 seja desmontado e removido completamente
+
+            const metronomoContainer1DE120 = document.createElement("div"); // Criar um novo elemento para o componente Metrônomo 1
+            apresentacaoMetronomo1DE120.appendChild(metronomoContainer1DE120); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<Metronomode120 />, metronomoContainer1DE120); // Renderizar o componente Metrônomo 1 no novo elemento
+
+            apresentacaoMetronomo1DE120.style.display = "block"; // Exibir o componente Metrônomo 1
+            // apresentacaoMetronomo1.style.marginTop = "-300px"; // Definir marginTop
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo1DE120 * 1000));
+
+            apresentacaoMetronomo1DE120.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
         }
 
         if (item.tempoFlashCard1) {
@@ -322,6 +374,145 @@ export default function ModeloFinal() {
             apresentacaoMetronomo2.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
         }
 
+        if (item.tempoFlashCard4) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo4 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+            const apresentacaoFlashCard4 = document.getElementById("apresentacao-flashcard-4");
+            apresentacaoFlashCard4.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer4 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard4.appendChild(flashCardContainer4); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardTexto />, flashCardContainer4); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard4.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard4 * 1000));
+
+            apresentacaoFlashCard4.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        }
+
+        if (item.tempoFlashCard5) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo5 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+            const apresentacaoFlashCard5 = document.getElementById("apresentacao-flashcard-5");
+            apresentacaoFlashCard5.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer5 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard5.appendChild(flashCardContainer5); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardTexto />, flashCardContainer5); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard5.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard5 * 1000));
+
+            apresentacaoFlashCard5.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        }
+
+        if (item.tempoFlashCard6) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo6 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+            const apresentacaoFlashCard6 = document.getElementById("apresentacao-flashcard-6");
+            apresentacaoFlashCard6.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer6 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard6.appendChild(flashCardContainer6); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardAudio />, flashCardContainer6); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard6.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard6 * 1000));
+
+            apresentacaoFlashCard6.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        }
+
+        if (item.tempoFlashCard7) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo7 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+            const apresentacaoFlashCard7 = document.getElementById("apresentacao-flashcard-7");
+            apresentacaoFlashCard7.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer7 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard7.appendChild(flashCardContainer7); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardImagem />, flashCardContainer7); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard7.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard7 * 1000));
+
+            apresentacaoFlashCard7.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        }
+
+        if (item.tempoFlashCard8) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo8 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+            const apresentacaoFlashCard8 = document.getElementById("apresentacao-flashcard-8");
+            apresentacaoFlashCard8.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer8 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard8.appendChild(flashCardContainer8); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardTexto />, flashCardContainer8); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard8.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard8 * 1000));
+
+            apresentacaoFlashCard8.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        }
+
+        if (item.tempoFlashCard9) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo9 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+            const apresentacaoFlashCard9 = document.getElementById("apresentacao-flashcard-9");
+            apresentacaoFlashCard9.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer9 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard9.appendChild(flashCardContainer9); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardAudio />, flashCardContainer9); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard9.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard9 * 1000));
+
+            apresentacaoFlashCard9.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        }
+
+        if (item.tempoFlashCard10) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo10 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+            const apresentacaoFlashCard10 = document.getElementById("apresentacao-flashcard-10");
+            apresentacaoFlashCard10.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer10 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard10.appendChild(flashCardContainer10); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardImagem />, flashCardContainer10); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard10.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard10 * 1000));
+
+            apresentacaoFlashCard10.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        }
         // MAIS FLASHCARD AQUI???
 
         if (item.tempoMetronomo3) {
@@ -431,6 +622,16 @@ export default function ModeloFinal() {
         await apresentarConteudo(item.texto8, item.tempoTexto8);
         await apresentarConteudo(item.texto9, item.tempoTexto9);
         await apresentarConteudo(item.texto10, item.tempoTexto10);
+        await apresentarConteudo(item.texto11, item.tempoTexto11);
+        await apresentarConteudo(item.texto12, item.tempoTexto12);
+        await apresentarConteudo(item.texto13, item.tempoTexto13);
+        await apresentarConteudo(item.texto14, item.tempoTexto14);
+        await apresentarConteudo(item.texto15, item.tempoTexto15);
+        await apresentarConteudo(item.texto16, item.tempoTexto16);
+        await apresentarConteudo(item.texto17, item.tempoTexto17);
+        await apresentarConteudo(item.texto18, item.tempoTexto18);
+        await apresentarConteudo(item.texto19, item.tempoTexto19);
+        await apresentarConteudo(item.texto20, item.tempoTexto20);
 
 
 
@@ -488,6 +689,14 @@ export default function ModeloFinal() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!tituloAula.trim()) {
+            toast.error("Por favor, preencha o campo Título da Aula.");
+            return;
+        } else {
+
+            setLoading(true);
+        }
+
         try {
             const classID = id;
             const docRef = await db.collection("seuColecao").add({
@@ -510,6 +719,16 @@ export default function ModeloFinal() {
                 texto8,
                 texto9,
                 texto10,
+                texto11,
+                texto12,
+                texto13,
+                texto14,
+                texto15,
+                texto16,
+                texto17,
+                texto18,
+                texto19,
+                texto20,
                 imagem3Url: "",
                 imagem4Url: "",
                 imagem5Url: "",
@@ -526,6 +745,16 @@ export default function ModeloFinal() {
                 tempoTexto8: tempoTexto8 / 1000, // Convertendo segundos para milissegundos
                 tempoTexto9: tempoTexto9 / 1000, // Convertendo segundos para milissegundos
                 tempoTexto10: tempoTexto10 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto11: tempoTexto12 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto12: tempoTexto12 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto13: tempoTexto13 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto14: tempoTexto14 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto15: tempoTexto15 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto16: tempoTexto16 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto17: tempoTexto17 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto18: tempoTexto18 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto19: tempoTexto19 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto20: tempoTexto20 / 1000, // Convertendo segundos para milissegundos
                 tempoImagem3: tempoImagem3 / 1000, // Convertendo segundos para milissegundos
                 tempoImagem4: tempoImagem4 / 1000, // Convertendo segundos para milissegundos
                 tempoImagem5: tempoImagem5 / 1000, // Convertendo segundos para milissegundos
@@ -549,6 +778,12 @@ export default function ModeloFinal() {
                 tempoFlashCard2: tempoFlashCard2 / 1000, // Convertendo segundos para milissegundos
                 tempoFlashCard3: tempoFlashCard3 / 1000,
                 tempoFlashCard4: tempoFlashCard4 / 1000,
+                tempoFlashCard5: tempoFlashCard5 / 1000,
+                tempoFlashCard6: tempoFlashCard6 / 1000,
+                tempoFlashCard7: tempoFlashCard7 / 1000,
+                tempoFlashCard8: tempoFlashCard8 / 1000,
+                tempoFlashCard9: tempoFlashCard9 / 1000,
+                tempoFlashCard10: tempoFlashCard10 / 1000,
             });
 
             const uploadImage = async (image, tempo, docRef, num) => {
@@ -639,13 +874,23 @@ export default function ModeloFinal() {
             setTempoFlashCard2(0);
             setTempoFlashCard3(0);
             setTempoFlashCard4(0);
+            setTempoFlashCard5(0);
+            setTempoFlashCard6(0);
+            setTempoFlashCard7(0);
 
-            toast.success("Aula criada com sucesso!");;
+            toast.success("Aula criada com sucesso!");
+            setLoading(false);
         } catch (error) {
             console.error("Erro ao enviar para o Firestore: ", error);
             toast.error("Ocorreu um erro ao enviar os dados. Por favor, tente novamente mais tarde.");
+            setLoading(false);
         }
     };
+
+    const reloadPage = () => {
+        window.location.reload();
+    };
+
 
     const [clickText, setClickText] = useState(0);
     const functionClickText = () => {
@@ -711,6 +956,24 @@ export default function ModeloFinal() {
     }
 
     const [clickMetronomo, setClickMetronomo] = useState(0);
+    const [clickMetronomoDE120, setClickMetronomoDE120] = useState(0);
+
+    const functionClickMetronomoDE120 = () => {
+        setClickMetronomoDE120(functionClickMetronomoDE120 => functionClickMetronomoDE120 + 1);
+
+        const containers = document.querySelectorAll(".containerMetronomoDE120");
+        if (clickMetronomoDE120 < containers.length) {
+            containers[clickMetronomoDE120].style.display = "block";
+        }
+
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
     const functionClickMetronomo = () => {
         setClickMetronomo(prevClickMetronomo => prevClickMetronomo + 1);
 
@@ -779,6 +1042,7 @@ export default function ModeloFinal() {
     }
 
 
+    const [loading, setLoading] = useState(false);
     const generateRandomId = () => {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let randomId = "";
@@ -881,6 +1145,27 @@ export default function ModeloFinal() {
         setIconsFixed(true);
     };
 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [itemIdToDelete, setItemIdToDelete] = useState(null);
+
+    const handleDelete = async () => {
+        try {
+            // Exclua o documento do Firestore usando o ID da aula
+            await db.collection("seuColecao").doc(itemIdToDelete).delete();
+
+            // Atualize o estado para refletir a exclusão da aula
+            setItems(prevItems => prevItems.filter(item => item.id !== itemIdToDelete));
+
+            toast.success("Aula excluída com sucesso!");
+        } catch (error) {
+            console.error("Erro ao excluir aula: ", error);
+            toast.error("Ocorreu um erro ao excluir a aula. Por favor, tente novamente mais tarde.");
+        }
+
+        // Fechar o modal de confirmação
+        setShowConfirmation(false);
+    };
+
     return (
         <div className="container">
             <ToastContainer />
@@ -899,6 +1184,10 @@ export default function ModeloFinal() {
                 </a>
                 <a href="#" onClick={functionClickMetronomo}>
                     <img src={IconMetronomo} style={{ width: "40px", cursor: 'pointer' }} />
+                </a>
+                <a href="#" onClick={functionClickMetronomoDE120} style={{ textDecoration: 'none', color: 'black' }}>
+                    <img src={IconMetronomo} style={{ width: "40px", cursor: 'pointer' }} />
+                    <p>Metronomo de 120!</p>
                 </a>
                 {/* <a href="#" onClickCapture={functionClickFlashCardTexto}>
                     <p>Texto</p>
@@ -926,14 +1215,14 @@ export default function ModeloFinal() {
                     <div className="containerTexto" id="textos">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto1} onChange={(e) => setTexto1(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto1} onChange={(e) => setTempoTexto1(e.target.value)} placeholder="Tempo para Texto 1" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto1} onChange={(e) => setTempoTexto1(e.target.value)} placeholder=" " />
 
                     </div>
 
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem1(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem1} onChange={(e) => setTempoImagem1(e.target.value)} placeholder="Tempo para Imagem 1" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem1} onChange={(e) => setTempoImagem1(e.target.value)} placeholder="  " />
                     </div>
                     {/* <div className="containerVideoItem">
                         <label className="form-label mt-2">Vídeoo:</label>
@@ -945,38 +1234,66 @@ export default function ModeloFinal() {
                     <div className="containerVideo">
                         <label className="form-label mt-2">Vídeo YT :</label>
                         <input type="text" className="form-control" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
-                        <input type="number" className="form-control mt-1" value={tempoVideo} onChange={(e) => setTempoVideo(e.target.value)} placeholder="Tempo vídeo 01" />
+                        <input type="number" className="form-control mt-1" value={tempoVideo} onChange={(e) => setTempoVideo(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerCronometro">
                         <label className="form-label mt-2">Cronometro :</label>
-                        <input type="number" className="form-control" value={tempoCronometro1} onChange={(e) => setTempoCronometro1(e.target.value)} placeholder="Tempo Cronometro 1" />
+                        <input type="number" className="form-control" value={tempoCronometro1} onChange={(e) => setTempoCronometro1(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo1} onChange={(e) => setTempoMetronomo1(e.target.value)} placeholder="Tempo Metrônomo 1" />
+                        <input type="number" className="form-control" value={tempoMetronomo1} onChange={(e) => setTempoMetronomo1(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerMetronomoDE120">
+                        <label className="form-label mt-2">Metrônomo - bmp120 :</label>
+                        <input type="number" className="form-control" value={tempoMetronomo1DE120} onChange={(e) => setTempoMetronomo1DE120(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard - Imagem:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard1} onChange={(e) => setTempoFlashCard1(e.target.value)} placeholder="Tempo FlashCard 1" />
+                        <input type="number" className="form-control" value={tempoFlashCard1} onChange={(e) => setTempoFlashCard1(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard - Texto:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard2} onChange={(e) => setTempoFlashCard2(e.target.value)} placeholder="Tempo FlashCard 2" />
+                        <input type="number" className="form-control" value={tempoFlashCard2} onChange={(e) => setTempoFlashCard2(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard - Áudio:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard3} onChange={(e) => setTempoFlashCard3(e.target.value)} placeholder="Tempo FlashCard 2" />
+                        <input type="number" className="form-control" value={tempoFlashCard3} onChange={(e) => setTempoFlashCard3(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard - Imagem:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard4} onChange={(e) => setTempoFlashCard4(e.target.value)} placeholder="Tempo FlashCard 2" />
+                        <input type="number" className="form-control" value={tempoFlashCard4} onChange={(e) => setTempoFlashCard4(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerFlashCard">
+                        <label className="form-label mt-2">FlashCard - Texto:</label>
+                        <input type="number" className="form-control" value={tempoFlashCard5} onChange={(e) => setTempoFlashCard5(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerFlashCard">
+                        <label className="form-label mt-2">FlashCard - Áudio:</label>
+                        <input type="number" className="form-control" value={tempoFlashCard6} onChange={(e) => setTempoFlashCard6(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerFlashCard">
+                        <label className="form-label mt-2">FlashCard - Imagem:</label>
+                        <input type="number" className="form-control" value={tempoFlashCard7} onChange={(e) => setTempoFlashCard7(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerFlashCard">
+                        <label className="form-label mt-2">FlashCard - Texto:</label>
+                        <input type="number" className="form-control" value={tempoFlashCard8} onChange={(e) => setTempoFlashCard8(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerFlashCard">
+                        <label className="form-label mt-2">FlashCard - Áudio:</label>
+                        <input type="number" className="form-control" value={tempoFlashCard9} onChange={(e) => setTempoFlashCard9(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerFlashCard">
+                        <label className="form-label mt-2">FlashCard - Imagem:</label>
+                        <input type="number" className="form-control" value={tempoFlashCard10} onChange={(e) => setTempoFlashCard10(e.target.value)} placeholder=" " />
                     </div>
                     {/* <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard2} onChange={(e) => setTempoFlashCard2(e.target.value)} placeholder="Tempo FlashCard 1" />
+                        <input type="number" className="form-control" value={tempoFlashCard2} onChange={(e) => setTempoFlashCard2(e.target.value)} placeholder=" " />
                     </div> */}
 
 
@@ -1013,39 +1330,39 @@ export default function ModeloFinal() {
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto2} onChange={(e) => setTexto2(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto2} onChange={(e) => setTempoTexto2(e.target.value)} placeholder="Tempo para Texto 2" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto2} onChange={(e) => setTempoTexto2(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem2(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem2} onChange={(e) => setTempoImagem2(e.target.value)} placeholder="Tempo para Imagem 1" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem2} onChange={(e) => setTempoImagem2(e.target.value)} placeholder="  " />
                     </div>
 
                     <div className="containerVideo">
                         <label className="form-label mt-2">Vídeo YT :</label>
                         <input type="text" className="form-control" value={videoUrl2} onChange={(e) => setVideoUrl2(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
-                        <input type="number" className="form-control mt-1" value={tempoVideo2} onChange={(e) => setTempoVideo2(e.target.value)} placeholder="Tempo vídeo 02" />
+                        <input type="number" className="form-control mt-1" value={tempoVideo2} onChange={(e) => setTempoVideo2(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerCronometro">
                         <label className="form-label mt-2">Cronometro :</label>
-                        <input type="number" className="form-control" value={tempoCronometro2} onChange={(e) => setTempoCronometro2(e.target.value)} placeholder="Tempo Cronometro 2" />
+                        <input type="number" className="form-control" value={tempoCronometro2} onChange={(e) => setTempoCronometro2(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo2} onChange={(e) => setTempoMetronomo2(e.target.value)} placeholder="Tempo Metrônomo 1" />
+                        <input type="number" className="form-control" value={tempoMetronomo2} onChange={(e) => setTempoMetronomo2(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo3} onChange={(e) => setTempoMetronomo3(e.target.value)} placeholder="Tempo Metrônomo 1" />
+                        <input type="number" className="form-control" value={tempoMetronomo3} onChange={(e) => setTempoMetronomo3(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo4} onChange={(e) => setTempoMetronomo4(e.target.value)} placeholder="Tempo Metrônomo 1" />
+                        <input type="number" className="form-control" value={tempoMetronomo4} onChange={(e) => setTempoMetronomo4(e.target.value)} placeholder=" " />
                     </div>
 
 
@@ -1070,22 +1387,22 @@ export default function ModeloFinal() {
 
                     {/* <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard3} onChange={(e) => setTempoFlashCard3(e.target.value)} placeholder="Tempo FlashCard 1" />
+                        <input type="number" className="form-control" value={tempoFlashCard3} onChange={(e) => setTempoFlashCard3(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard4} onChange={(e) => setTempoFlashCard4(e.target.value)} placeholder="Tempo FlashCard 1" />
+                        <input type="number" className="form-control" value={tempoFlashCard4} onChange={(e) => setTempoFlashCard4(e.target.value)} placeholder=" " />
                     </div> */}
 
 
                     <div className="containerCronometro">
                         <label className="form-label mt-2">Cronometro :</label>
-                        <input type="number" className="form-control" value={tempoCronometro3} onChange={(e) => setTempoCronometro3(e.target.value)} placeholder="Tempo Cronometro 2" />
+                        <input type="number" className="form-control" value={tempoCronometro3} onChange={(e) => setTempoCronometro3(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerCronometro">
                         <label className="form-label mt-2">Cronometro :</label>
-                        <input type="number" className="form-control" value={tempoCronometro4} onChange={(e) => setTempoCronometro4(e.target.value)} placeholder="Tempo Cronometro 2" />
+                        <input type="number" className="form-control" value={tempoCronometro4} onChange={(e) => setTempoCronometro4(e.target.value)} placeholder=" " />
                     </div>
 
 
@@ -1094,96 +1411,152 @@ export default function ModeloFinal() {
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto3} onChange={(e) => setTexto3(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto3} onChange={(e) => setTempoTexto3(e.target.value)} placeholder="Tempo para Texto 2" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto3} onChange={(e) => setTempoTexto3(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto4} onChange={(e) => setTexto4(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto4} onChange={(e) => setTempoTexto4(e.target.value)} placeholder="Tempo para Texto 4" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto4} onChange={(e) => setTempoTexto4(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto5} onChange={(e) => setTexto5(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto5} onChange={(e) => setTempoTexto5(e.target.value)} placeholder="Tempo para Texto 5" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto5} onChange={(e) => setTempoTexto5(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto6} onChange={(e) => setTexto6(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto6} onChange={(e) => setTempoTexto6(e.target.value)} placeholder="Tempo para Texto 6" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto6} onChange={(e) => setTempoTexto6(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto7} onChange={(e) => setTexto7(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto7} onChange={(e) => setTempoTexto7(e.target.value)} placeholder="Tempo para Texto 6" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto7} onChange={(e) => setTempoTexto7(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto8} onChange={(e) => setTexto8(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto8} onChange={(e) => setTempoTexto8(e.target.value)} placeholder="Tempo para Texto 6" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto8} onChange={(e) => setTempoTexto8(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto9} onChange={(e) => setTexto9(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto9} onChange={(e) => setTempoTexto9(e.target.value)} placeholder="Tempo para Texto 6" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto9} onChange={(e) => setTempoTexto9(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto10} onChange={(e) => setTexto10(e.target.value)} />
-                        <input type="number" className="form-control mt-1" value={tempoTexto10} onChange={(e) => setTempoTexto10(e.target.value)} placeholder="Tempo para Texto 6" />
+                        <input type="number" className="form-control mt-1" value={tempoTexto10} onChange={(e) => setTempoTexto10(e.target.value)} placeholder=" " />
                     </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto11} onChange={(e) => setTexto11(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto11} onChange={(e) => setTempoTexto11(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto12} onChange={(e) => setTexto12(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto12} onChange={(e) => setTempoTexto12(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto13} onChange={(e) => setTexto13(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto13} onChange={(e) => setTempoTexto13(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto14} onChange={(e) => setTexto14(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto14} onChange={(e) => setTempoTexto14(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto15} onChange={(e) => setTexto15(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto15} onChange={(e) => setTempoTexto15(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto16} onChange={(e) => setTexto16(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto16} onChange={(e) => setTempoTexto16(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto17} onChange={(e) => setTexto17(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto17} onChange={(e) => setTempoTexto17(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto18} onChange={(e) => setTexto18(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto18} onChange={(e) => setTempoTexto18(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto19} onChange={(e) => setTexto19(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto19} onChange={(e) => setTempoTexto19(e.target.value)} placeholder=" " />
+                    </div>
+                    <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto20} onChange={(e) => setTexto20(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto20} onChange={(e) => setTempoTexto20(e.target.value)} placeholder=" " />
+                    </div>
+
+                    {/* <div className="containerTexto">
+                        <label className="form-label">Texto:</label>
+                        <input type="text" className="form-control" value={texto13} onChange={(e) => setTexto13(e.target.value)} />
+                        <input type="number" className="form-control mt-1" value={tempoTexto13} onChange={(e) => setTempoTexto13(e.target.value)} placeholder=" " />
+                    </div> */}
 
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem3(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem3} onChange={(e) => setTempoImagem3(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem3} onChange={(e) => setTempoImagem3(e.target.value)} placeholder=" " />
                     </div>
 
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem4(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem4} onChange={(e) => setTempoImagem4(e.target.value)} placeholder="Tempo para Imagem4" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem4} onChange={(e) => setTempoImagem4(e.target.value)} placeholder=" " />
                     </div>
 
                     {/* <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem3(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem3} onChange={(e) => setTempoImagem3(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem3} onChange={(e) => setTempoImagem3(e.target.value)} placeholder=" " />
                     </div> */}
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem5(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem5} onChange={(e) => setTempoImagem5(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem5} onChange={(e) => setTempoImagem5(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem6(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem6} onChange={(e) => setTempoImagem6(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem6} onChange={(e) => setTempoImagem6(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem7(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem7} onChange={(e) => setTempoImagem7(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem7} onChange={(e) => setTempoImagem7(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem8(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem8} onChange={(e) => setTempoImagem8(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem8} onChange={(e) => setTempoImagem8(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem9(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem9} onChange={(e) => setTempoImagem9(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem9} onChange={(e) => setTempoImagem9(e.target.value)} placeholder=" " />
                     </div>
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem10(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem10} onChange={(e) => setTempoImagem10(e.target.value)} placeholder="Tempo para Imagem3" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem10} onChange={(e) => setTempoImagem10(e.target.value)} placeholder=" " />
                     </div>
                     {/* <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem 4:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem4(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoImagem4} onChange={(e) => setTempoImagem4(e.target.value)} placeholder="Tempo para Imagem 1" />
+                        <input type="number" className="form-control mt-1" value={tempoImagem4} onChange={(e) => setTempoImagem4(e.target.value)} placeholder="  " />
                     </div> */}
                 </div>
 
@@ -1193,7 +1566,20 @@ export default function ModeloFinal() {
                 {/* Campos para Texto 3, Imagem 3, Vídeo YT 03, e Cronometro 03 */}
                 {/* Campos para FlashCard 2 e 3 */}
 
-                <button type="submit" className="btn btn-primary" >Salvar</button>
+                {/* <button type="submit" className="btn btn-primary" >Salvar</button> */}
+                <button type="submit" className="btn btn-primary" disabled={loading}>
+                    {loading ? (
+
+                        // <img src={require('../images/')} alt="Spinner animado" />
+                        <FaSpinner className="spinner" />
+
+                        // <img src={iconCarregamento} />
+                        // <i className="fa fa-spinner fa-spin"></i> 
+                    ) : (
+                        "Salvar"
+                    )}
+                </button>
+                <img src={iconReload} onClick={() => reloadPage()} />
             </form>
 
             <div id="aulas-disponiveis">
@@ -1208,6 +1594,24 @@ export default function ModeloFinal() {
                                 <img src={IconPlay} style={{ width: '37px', marginLeft: '-10px' }} />
                             </a></button>
                             <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id, generateRandomId())}>Trocar ID</button>
+                            <Button className="btn-danger" onClick={() => { setShowConfirmation(true); setItemIdToDelete(item.id); }}>
+                                Excluir Turma
+                            </Button>
+
+                            <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Confirmação</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>Deseja realmente apagar essa turma? </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
+                                        Cancelar
+                                    </Button>
+                                    <Button variant="primary" onClick={handleDelete}>
+                                        Confirmar
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
                             <hr />
                         </li>
 
@@ -1263,6 +1667,9 @@ export default function ModeloFinal() {
                 <div id="apresentacao-metronomo-1" className="mt-4" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-400px', width: '100%', height: '100%' }}>
                     <Metronomo />
                 </div>
+                <div id="apresentacao-metronomo-1DE120" className="mt-4" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-400px', width: '100%', height: '100%' }}>
+                    <MetronomoDE120 />
+                </div>
                 <div id="apresentacao-metronomo-2" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
                     <Metronomo />
                 </div>
@@ -1279,6 +1686,27 @@ export default function ModeloFinal() {
                 </div>
                 <div id="apresentacao-flashcard-3" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
                     <FlashCardAudio />
+                </div>
+                <div id="apresentacao-flashcard-4" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCardImagem />
+                </div>
+                <div id="apresentacao-flashcard-5" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCardTexto />
+                </div>
+                <div id="apresentacao-flashcard-6" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCardAudio />
+                </div>
+                <div id="apresentacao-flashcard-7" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCardImagem />
+                </div>
+                <div id="apresentacao-flashcard-8" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCardTexto />
+                </div>
+                <div id="apresentacao-flashcard-9" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCardAudio />
+                </div>
+                <div id="apresentacao-flashcard-10" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
+                    <FlashCardImagem />
                 </div>
                 {confirmNonee ?
                     <div className="container" style={{ position: 'absolute', display: 'flex', margin: 'auto', top: '110px', backgroundColor: 'white' }}>
@@ -1310,6 +1738,6 @@ export default function ModeloFinal() {
                 </div>
             </div>
             {/* Divs para os FlashCards 2 e 3 */}
-        </div>
+        </div >
     );
 }

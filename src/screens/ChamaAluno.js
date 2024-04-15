@@ -18,6 +18,8 @@ const ChamadaTurma = () => {
     const [newStudentName, setNewStudentName] = useState("");
     const [newStudentPhoto, setNewStudentPhoto] = useState(null);
     const [attendanceCounts, setAttendanceCounts] = useState({});
+    const [aulaId, setAulaId] = useState("");
+    const [descricaoAula, setDescricaoAula] = useState("");
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -93,10 +95,12 @@ const ChamadaTurma = () => {
                 const pdf = new jsPDF();
                 pdf.text("Lista de Presença", 20, 10);
                 pdf.text(`Escola: ${nomeEscola}`, 20, 20); // Imprime o nome da escola
+                pdf.text(`ID da Aula: ${aulaId}`, 20, 30);
+                pdf.text(`Descrição da Aula: ${descricaoAula}`, 20, 40);
 
                 students.forEach((student, index) => {
                     if (student.isPresent) {
-                        pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 20, 30 + index * 10);
+                        pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 20, 50 + index * 10);
                     }
                 });
 
@@ -263,20 +267,23 @@ const ChamadaTurma = () => {
                     ))}
                 </tbody>
             </table>
+            <label>ID da Aula:</label>
+            <input
+                type="text" className="form-control"
+                placeholder="id da aula para puxar conteúdo"
+                value={aulaId}
+                onChange={(e) => setAulaId(e.target.value)}
+            />
+            <br />
+            <label>Descrição da Aula:</label>
+            <input className="form-control"
+                type="text"
+                placeholder="Descrição da aula"
+                value={descricaoAula}
+                onChange={(e) => setDescricaoAula(e.target.value)}
+            />
+            <br />
             <button onClick={handleGeneratePDF} className="btn btn-primary" style={{ width: '100%' }}>Gerar PDF</button>
-
-            {/* <div>
-                <h2 className="text-center">Adicionar Novo Aluno</h2>
-                <input
-                    className="form-control input-add-new-aluno"
-                    type="text"
-                    placeholder="Nome do novo aluno"
-                    value={newStudentName}
-                    onChange={(e) => setNewStudentName(e.target.value)}
-                />
-                <input type="file" accept="image/*" className="form-control input-add-image-aluno" onChange={handlePhotoChange} style={{ height: '40px', marginLeft: '0px' }} />
-                <button onClick={handleAddStudent} className="btn btn-success" style={{ width: '100%', margin: '20px 0' }}>Adicionar Aluno</button>
-            </div> */}
 
             <div id="lista-de-PDFS">
                 <h2>Lista de Presenças</h2>
@@ -298,7 +305,6 @@ const ChamadaTurma = () => {
             </div>
 
             <div className="text-center">
-                {/* <button onClick={handleGeneratePDF} className="btn btn-primary">Gerar PDF</button> */}
                 <button onClick={handleGenerateConsolidatedPDF} style={{ width: '100%' }} className="btn btn-info">Gerar PDF Consolidado</button>
             </div>
         </div>

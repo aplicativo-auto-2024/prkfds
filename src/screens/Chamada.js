@@ -17,7 +17,9 @@ const ChamadaTurma = () => {
     const [newStudentName, setNewStudentName] = useState("");
     const [newStudentPhoto, setNewStudentPhoto] = useState(null);
     const [attendanceCounts, setAttendanceCounts] = useState({});
-    const [contChamada, setContChamada] = useState(0); // Inicialize o estado do contador
+    const [contChamada, setContChamada] = useState(0);
+    const [aulaId, setAulaId] = useState("");
+    const [descricaoAula, setDescricaoAula] = useState("");
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -88,6 +90,7 @@ const ChamadaTurma = () => {
             });
         });
     };
+
     const handleGeneratePDF = async () => {
         try {
             const classDoc = await db.collection("classes").doc(id).get();
@@ -98,10 +101,12 @@ const ChamadaTurma = () => {
                 const pdf = new jsPDF();
                 pdf.text("Lista de Presença", 20, 10);
                 pdf.text(`Escola: ${nomeEscola}`, 20, 20);
+                pdf.text(`ID da Aula: ${aulaId}`, 20, 30);
+                pdf.text(`Descrição da Aula: ${descricaoAula}`, 20, 40);
 
                 students.forEach((student, index) => {
                     if (student.isPresent) {
-                        pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 20, 30 + index * 10);
+                        pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 20, 50 + index * 10);
                     }
                 });
 
@@ -131,14 +136,12 @@ const ChamadaTurma = () => {
                     attendanceCounts,
                 });
 
-                // Incrementa o contador de chamadas em 1
                 await db.collection("classes").doc(id).update({
                     callCount: firebase.firestore.FieldValue.increment(1),
                 });
 
                 toast.success("PDF gerado e informações salvas com sucesso!");
 
-                // Recarrega a página
                 window.location.reload();
             } else {
                 console.error("Documento da classe não encontrado");
@@ -149,9 +152,6 @@ const ChamadaTurma = () => {
             toast.error("Erro ao gerar PDF e salvar informações");
         }
     };
-
-
-
 
     const handleGenerateConsolidatedPDF = async () => {
         const pdf = new jsPDF();
@@ -197,6 +197,12 @@ const ChamadaTurma = () => {
         }
     };
 
+    const handlePhotoChange = (e) => {
+        if (e.target.files.length > 0) {
+            const photo = e.target.files[0];
+            setNewStudentPhoto(photo);
+        }
+    };
 
 
     const handleAddStudent = async () => {
@@ -219,7 +225,6 @@ const ChamadaTurma = () => {
             }
         }
     };
-
     const uploadStudentPhoto = async () => {
         try {
             if (newStudentPhoto) {
@@ -234,26 +239,18 @@ const ChamadaTurma = () => {
             return null;
         }
     };
-
-    const handlePhotoChange = (e) => {
-        if (e.target.files.length > 0) {
-            const photo = e.target.files[0];
-            setNewStudentPhoto(photo);
-        }
-    };
-
-
-
     const handleCopyID = () => {
         navigator.clipboard.writeText(id);
         toast.info("ID da turma copiado para a área de transferência!");
     };
 
-
     return (
         <div className="container">
             <ToastContainer />
+            <br />
+            <br />
             <h2 className="text-center" onClick={handleCopyID} style={{ cursor: 'pointer' }}>ID da turma: {id}</h2>
+            <br />
             <h2 className="text-center">Lista de Chamada</h2>
 
             <table className="table table-bordered main-table-chamada">
@@ -279,6 +276,20 @@ const ChamadaTurma = () => {
                     ))}
                 </tbody>
             </table>
+            <label>ID da Aula:</label>
+            <input
+                type="text"
+                placeholder="id da aula para puxar conteúdo"
+                value={aulaId}
+                onChange={(e) => setAulaId(e.target.value)}
+            />
+            <label>Descrição da Aula:</label>
+            <input
+                type="text"
+                placeholder="Descrição da aula"
+                value={descricaoAula}
+                onChange={(e) => setDescricaoAula(e.target.value)}
+            />
             <button onClick={handleGeneratePDF} className="btn btn-primary" style={{ width: '100%' }}>Gerar PDF</button>
 
             <div>
@@ -321,4 +332,3 @@ const ChamadaTurma = () => {
 };
 
 export default ChamadaTurma;
-

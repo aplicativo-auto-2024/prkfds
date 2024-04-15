@@ -14,6 +14,12 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
+import iconCronometro from "../icons/icon-cronometro.png";
+import iconMetronomo from "../icons/icon-metronomo.png";
+import iconFlashCard from "../icons/icon-flash-card.png";
+import iconChamada from "../icons/icon-chamada.png";
+import iconAssistirAula from "../icons/icon-assistir-aula.png";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBLCKgRLmvT2RkJUjgKOa1GaEkSMBOWaiU",
   authDomain: "visu-new-7729d.firebaseapp.com",
@@ -126,13 +132,11 @@ export const MenuLateralEsquerdo = () => {
             ))} */}
             <h3 style={{ marginTop: "20px" }}>Funcionalidades</h3>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <Stopwatch
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
+              <img src={iconCronometro} style={{ width: '30px' }} />
               <a
                 href="/Cronometro"
                 style={{
-                  marginLeft: "18px",
+                  margin: '10px -10px',
                   fontSize: "22px",
                   listStyle: "none",
                   textDecoration: "none",
@@ -149,13 +153,11 @@ export const MenuLateralEsquerdo = () => {
                 alignItems: "center",
               }}
             >
-              <Clock
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
+              <img src={iconMetronomo} style={{ width: '30px' }} />
               <a
                 href="/Metronomo"
                 style={{
-                  marginLeft: "18px",
+                  margin: '10px -10px',
                   fontSize: "22px",
                   listStyle: "none",
                   textDecoration: "none",
@@ -172,13 +174,11 @@ export const MenuLateralEsquerdo = () => {
                 alignItems: "center",
               }}
             >
-              <Clock
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
+              <img src={iconFlashCard} style={{ width: '30px' }} />
               <a
                 href="/FlashCardTexto"
                 style={{
-                  marginLeft: "18px",
+                  margin: '10px -10px',
                   fontSize: "22px",
                   listStyle: "none",
                   textDecoration: "none",
@@ -195,13 +195,11 @@ export const MenuLateralEsquerdo = () => {
                 alignItems: "center",
               }}
             >
-              <Clock
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
+              <img src={iconFlashCard} style={{ width: '30px' }} />
               <a
                 href="/FlashCardImagem"
                 style={{
-                  marginLeft: "18px",
+                  margin: '10px -10px',
                   fontSize: "22px",
                   listStyle: "none",
                   textDecoration: "none",
@@ -218,13 +216,11 @@ export const MenuLateralEsquerdo = () => {
                 alignItems: "center",
               }}
             >
-              <Clock
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
+              <img src={iconFlashCard} style={{ width: '30px' }} />
               <a
                 href="/FlashCardAudio"
                 style={{
-                  marginLeft: "18px",
+                  margin: '10px -10px',
                   fontSize: "22px",
                   listStyle: "none",
                   textDecoration: "none",
@@ -241,13 +237,11 @@ export const MenuLateralEsquerdo = () => {
                 alignItems: "center",
               }}
             >
-              <Clock
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
+              <img src={iconAssistirAula} style={{ width: '30px' }} />
               <a
                 href="/VISU"
                 style={{
-                  marginLeft: "18px",
+                  margin: '10px -10px',
                   fontSize: "22px",
                   listStyle: "none",
                   textDecoration: "none",
@@ -263,13 +257,11 @@ export const MenuLateralEsquerdo = () => {
                 alignItems: "center",
               }}
             >
-              <Clock
-                style={{ marginLeft: "18px", width: "22px", height: "22px" }}
-              />
+              <img src={iconChamada} style={{ width: '30px' }} />
               <a
                 href="/ChamaAluno"
                 style={{
-                  marginLeft: "18px",
+                  margin: '10px -10px',
                   fontSize: "22px",
                   listStyle: "none",
                   textDecoration: "none",

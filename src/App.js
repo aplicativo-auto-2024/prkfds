@@ -10,7 +10,7 @@ import FrenquenciaCardiaca from "./funcionalidades/frenquanciaCardiaca/frenquanc
 import FlashCardImagem from "./funcionalidades/flashCard/flashCardImagem.js";
 import FlashCardTexto from "./funcionalidades/flashCard/flashCardTexto.js";
 import FlashCardAudio from "./funcionalidades/flashCard/FlashCardAudio.js";
-import Afinador from "./funcionalidades/afinador/index.html";
+// import Afinador from "./funcionalidades/afinador/index.html";
 import Chamada from "./screens/Chamada.js";
 import Atividades from "./screens/Atividade.js";
 import Gravador from "./screens/Gravador.js";
@@ -24,6 +24,7 @@ import Visu from "./screens/Visu.js";
 import ChamaAluno from "./screens/ChamaAluno.js";
 import ModeloFinalLite from "./screens/modeloFinalLite.js";
 import FlashcardNovomodel from "./funcionalidades/flashCard/as.js";
+import Afinador from "./Afinador.js";
 
 function App() {
   return (
@@ -53,7 +54,10 @@ function App() {
           <Route path="/Visu" element={<Visu />} />
           <Route path="/ModeloFinalLite/:id" element={<ModeloFinalLite />} />
           <Route path="/FlashcardNovomodel" element={<FlashcardNovomodel />} />
-          {/* <Route path="/Afinador" element={<p><iframe src="https://resilient-sawine-66cd63.netlify.app/"></iframe> </p>} /> */}
+          {/* <Route path="/Afinado" element={<p>oLÁ </p>} */}
+
+
+          {/* <Route path="/Afinador" element={<Afinador/>} /> */}
 
 
 

@@ -9,7 +9,7 @@ import FlashCardTexto from "../funcionalidades/flashCard/flashCardTexto"; // Imp
 import FlashCardAudio from "../funcionalidades/flashCard/FlashCardAudio"; // Importe o componente FlashCard
 import ReactDOM from "react-dom";
 import "./sa.css"
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -115,6 +115,7 @@ export default function ModeloFinal() {
     const [tempoMetronomo2, setTempoMetronomo2] = useState();
     const [tempoMetronomo3, setTempoMetronomo3] = useState();
     const [tempoMetronomo4, setTempoMetronomo4] = useState();
+    const [tempoAudio1, setTempoAudio1] = useState();
 
     const [tempoFlashCard1, setTempoFlashCard1] = useState();
     const [tempoFlashCard2, setTempoFlashCard2] = useState();
@@ -149,14 +150,606 @@ export default function ModeloFinal() {
     const handlePresent = (itemId) => {
         const item = items.find(item => item.id === itemId);
         if (item) {
-            apresentarItem(item);
+            apresentarItem(item, item.audioURL); // Passando audioURL
             setContainerNone(!containerNone);
-
         }
-
     };
 
-    const apresentarItem = async (item) => {
+
+
+    // Function to extract the YouTube video ID from a URL
+
+    const [videoFile, setVideoFile] = useState(null);
+
+    const handleSubmitDois = async () => {
+        if (
+
+            audioAula
+        ) {
+            try {
+                const storageRef = storage.ref();
+
+
+                const audioFileRef = storageRef.child(`audios/${audioAula.name}`);
+                await audioFileRef.put(audioAula);
+
+                const audioUrl = await audioFileRef.getDownloadURL();
+
+                await db.collection('aulas').add({
+
+                    audioURL: audioUrl,
+                    // tempoCronometro: parseInt(tempoCronometro)  // Adicione este campo
+                });
+
+
+            } catch (error) {
+                console.error('Erro ao salvar aula no Firebase:', error);
+            }
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!tituloAula.trim()) {
+            toast.error("Por favor, preencha o campo Título da Aula.");
+            return;
+        } else {
+
+            setLoading(true);
+        }
+
+        try {
+            const classID = id;
+            const storageRef = storage.ref();
+
+
+            const audioFileRef = storageRef.child(`audios/${audioAula.name}`);
+            await audioFileRef.put(audioAula);
+
+            const audioUrl = await audioFileRef.getDownloadURL();
+
+            const docRef = await db.collection("seuColecao").add({
+                classID,
+                tituloAula,
+                descricaoAula,
+                texto1,
+                audioURL: audioUrl,
+
+                imagem1Url: "",
+                tempoTexto1: tempoTexto1 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem1: tempoImagem1 / 1000, // Convertendo segundos para milissegundos
+                texto2,
+                imagem2Url: "",
+                tempoTexto2: tempoTexto2 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem2: tempoImagem2 / 1000, // Convertendo segundos para milissegundos
+                texto3,
+                texto4,
+                texto5,
+                texto6,
+                texto7,
+                texto8,
+                texto9,
+                texto10,
+                texto11,
+                texto12,
+                texto13,
+                texto14,
+                texto15,
+                texto16,
+                texto17,
+                texto18,
+                texto19,
+                texto20,
+                imagem3Url: "",
+                imagem4Url: "",
+                imagem5Url: "",
+                imagem6Url: "",
+                imagem7Url: "",
+                imagem8Url: "",
+                imagem9Url: "",
+                imagem10Url: "",
+                tempoTexto3: tempoTexto3 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto4: tempoTexto4 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto5: tempoTexto5 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto6: tempoTexto6 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto7: tempoTexto7 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto8: tempoTexto8 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto9: tempoTexto9 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto10: tempoTexto10 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto11: tempoTexto12 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto12: tempoTexto12 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto13: tempoTexto13 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto14: tempoTexto14 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto15: tempoTexto15 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto16: tempoTexto16 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto17: tempoTexto17 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto18: tempoTexto18 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto19: tempoTexto19 / 1000, // Convertendo segundos para milissegundos
+                tempoTexto20: tempoTexto20 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem3: tempoImagem3 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem4: tempoImagem4 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem5: tempoImagem5 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem6: tempoImagem6 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem7: tempoImagem7 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem8: tempoImagem8 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem9: tempoImagem9 / 1000, // Convertendo segundos para milissegundos
+                tempoImagem10: tempoImagem10 / 1000, // Convertendo segundos para milissegundos
+                videoUrl, // Inicialmente vazio, pois o vídeo ainda não foi carregado
+                videoUrl2, // Inicialmente vazio, pois o vídeo ainda não foi carregado
+                tempoVideo: tempoVideo / 1000, // Convertendo segundos para milissegundos
+                tempoVideo2: tempoVideo2 / 1000, // Convertendo segundos para milissegundos
+                tempoCronometro1: tempoCronometro1 / 1000, // Convertendo segundos para milissegundos
+                tempoCronometro2: tempoCronometro2 / 1000, // Convertendo segundos para milissegundos
+                tempoCronometro3: tempoCronometro3 / 1000, // Convertendo segundos para milissegundos
+                tempoCronometro4: tempoCronometro4 / 1000, // Convertendo segundos para milissegundos
+                tempoMetronomo1: tempoMetronomo1 / 1000, // Convertendo segundos para milissegundos
+                tempoMetronomo2: tempoMetronomo2 / 1000, // Convertendo segundos para milissegundos
+                tempoMetronomo3: tempoMetronomo3 / 1000, // Convertendo segundos para milissegundos
+                tempoFlashCard1: tempoFlashCard1 / 1000, // Convertendo segundos para milissegundos
+                tempoFlashCard2: tempoFlashCard2 / 1000, // Convertendo segundos para milissegundos
+                tempoFlashCard3: tempoFlashCard3 / 1000,
+                tempoFlashCard4: tempoFlashCard4 / 1000,
+                tempoFlashCard5: tempoFlashCard5 / 1000,
+                tempoFlashCard6: tempoFlashCard6 / 1000,
+                tempoFlashCard7: tempoFlashCard7 / 1000,
+                tempoFlashCard8: tempoFlashCard8 / 1000,
+                tempoFlashCard9: tempoFlashCard9 / 1000,
+                tempoFlashCard10: tempoFlashCard10 / 1000,
+            });
+
+
+            const uploadImage = async (image, tempo, docRef, num) => {
+                if (image) {
+                    const storageRef = storage.ref();
+                    const imagemRef = storageRef.child(`imagens/${docRef.id}/imagem${num}`);
+                    await imagemRef.put(image);
+                    const url = await imagemRef.getDownloadURL();
+                    await docRef.update({
+                        [`imagem${num}Url`]: url
+                    });
+                }
+            };
+
+
+            // Upload das imagens
+            await uploadImage(imagem1, tempoImagem1, docRef, 1);
+            await uploadImage(imagem2, tempoImagem2, docRef, 2);
+            await uploadImage(imagem3, tempoImagem3, docRef, 3);
+            await uploadImage(imagem4, tempoImagem4, docRef, 4);
+            await uploadImage(imagem5, tempoImagem5, docRef, 5);
+            await uploadImage(imagem6, tempoImagem6, docRef, 6);
+            await uploadImage(imagem7, tempoImagem7, docRef, 7);
+            await uploadImage(imagem8, tempoImagem8, docRef, 8);
+            await uploadImage(imagem9, tempoImagem9, docRef, 9);
+            await uploadImage(imagem10, tempoImagem10, docRef, 10);
+
+            // Função de upload de vídeos
+            const uploadVideo = async (videoFile, docRef) => {
+                if (videoFile) {
+                    const storageRef = storage.ref();
+                    const videoRef = storageRef.child(`videos/${docRef.id}/video.mp4`);
+                    await videoRef.put(videoFile);
+                    const url = await videoRef.getDownloadURL();
+                    await docRef.update({
+                        videoUrl: url
+                    });
+                }
+            };
+
+            // Upload do vídeo
+            await uploadVideo(videoFile, docRef);
+
+            const uploadAudio = async (audioFile, docRef) => {
+                if (audioFile) {
+                    const storageRef = storage.ref();
+                    const audioRef = storageRef.child(`audios/${docRef.id}/audio.mp3`);
+                    await audioRef.put(audioFile);
+                    const url = await audioRef.getDownloadURL();
+                    await docRef.update({
+                        audioUrl: url
+                    });
+                }
+            };
+            await uploadAudio(audioFile, docRef);
+
+            // Restante do código para upload de imagens e reset de estados
+            // ...
+
+            // Função de upload de imagens
+
+
+            // Reset dos estados após envio
+            setTituloAula("");
+            setDescricaoAula("");
+            setTexto1("");
+            setImagem1(null);
+            setTempoTexto1(0);
+            setTempoImagem1(0);
+
+            setTexto2("");
+            setImagem2(null);
+            setTempoTexto2(0);
+            setTempoImagem2(0);
+
+            setTexto3("");
+            setImagem3(null);
+            setTempoTexto3(0);
+            setTempoImagem3(0);
+            setTempoImagem4(0);
+            setTempoImagem5(0);
+            setTempoImagem6(0);
+            setTempoImagem7(0);
+            setTempoImagem8(0);
+            setTempoImagem9(0);
+            setTempoImagem10(0);
+
+            setVideoUrl("");
+            setTempoVideo(0);
+            setTempoVideo2(0);
+
+            setTempoCronometro1(0);
+            setTempoCronometro2(0);
+            setTempoCronometro3(0);
+            setTempoCronometro4(0);
+
+            setTempoMetronomo1(0);
+            setTempoMetronomo2(0);
+            setTempoMetronomo3(0);
+
+            setTempoFlashCard1(0);
+            setTempoFlashCard2(0);
+            setTempoFlashCard3(0);
+            setTempoFlashCard4(0);
+            setTempoFlashCard5(0);
+            setTempoFlashCard6(0);
+            setTempoFlashCard7(0);
+
+            toast.success("Aula criada com sucesso!");
+            setLoading(false);
+            handleSubmitDois();
+        } catch (error) {
+            console.error("Erro ao enviar para o Firestore: ", error);
+            toast.error("Ocorreu um erro ao enviar os dados. Por favor, tente novamente mais tarde.!!!!!!!!");
+            setLoading(false);
+        }
+    };
+
+    const reloadPage = () => {
+        window.location.reload();
+    };
+
+
+    const [clickText, setClickText] = useState(0);
+    const functionClickText = () => {
+
+        const containers = document.querySelectorAll(".containerTexto");
+        if (clickText < containers.length) {
+            containers[clickText].style.display = "block";
+        }
+        setClickText(prevClickText => prevClickText + 1);
+        setClickCronometro(clickCronometro + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+
+    const [clickImage, setClickImage] = useState(0);
+    const functionClickImage = () => {
+        setClickImage(prevClickImage => prevClickImage + 1);
+
+        const containers = document.querySelectorAll(".containerImagemItem");
+        if (clickImage < containers.length) {
+            containers[clickImage].style.display = "block";
+        }
+        setClickText(clickText + 1)
+        setClickFlashCard(clickFlashCard + 1)
+        setClickCronometro(clickCronometro + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+
+
+    const [clickVideo, setClickVideo] = useState(0);
+    const functionClickVideo = () => {
+        setClickVideo(prevClickVideo => prevClickVideo + 1);
+
+        const containers = document.querySelectorAll(".containerVideo");
+        if (clickVideo < containers.length) {
+            containers[clickVideo].style.display = "block";
+        }
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickFlashCard(clickFlashCard + 1)
+        setClickCronometro(clickCronometro + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+
+    const [clickCronometro, setClickCronometro] = useState(0);
+    const functionClickCronometro = () => {
+        setClickCronometro(prevClickCronometro => prevClickCronometro + 1);
+
+        const containers = document.querySelectorAll(".containerCronometro");
+        if (clickCronometro < containers.length) {
+            containers[clickCronometro].style.display = "block";
+        }
+
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+
+    const [clickMetronomo, setClickMetronomo] = useState(0);
+    const [clickMetronomoDE120, setClickMetronomoDE120] = useState(0);
+
+    const functionClickMetronomoDE120 = () => {
+        setClickMetronomoDE120(functionClickMetronomoDE120 => functionClickMetronomoDE120 + 1);
+
+        const containers = document.querySelectorAll(".containerMetronomoDE120");
+        if (clickMetronomoDE120 < containers.length) {
+            containers[clickMetronomoDE120].style.display = "block";
+        }
+
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+    const functionClickMetronomo = () => {
+        setClickMetronomo(prevClickMetronomo => prevClickMetronomo + 1);
+
+        const containers = document.querySelectorAll(".containerMetronomo");
+        if (clickMetronomo < containers.length) {
+            containers[clickMetronomo].style.display = "block";
+        }
+
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+    const [clickFlashCard, setClickFlashCard] = useState(0);
+    const functionClickFlashCardImagem = () => {
+        setClickFlashCard(prevClickFlashCard => prevClickFlashCard + 1);
+
+        const containers = document.querySelectorAll(".containerFlashCard");
+        if (clickFlashCard < containers.length) {
+            containers[clickFlashCard].style.display = "block";
+        }
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+    const functionClickAudio = () => {
+        setClickAudio(prevClickAudio => prevClickAudio + 1);
+
+        const containers = document.querySelectorAll(".containerAudio");
+        if (clickFlashCard < containers.length) {
+            containers[clickFlashCard].style.display = "block";
+        }
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+    const functionClickFlashCardImagemMaisUm = () => {
+        setClickFlashCard(1);
+
+        const containers = document.querySelectorAll(".containerFlashCard");
+        if (clickFlashCard < containers.length) {
+            containers[clickFlashCard].style.display = "block";
+        }
+
+        setClickText(clickText + 1);
+        setClickImage(clickImage + 1);
+        setClickVideo(clickVideo + 1);
+        setClickCronometro(clickCronometro + 1);
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+
+
+    const [clickFlashCardTexto, setClickFlashCardTexto] = useState(0);
+    const [clickAudio, setClickAudio] = useState(0);
+    const functionClickFlashCardTexto = () => {
+        setClickFlashCardTexto(prevClickFlashCardTexto => prevClickFlashCardTexto + 1);
+
+        const containers = document.querySelectorAll(".containerFlashCardTexto");
+        if (clickFlashCardTexto < containers.length) {
+            containers[clickFlashCardTexto].style.display = "block";
+        }
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+
+    const [clickVideoLocal, setClickVideoLocal] = useState(0);
+    const functionClickVideoLocal = () => {
+        setClickFlashCard(prevClickFlashCard => prevClickFlashCard + 1);
+
+        const containers = document.querySelectorAll(".containerFlashCard");
+        if (clickFlashCard < containers.length) {
+            containers[clickFlashCard].style.display = "block";
+        }
+        setClickText(clickText + 1)
+        setClickImage(clickImage + 1)
+        setClickVideo(clickVideo + 1)
+        setClickCronometro(clickCronometro + 1)
+        setClickFlashCard(clickFlashCard + 1)
+
+        document.getElementById("detalhe-aula").style.display = "block";
+    }
+
+
+    const [loading, setLoading] = useState(false);
+    const generateRandomId = () => {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let randomId = "";
+        for (let i = 0; i < 10; i++) {
+            randomId += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return randomId;
+    };
+
+    const isIdUnique = (newId, items) => {
+        return items.every(item => item.id !== newId);
+    };
+
+    const handleChangeId = async (itemId, newId) => {
+        try {
+            // Verifica se o novo ID é único
+            if (!isIdUnique(newId, items)) {
+                alert("O novo ID não é único. Por favor, tente novamente.");
+                return;
+            }
+
+            // Atualizar o ID no Firestore
+            await db.collection("seuColecao").doc(itemId).update({ id: newId });
+
+            // Atualizar localmente
+            const updatedItems = items.map(item => {
+                if (item.id === itemId) {
+                    return { ...item, id: newId };
+                } else {
+                    return item;
+                }
+            });
+            setItems(updatedItems);
+            toast.success("ID atualizado com sucesso!");
+        } catch (error) {
+            console.error("Erro ao atualizar ID: ", error);
+            toast.success(`Ocorreu um erro ao atualizar o ID: ${error.message}`);
+        }
+    };
+
+
+    const [setVirarAula, virarAula] = useState(false)
+
+    const [rotacao, setRotacao] = useState(0); // Estado para controlar a rotação
+
+    const toggleRotacao = () => {
+        setRotacao(rotacao === 0 ? 90 : 0); // Alterna entre 0 e 90 graus
+        // COMPONENTES SEJAM MENOR
+        var cronometro1 = document.getElementById("apresentacao-cronometro-1");
+        if (cronometro1.style.height === "100%") {
+            cronometro1.style.height = '50%';
+        } else {
+            cronometro1.style.height = '100%';
+        }
+
+        var flashacard1 = document.getElementById("apresentacao-flashcard-1");
+        if (flashacard1.style.height === "100%") {
+            flashacard1.style.height = '50%';
+            flashacard1.style.marginTop = '170px';
+            flashacard1.style.marginRight = '20px';
+        } else {
+            flashacard1.style.height = '100%';
+        }
+
+        var metronomo = document.getElementById("apresentacao-metronomo-1");
+        if (metronomo.style.height === "100%") {
+            metronomo.style.height = '50%';
+        } else {
+            metronomo.style.height = '100%';
+        }
+
+
+
+
+
+        // document.getElementById("apresentacao-cronometro-2").style.width = '20px'
+    };
+    const [confirmNonee, setConfirmNonee] = useState(false);
+
+
+
+    function copyText(id) {
+        const textToCopy = document.getElementById(id).innerText;
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => toast.success("ID copiado!"))
+            .catch(err => console.error('Erro ao copiar ID:', err));
+    }
+
+    const [newStudentVideo, setNewStudentVideo] = useState(null);
+
+    const handleVideoChange = (e) => {
+        const video = e.target.files[0];
+        setNewStudentVideo(video);
+    };
+
+
+    const [iconsFixed, setIconsFixed] = useState(false);
+
+    const handleClick = () => {
+        setIconsFixed(true);
+    };
+
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [itemIdToDelete, setItemIdToDelete] = useState(null);
+
+    const handleDelete = async () => {
+        try {
+            // Exclua o documento do Firestore usando o ID da aula
+            await db.collection("seuColecao").doc(itemIdToDelete).delete();
+
+            // Atualize o estado para refletir a exclusão da aula
+            setItems(prevItems => prevItems.filter(item => item.id !== itemIdToDelete));
+
+            toast.success("Aula excluída com sucesso!");
+        } catch (error) {
+            console.error("Erro ao excluir aula: ", error);
+            toast.error("Ocorreu um erro ao excluir a aula. Por favor, tente novamente mais tarde.");
+        }
+
+        // Fechar o modal de confirmação
+        setShowConfirmation(false);
+    };
+    const handleVideoUrlChange = (event) => {
+        setVideoUrl(event.target.value);
+    };
+
+
+
+
+
+
+    const [audioFile, setAudioFile] = useState(null);
+
+
+
+
+
+    function extractVideoId(videoUrl) {
+        // Verifica se a URL é válida e contém o parâmetro 'v'
+        const match = videoUrl.match(/(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:watch\?.*v=|embed\/|v\/)?([\w\-]{11})/);
+
+        // Retorna o ID do vídeo se houver correspondência, caso contrário, retorna null
+        return match ? match[1] : null;
+    }
+
+
+    const apresentarItem = async (item, audioURL) => {
         const apresentacaoDiv = document.getElementById("apresentacao-aula");
         apresentacaoDiv.innerHTML = ""; // Limpar o conteúdo anterior
         apresentacaoDiv.style.marginTop = "220px"; // Limpar o conteúdo anterior
@@ -173,21 +766,63 @@ export default function ModeloFinal() {
             imagem1Tag.src = item.imagem1Url;
             apresentacaoDiv.appendChild(imagem1Tag);
             await new Promise(resolve => setTimeout(resolve, item.tempoImagem1 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem1Tag); // Remover a imagem após o tempo
+            apresentacaoDiv.removeChild(imagem1Tag);
+
         }
+
+        if (audioURL) {
+            const audio = document.createElement("audio");
+            audio.src = audioURL;
+            audio.controls = true;
+            audio.autoplay = true;
+            apresentacaoDiv.appendChild(audio);
+            await new Promise(resolve => {
+                audio.onended = resolve; // Resolve a promessa quando o áudio terminar
+            });
+            apresentacaoDiv.removeChild(audio);
+        }
+
+        if (item.imagem1Url) {
+            <audio controls>
+                <source src={audioAula} type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+        }
+        const videoDiv = document.createElement("div");
+        const video = document.createElement("iframe");
+        video.width = "560";
+        video.height = "315";
+        videoDiv.appendChild(video);
+        apresentacaoDiv.appendChild(videoDiv);
 
         if (item.videoUrl) {
             const videoDiv = document.createElement("div");
             const video = document.createElement("iframe");
+            const videoId = extractVideoId(item.videoUrl); // Extrai o ID do vídeo do URL do YouTube
+
             video.width = "560";
             video.height = "315";
-            // video.style.marginTop = "-200px";
-            video.src = item.videoUrl;
+            video.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`; // Adiciona o parâmetro autoplay=1
+            video.frameBorder = "0";
+            video.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            video.allowFullScreen = true;
+
+            video.style.position = "fixed"; // Define a posição fixa
+            video.style.top = "-29%"; // Coloca o vídeo no topo
+            video.style.left = "50%"; // Centraliza horizontalmente
+            video.style.transform = "translateX(-50%)"; // Corrige o centro horizontal
+            video.id = `video-${videoId}`; // Define o ID do iframe
+
+            // Define o ID do div
+            videoDiv.id = `video-container-${videoId}`;
+
             videoDiv.appendChild(video);
             apresentacaoDiv.appendChild(videoDiv);
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
-            apresentacaoDiv.removeChild(videoDiv); // Remover o vídeo após o tempo
+            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguarda pelo tempo do vídeo
+            apresentacaoDiv.removeChild(videoDiv); // Remove o vídeo após o tempo especificado
         }
+
+
 
         if (item.tempoCronometro1) {
             await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
@@ -310,7 +945,6 @@ export default function ModeloFinal() {
             apresentacaoFlashCard3.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
         }
 
-        // 2!!!!!!!!!!!!!!!!!!
         await apresentarConteudo(item.texto2, item.tempoTexto2);
         if (item.imagem2Url) {
             const imagem2Tag = document.createElement("img");
@@ -325,12 +959,18 @@ export default function ModeloFinal() {
             const video2 = document.createElement("iframe");
             video2.width = "560";
             video2.height = "315";
-            // video.style.marginTop = "-200px";
-            video2.src = item.videoUrl2;
+            video2.style.marginTop = "-200px";
+
+            const videoId = extractVideoId(item.videoUrl2);
+            video2.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            video2.frameBorder = "0";
+            video2.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            video2.allowFullScreen = true;
             videoDiv2.appendChild(video2);
             apresentacaoDiv.appendChild(videoDiv2);
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo2 * 1000)); // Aguardar pelo tempo do vídeo YT
-            apresentacaoDiv.removeChild(videoDiv2); // Remover o vídeo após o tempo
+            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguarda pelo tempo do vídeo
+            apresentacaoDiv.removeChild(videoDiv2);
+
         }
 
         if (item.tempoCronometro2) {
@@ -513,7 +1153,6 @@ export default function ModeloFinal() {
 
             apresentacaoFlashCard10.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
         }
-        // MAIS FLASHCARD AQUI???
 
         if (item.tempoMetronomo3) {
             await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
@@ -676,495 +1315,21 @@ export default function ModeloFinal() {
             apresentacaoCronometro4.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
         }
 
-
+        if (item.audioUrl) {
+            const audio = new Audio(item.audioUrl);
+            audio.play();
+            await new Promise(resolve => audio.addEventListener('ended', resolve));
+        }
 
         // Mesmo processo para os cronômetros 2 e 3
         // Mesmo processo para os metrônomos 2 e 3
         // Mesmo processo para os FlashCards 2 e 3
     };
-    const [videoFile, setVideoFile] = useState(null);
 
 
+    const [audioPlayerVisible, setAudioPlayerVisible] = useState(false);
+    const [audioAula, setAudioAula] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!tituloAula.trim()) {
-            toast.error("Por favor, preencha o campo Título da Aula.");
-            return;
-        } else {
-
-            setLoading(true);
-        }
-
-        try {
-            const classID = id;
-            const docRef = await db.collection("seuColecao").add({
-                classID,
-                tituloAula,
-                descricaoAula,
-                texto1,
-                imagem1Url: "",
-                tempoTexto1: tempoTexto1 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem1: tempoImagem1 / 1000, // Convertendo segundos para milissegundos
-                texto2,
-                imagem2Url: "",
-                tempoTexto2: tempoTexto2 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem2: tempoImagem2 / 1000, // Convertendo segundos para milissegundos
-                texto3,
-                texto4,
-                texto5,
-                texto6,
-                texto7,
-                texto8,
-                texto9,
-                texto10,
-                texto11,
-                texto12,
-                texto13,
-                texto14,
-                texto15,
-                texto16,
-                texto17,
-                texto18,
-                texto19,
-                texto20,
-                imagem3Url: "",
-                imagem4Url: "",
-                imagem5Url: "",
-                imagem6Url: "",
-                imagem7Url: "",
-                imagem8Url: "",
-                imagem9Url: "",
-                imagem10Url: "",
-                tempoTexto3: tempoTexto3 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto4: tempoTexto4 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto5: tempoTexto5 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto6: tempoTexto6 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto7: tempoTexto7 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto8: tempoTexto8 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto9: tempoTexto9 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto10: tempoTexto10 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto11: tempoTexto12 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto12: tempoTexto12 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto13: tempoTexto13 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto14: tempoTexto14 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto15: tempoTexto15 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto16: tempoTexto16 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto17: tempoTexto17 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto18: tempoTexto18 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto19: tempoTexto19 / 1000, // Convertendo segundos para milissegundos
-                tempoTexto20: tempoTexto20 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem3: tempoImagem3 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem4: tempoImagem4 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem5: tempoImagem5 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem6: tempoImagem6 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem7: tempoImagem7 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem8: tempoImagem8 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem9: tempoImagem9 / 1000, // Convertendo segundos para milissegundos
-                tempoImagem10: tempoImagem10 / 1000, // Convertendo segundos para milissegundos
-                videoUrl, // Inicialmente vazio, pois o vídeo ainda não foi carregado
-                videoUrl2, // Inicialmente vazio, pois o vídeo ainda não foi carregado
-                tempoVideo: tempoVideo / 1000, // Convertendo segundos para milissegundos
-                tempoVideo2: tempoVideo2 / 1000, // Convertendo segundos para milissegundos
-                tempoCronometro1: tempoCronometro1 / 1000, // Convertendo segundos para milissegundos
-                tempoCronometro2: tempoCronometro2 / 1000, // Convertendo segundos para milissegundos
-                tempoCronometro3: tempoCronometro3 / 1000, // Convertendo segundos para milissegundos
-                tempoCronometro4: tempoCronometro4 / 1000, // Convertendo segundos para milissegundos
-                tempoMetronomo1: tempoMetronomo1 / 1000, // Convertendo segundos para milissegundos
-                tempoMetronomo2: tempoMetronomo2 / 1000, // Convertendo segundos para milissegundos
-                tempoMetronomo3: tempoMetronomo3 / 1000, // Convertendo segundos para milissegundos
-                tempoFlashCard1: tempoFlashCard1 / 1000, // Convertendo segundos para milissegundos
-                tempoFlashCard2: tempoFlashCard2 / 1000, // Convertendo segundos para milissegundos
-                tempoFlashCard3: tempoFlashCard3 / 1000,
-                tempoFlashCard4: tempoFlashCard4 / 1000,
-                tempoFlashCard5: tempoFlashCard5 / 1000,
-                tempoFlashCard6: tempoFlashCard6 / 1000,
-                tempoFlashCard7: tempoFlashCard7 / 1000,
-                tempoFlashCard8: tempoFlashCard8 / 1000,
-                tempoFlashCard9: tempoFlashCard9 / 1000,
-                tempoFlashCard10: tempoFlashCard10 / 1000,
-            });
-
-            const uploadImage = async (image, tempo, docRef, num) => {
-                if (image) {
-                    const storageRef = storage.ref();
-                    const imagemRef = storageRef.child(`imagens/${docRef.id}/imagem${num}`);
-                    await imagemRef.put(image);
-                    const url = await imagemRef.getDownloadURL();
-                    await docRef.update({
-                        [`imagem${num}Url`]: url
-                    });
-                }
-            };
-
-            // Upload das imagens
-            await uploadImage(imagem1, tempoImagem1, docRef, 1);
-            await uploadImage(imagem2, tempoImagem2, docRef, 2);
-            await uploadImage(imagem3, tempoImagem3, docRef, 3);
-            await uploadImage(imagem4, tempoImagem4, docRef, 4);
-            await uploadImage(imagem5, tempoImagem5, docRef, 5);
-            await uploadImage(imagem6, tempoImagem6, docRef, 6);
-            await uploadImage(imagem7, tempoImagem7, docRef, 7);
-            await uploadImage(imagem8, tempoImagem8, docRef, 8);
-            await uploadImage(imagem9, tempoImagem9, docRef, 9);
-            await uploadImage(imagem10, tempoImagem10, docRef, 10);
-
-            // Função de upload de vídeos
-            const uploadVideo = async (videoFile, docRef) => {
-                if (videoFile) {
-                    const storageRef = storage.ref();
-                    const videoRef = storageRef.child(`videos/${docRef.id}/video.mp4`);
-                    await videoRef.put(videoFile);
-                    const url = await videoRef.getDownloadURL();
-                    await docRef.update({
-                        videoUrl: url
-                    });
-                }
-            };
-
-            // Upload do vídeo
-            await uploadVideo(videoFile, docRef);
-
-            // Restante do código para upload de imagens e reset de estados
-            // ...
-
-            // Função de upload de imagens
-
-
-            // Reset dos estados após envio
-            setTituloAula("");
-            setDescricaoAula("");
-            setTexto1("");
-            setImagem1(null);
-            setTempoTexto1(0);
-            setTempoImagem1(0);
-
-            setTexto2("");
-            setImagem2(null);
-            setTempoTexto2(0);
-            setTempoImagem2(0);
-
-            setTexto3("");
-            setImagem3(null);
-            setTempoTexto3(0);
-            setTempoImagem3(0);
-            setTempoImagem4(0);
-            setTempoImagem5(0);
-            setTempoImagem6(0);
-            setTempoImagem7(0);
-            setTempoImagem8(0);
-            setTempoImagem9(0);
-            setTempoImagem10(0);
-
-            setVideoUrl("");
-            setTempoVideo(0);
-            setTempoVideo2(0);
-
-            setTempoCronometro1(0);
-            setTempoCronometro2(0);
-            setTempoCronometro3(0);
-            setTempoCronometro4(0);
-
-            setTempoMetronomo1(0);
-            setTempoMetronomo2(0);
-            setTempoMetronomo3(0);
-
-            setTempoFlashCard1(0);
-            setTempoFlashCard2(0);
-            setTempoFlashCard3(0);
-            setTempoFlashCard4(0);
-            setTempoFlashCard5(0);
-            setTempoFlashCard6(0);
-            setTempoFlashCard7(0);
-
-            toast.success("Aula criada com sucesso!");
-            setLoading(false);
-        } catch (error) {
-            console.error("Erro ao enviar para o Firestore: ", error);
-            toast.error("Ocorreu um erro ao enviar os dados. Por favor, tente novamente mais tarde.");
-            setLoading(false);
-        }
-    };
-
-    const reloadPage = () => {
-        window.location.reload();
-    };
-
-
-    const [clickText, setClickText] = useState(0);
-    const functionClickText = () => {
-
-        const containers = document.querySelectorAll(".containerTexto");
-        if (clickText < containers.length) {
-            containers[clickText].style.display = "block";
-        }
-        setClickText(prevClickText => prevClickText + 1);
-        setClickCronometro(clickCronometro + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-
-    const [clickImage, setClickImage] = useState(0);
-    const functionClickImage = () => {
-        setClickImage(prevClickImage => prevClickImage + 1);
-
-        const containers = document.querySelectorAll(".containerImagemItem");
-        if (clickImage < containers.length) {
-            containers[clickImage].style.display = "block";
-        }
-        setClickText(clickText + 1)
-        setClickFlashCard(clickFlashCard + 1)
-        setClickCronometro(clickCronometro + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-
-
-    const [clickVideo, setClickVideo] = useState(0);
-    const functionClickVideo = () => {
-        setClickVideo(prevClickVideo => prevClickVideo + 1);
-
-        const containers = document.querySelectorAll(".containerVideo");
-        if (clickVideo < containers.length) {
-            containers[clickVideo].style.display = "block";
-        }
-        setClickText(clickText + 1)
-        setClickImage(clickImage + 1)
-        setClickFlashCard(clickFlashCard + 1)
-        setClickCronometro(clickCronometro + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-
-    const [clickCronometro, setClickCronometro] = useState(0);
-    const functionClickCronometro = () => {
-        setClickCronometro(prevClickCronometro => prevClickCronometro + 1);
-
-        const containers = document.querySelectorAll(".containerCronometro");
-        if (clickCronometro < containers.length) {
-            containers[clickCronometro].style.display = "block";
-        }
-
-        setClickText(clickText + 1)
-        setClickImage(clickImage + 1)
-        setClickVideo(clickVideo + 1)
-        setClickCronometro(clickCronometro + 1)
-        setClickFlashCard(clickFlashCard + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-
-    const [clickMetronomo, setClickMetronomo] = useState(0);
-    const [clickMetronomoDE120, setClickMetronomoDE120] = useState(0);
-
-    const functionClickMetronomoDE120 = () => {
-        setClickMetronomoDE120(functionClickMetronomoDE120 => functionClickMetronomoDE120 + 1);
-
-        const containers = document.querySelectorAll(".containerMetronomoDE120");
-        if (clickMetronomoDE120 < containers.length) {
-            containers[clickMetronomoDE120].style.display = "block";
-        }
-
-        setClickText(clickText + 1)
-        setClickImage(clickImage + 1)
-        setClickVideo(clickVideo + 1)
-        setClickCronometro(clickCronometro + 1)
-        setClickFlashCard(clickFlashCard + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-    const functionClickMetronomo = () => {
-        setClickMetronomo(prevClickMetronomo => prevClickMetronomo + 1);
-
-        const containers = document.querySelectorAll(".containerMetronomo");
-        if (clickMetronomo < containers.length) {
-            containers[clickMetronomo].style.display = "block";
-        }
-
-        setClickText(clickText + 1)
-        setClickImage(clickImage + 1)
-        setClickVideo(clickVideo + 1)
-        setClickCronometro(clickCronometro + 1)
-        setClickFlashCard(clickFlashCard + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-    const [clickFlashCard, setClickFlashCard] = useState(0);
-    const functionClickFlashCardImagem = () => {
-        setClickFlashCard(prevClickFlashCard => prevClickFlashCard + 1);
-
-        const containers = document.querySelectorAll(".containerFlashCard");
-        if (clickFlashCard < containers.length) {
-            containers[clickFlashCard].style.display = "block";
-        }
-        setClickText(clickText + 1)
-        setClickImage(clickImage + 1)
-        setClickVideo(clickVideo + 1)
-        setClickCronometro(clickCronometro + 1)
-        setClickFlashCard(clickFlashCard + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-
-    const [clickFlashCardTexto, setClickFlashCardTexto] = useState(0);
-    const functionClickFlashCardTexto = () => {
-        setClickFlashCardTexto(prevClickFlashCardTexto => prevClickFlashCardTexto + 1);
-
-        const containers = document.querySelectorAll(".containerFlashCardTexto");
-        if (clickFlashCardTexto < containers.length) {
-            containers[clickFlashCardTexto].style.display = "block";
-        }
-        setClickText(clickText + 1)
-        setClickImage(clickImage + 1)
-        setClickVideo(clickVideo + 1)
-        setClickCronometro(clickCronometro + 1)
-        setClickFlashCard(clickFlashCard + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-
-    const [clickVideoLocal, setClickVideoLocal] = useState(0);
-    const functionClickVideoLocal = () => {
-        setClickFlashCard(prevClickFlashCard => prevClickFlashCard + 1);
-
-        const containers = document.querySelectorAll(".containerFlashCard");
-        if (clickFlashCard < containers.length) {
-            containers[clickFlashCard].style.display = "block";
-        }
-        setClickText(clickText + 1)
-        setClickImage(clickImage + 1)
-        setClickVideo(clickVideo + 1)
-        setClickCronometro(clickCronometro + 1)
-        setClickFlashCard(clickFlashCard + 1)
-
-        document.getElementById("detalhe-aula").style.display = "block";
-    }
-
-
-    const [loading, setLoading] = useState(false);
-    const generateRandomId = () => {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        let randomId = "";
-        for (let i = 0; i < 10; i++) {
-            randomId += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return randomId;
-    };
-
-    const isIdUnique = (newId, items) => {
-        return items.every(item => item.id !== newId);
-    };
-
-    const handleChangeId = async (itemId, newId) => {
-        try {
-            // Verifica se o novo ID é único
-            if (!isIdUnique(newId, items)) {
-                alert("O novo ID não é único. Por favor, tente novamente.");
-                return;
-            }
-
-            // Atualizar o ID no Firestore
-            await db.collection("seuColecao").doc(itemId).update({ id: newId });
-
-            // Atualizar localmente
-            const updatedItems = items.map(item => {
-                if (item.id === itemId) {
-                    return { ...item, id: newId };
-                } else {
-                    return item;
-                }
-            });
-            setItems(updatedItems);
-            toast.success("ID atualizado com sucesso!");
-        } catch (error) {
-            console.error("Erro ao atualizar ID: ", error);
-            toast.success(`Ocorreu um erro ao atualizar o ID: ${error.message}`);
-        }
-    };
-
-
-    const [setVirarAula, virarAula] = useState(false)
-
-    const [rotacao, setRotacao] = useState(0); // Estado para controlar a rotação
-
-    const toggleRotacao = () => {
-        setRotacao(rotacao === 0 ? 90 : 0); // Alterna entre 0 e 90 graus
-        // COMPONENTES SEJAM MENOR
-        var cronometro1 = document.getElementById("apresentacao-cronometro-1");
-        if (cronometro1.style.height === "100%") {
-            cronometro1.style.height = '50%';
-        } else {
-            cronometro1.style.height = '100%';
-        }
-
-        var flashacard1 = document.getElementById("apresentacao-flashcard-1");
-        if (flashacard1.style.height === "100%") {
-            flashacard1.style.height = '50%';
-            flashacard1.style.marginTop = '170px';
-            flashacard1.style.marginRight = '20px';
-        } else {
-            flashacard1.style.height = '100%';
-        }
-
-        var metronomo = document.getElementById("apresentacao-metronomo-1");
-        if (metronomo.style.height === "100%") {
-            metronomo.style.height = '50%';
-        } else {
-            metronomo.style.height = '100%';
-        }
-
-
-
-
-
-        // document.getElementById("apresentacao-cronometro-2").style.width = '20px'
-    };
-    const [confirmNonee, setConfirmNonee] = useState(false);
-
-
-
-    function copyText(id) {
-        const textToCopy = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(textToCopy)
-            .then(() => toast.success("ID copiado!"))
-            .catch(err => console.error('Erro ao copiar ID:', err));
-    }
-
-    const [newStudentVideo, setNewStudentVideo] = useState(null);
-
-    const handleVideoChange = (e) => {
-        const video = e.target.files[0];
-        setNewStudentVideo(video);
-    };
-
-
-    const [iconsFixed, setIconsFixed] = useState(false);
-
-    const handleClick = () => {
-        setIconsFixed(true);
-    };
-
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [itemIdToDelete, setItemIdToDelete] = useState(null);
-
-    const handleDelete = async () => {
-        try {
-            // Exclua o documento do Firestore usando o ID da aula
-            await db.collection("seuColecao").doc(itemIdToDelete).delete();
-
-            // Atualize o estado para refletir a exclusão da aula
-            setItems(prevItems => prevItems.filter(item => item.id !== itemIdToDelete));
-
-            toast.success("Aula excluída com sucesso!");
-        } catch (error) {
-            console.error("Erro ao excluir aula: ", error);
-            toast.error("Ocorreu um erro ao excluir a aula. Por favor, tente novamente mais tarde.");
-        }
-
-        // Fechar o modal de confirmação
-        setShowConfirmation(false);
-    };
 
     return (
         <div className="container">
@@ -1185,27 +1350,19 @@ export default function ModeloFinal() {
                 <a href="#" onClick={functionClickMetronomo}>
                     <img src={IconMetronomo} style={{ width: "40px", cursor: 'pointer' }} />
                 </a>
-                <a href="#" onClick={functionClickMetronomoDE120} style={{ textDecoration: 'none', color: 'black' }}>
-                    <img src={IconMetronomo} style={{ width: "40px", cursor: 'pointer' }} />
-                    <p>Metronomo de 120!</p>
-                </a>
-                {/* <a href="#" onClickCapture={functionClickFlashCardTexto}>
-                    <p>Texto</p>
-                    <img src={IconFlashCard} style={{ width: "40px", cursor: 'pointer' }} />
-                </a> */}
                 <a href="#" onClickCapture={functionClickFlashCardImagem}>
-                    {/* <p>Imagem</p> */}
                     <img src={IconFlashCard} style={{ width: "40px", cursor: 'pointer' }} />
                 </a>
-                {/* <a href="#" onClickCapture={functionClickVideoLocal}>
-                    <img src={iconVideoDois} style={{ width: "40px", cursor: 'pointer' }} />
+                {/* <a href="#" onClickCapture={functionClickAudio}>
+                    <p>Áudio</p>
                 </a> */}
+
             </div>
 
             <form onSubmit={handleSubmit} >
                 <div className="mb-3">
                     <div id="detalhe-aula" style={{ display: 'none', marginBottom: '100px' }}>
-                        <label className="form-label" style={{ marginTop: iconsFixed ? '300px' : '0px' }} >Título:</label>
+                        <label className="form-label" style={{ marginTop: iconsFixed ? '300px' : '0px' }} >PLATY -Título:</label>
                         <input className="form-control" type="text" value={tituloAula} onChange={(e) => setTituloAula(e.target.value)} />
 
                         <label className="form-label">Descrição:</label>
@@ -1216,41 +1373,31 @@ export default function ModeloFinal() {
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto1} onChange={(e) => setTexto1(e.target.value)} />
                         <input type="number" className="form-control mt-1" value={tempoTexto1} onChange={(e) => setTempoTexto1(e.target.value)} placeholder=" " />
-
                     </div>
-
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem1(e.target.files[0])} />
                         <input type="number" className="form-control mt-1" value={tempoImagem1} onChange={(e) => setTempoImagem1(e.target.value)} placeholder="  " />
                     </div>
-                    {/* <div className="containerVideoItem">
-                        <label className="form-label mt-2">Vídeoo:</label>
-                        <input type="file" className="form-control" onChange={(e) => setVideoFile(e.target.files[0])} />
-                        <input type="number" className="form-control mt-1" value={tempoVideo} onChange={(e) => setTempoVideo(e.target.value)} placeholder="Tempo para Vídeo" />
-                    </div> */}
-
-
                     <div className="containerVideo">
                         <label className="form-label mt-2">Vídeo YT :</label>
-                        <input type="text" className="form-control" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
+                        <input
+                            type="text"
+                            value={videoUrl}
+                            onChange={handleVideoUrlChange}
+                            placeholder="URL do vídeo do YouTube"
+                            className="form-control"
+                        />
                         <input type="number" className="form-control mt-1" value={tempoVideo} onChange={(e) => setTempoVideo(e.target.value)} placeholder=" " />
                     </div>
-
                     <div className="containerCronometro">
                         <label className="form-label mt-2">Cronometro :</label>
                         <input type="number" className="form-control" value={tempoCronometro1} onChange={(e) => setTempoCronometro1(e.target.value)} placeholder=" " />
                     </div>
-
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
                         <input type="number" className="form-control" value={tempoMetronomo1} onChange={(e) => setTempoMetronomo1(e.target.value)} placeholder=" " />
                     </div>
-                    <div className="containerMetronomoDE120">
-                        <label className="form-label mt-2">Metrônomo - bmp120 :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo1DE120} onChange={(e) => setTempoMetronomo1DE120(e.target.value)} placeholder=" " />
-                    </div>
-
                     <div className="containerFlashCard">
                         <label className="form-label mt-2">FlashCard - Imagem:</label>
                         <input type="number" className="form-control" value={tempoFlashCard1} onChange={(e) => setTempoFlashCard1(e.target.value)} placeholder=" " />
@@ -1291,81 +1438,51 @@ export default function ModeloFinal() {
                         <label className="form-label mt-2">FlashCard - Imagem:</label>
                         <input type="number" className="form-control" value={tempoFlashCard10} onChange={(e) => setTempoFlashCard10(e.target.value)} placeholder=" " />
                     </div>
-                    {/* <div className="containerFlashCard">
-                        <label className="form-label mt-2">FlashCard:</label>
-                        <input type="number" className="form-control" value={tempoFlashCard2} onChange={(e) => setTempoFlashCard2(e.target.value)} placeholder=" " />
-                    </div> */}
-
-
-                    {/* <div>
-                        <label>Vídeo (local):</label>
-                        <input type="file" accept="video/*" onChange={handleVideoChange} />
-                    </div> */}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    {/* <label>Áudio 01:</label>
-                    <input />
-                    <input type="number" placeholder="Tempo para áudio 01" /> */}
-
                     <div className="containerTexto">
                         <label className="form-label">Texto:</label>
                         <input type="text" className="form-control" value={texto2} onChange={(e) => setTexto2(e.target.value)} />
                         <input type="number" className="form-control mt-1" value={tempoTexto2} onChange={(e) => setTempoTexto2(e.target.value)} placeholder=" " />
                     </div>
-
                     <div className="containerImagemItem">
                         <label className="form-label mt-2">Imagem:</label>
                         <input type="file" className="form-control" onChange={(e) => setImagem2(e.target.files[0])} />
                         <input type="number" className="form-control mt-1" value={tempoImagem2} onChange={(e) => setTempoImagem2(e.target.value)} placeholder="  " />
                     </div>
-
                     <div className="containerVideo">
                         <label className="form-label mt-2">Vídeo YT :</label>
                         <input type="text" className="form-control" value={videoUrl2} onChange={(e) => setVideoUrl2(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
                         <input type="number" className="form-control mt-1" value={tempoVideo2} onChange={(e) => setTempoVideo2(e.target.value)} placeholder=" " />
                     </div>
-
                     <div className="containerCronometro">
                         <label className="form-label mt-2">Cronometro :</label>
                         <input type="number" className="form-control" value={tempoCronometro2} onChange={(e) => setTempoCronometro2(e.target.value)} placeholder=" " />
                     </div>
-
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
                         <input type="number" className="form-control" value={tempoMetronomo2} onChange={(e) => setTempoMetronomo2(e.target.value)} placeholder=" " />
                     </div>
-
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
                         <input type="number" className="form-control" value={tempoMetronomo3} onChange={(e) => setTempoMetronomo3(e.target.value)} placeholder=" " />
                     </div>
-
                     <div className="containerMetronomo">
                         <label className="form-label mt-2">Metrônomo :</label>
                         <input type="number" className="form-control" value={tempoMetronomo4} onChange={(e) => setTempoMetronomo4(e.target.value)} placeholder=" " />
                     </div>
-
-
+                    {/* <div className="containerAudio">
+                        <label className="form-label mt-2">Áudio :</label>
+                        <input type="file" className="form-control" value={tempoAudio1} onChange={(e) => setTempoAudio1(e.target.value)} placeholder=" " />
+                    </div> */}
+                    <label>Áudio ok!!:</label>
+                    <input
+                        type="file"
+                        onChange={(e) => setAudioAula(e.target.files[0])}
+                    />
+                    <div className="containerAudio">
+                        <label className="form-label mt-2">Áudio :</label>
+                        <input type="file" className="form-control" onChange={(e) => setAudioFile(e.target.files[0])} />
+                        {/* Se desejar, você pode adicionar atributos para limitar o tipo de arquivo aceito, como accept="audio/*" */}
+                    </div>
 
 
 
@@ -1617,39 +1734,18 @@ export default function ModeloFinal() {
 
                     ))}
                 </ul>
-
             </div>
-
-            {/* <div id="aulas-disponiveis">
-                <h2 className="mt-4">Aulas Disponíveis:</h2>
-                <ul>
-                    {items.map(item => (
-                        <li key={item.id}>
-                            {item.id}
-                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula">Apresentar</a></button>
-                            <button className="btn btn-primary ms-2 style-button" onClick={() => handleChangeId(item.id)} >Trocar ID</button>
-                        </li>
-                    ))}
-                </ul>
-            </div> */}
-
-            {/* <div id="aulas-disponiveis">
-                <h2 className="mt-4">Aulas Disponíveis:</h2>
-                <ul>
-                    {items.map(item => (
-                        <li key={item.id}>
-                            {item.id}
-                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula">Apresentar</a></button>
-                        </li>
-                    ))}
-                </ul>
-            </div> */}
-
-            {/* <button onClick={() => setVirarAula(!virarAula)}>Virar Aula</button> */}
-
-
             <div id="subir" style={{ marginLeft: '-7px', background: 'white', height: '100%', width: '100%', position: 'absolute', top: '0px', zIndex: '0', display: containerNone ? 'block' : 'none' }}>
                 <div id="apresentacao-aula" style={{ transform: `rotate(${rotacao}deg)` }}></div>
+                {audioPlayerVisible && (
+                    <audio controls>
+                        <source src={audioAula} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                    </audio>
+                )}
+
+
+
 
                 {/* Divs para os cronômetros */}
                 <div id="apresentacao-cronometro-1" className="mt-4" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }} >
@@ -1731,13 +1827,8 @@ export default function ModeloFinal() {
                     <button onClick={() => setConfirmNonee(!confirmNonee)} style={{ width: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img src={IconDiminuir} style={{ width: '20px' }} />
                     </button>
-
-                    {/* <button onClick={() => handlePresent()} >
-                        <img src={IconPlay} style={{ width: '20px' }} />
-                    </button> */}
                 </div>
             </div>
-            {/* Divs para os FlashCards 2 e 3 */}
         </div >
     );
 }

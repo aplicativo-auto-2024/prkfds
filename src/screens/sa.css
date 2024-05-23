@@ -11,6 +11,7 @@
     animation: spin 1s infinite linear;
 }
 
+
 @keyframes spin {
     from {
         transform: rotate(0deg);
@@ -19,6 +20,21 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+.hide-container {
+    display: none;
+}
+
+.show-container {
+    display: block;
+}
+
+
+
+
+.html5-video-container {
+    margin-top: -600px;
 }
 
 
@@ -54,6 +70,10 @@
     display: none;
 }
 
+/* .containerAudio {
+    display: none;
+}
+ */
 .containerFlashCard {
     display: none;
 }
@@ -63,10 +83,12 @@
 }
 
 #apresentacao-aula {
-    font-size: 78px;
+    font-size: 160px;
     font-weight: 600;
     text-align: center;
+    word-wrap: break-word;
 }
+
 
 #apresentacao-aula img {
     width: 100%;

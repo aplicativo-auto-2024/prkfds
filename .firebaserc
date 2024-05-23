@@ -1,7 +1,8 @@
 {
   "projects": {
-    "default": "visu-new-7729d",
-    "project": "visu-new-7729d"
+    "default": "bruno-new-app-a3547",
+    "project": "visu-new-7729d",
+    "bruno-new-app": "bruno-new-app-a3547"
   },
   "targets": {},
   "etags": {}

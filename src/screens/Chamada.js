@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "../styles/Chamada.css";
+import { Modal, Button } from 'react-bootstrap';
 
 import firebase from '../firebase';
 import "firebase/firestore";
@@ -19,7 +20,9 @@ const ChamadaTurma = () => {
     const [attendanceCounts, setAttendanceCounts] = useState({});
     const [contChamada, setContChamada] = useState(0);
     const [aulaId, setAulaId] = useState("");
+    const [periodoChamada, setPeriodoChamada] = useState("");
     const [descricaoAula, setDescricaoAula] = useState("");
+    const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -41,6 +44,16 @@ const ChamadaTurma = () => {
                 console.error("Error fetching students: ", error);
             }
         };
+
+        const openConfirmation = () => {
+            setIsConfirmationOpen(true);
+        };
+
+        // Função para fechar o modal de confirmação
+        const closeConfirmation = () => {
+            setIsConfirmationOpen(false);
+        };
+
 
         const fetchPDFs = async () => {
             try {
@@ -99,14 +112,17 @@ const ChamadaTurma = () => {
                 const nomeEscola = classDoc.data().turma;
 
                 const pdf = new jsPDF();
-                pdf.text("Lista de Presença", 20, 10);
-                pdf.text(`Escola: ${nomeEscola}`, 20, 20);
-                pdf.text(`ID da Aula: ${aulaId}`, 20, 30);
-                pdf.text(`Descrição da Aula: ${descricaoAula}`, 20, 40);
+                pdf.text("DETALHES:", 20, 10);
+                pdf.text("Lista de Presença", 25, 20);
+                pdf.text(`Escola: ${nomeEscola}`, 25, 30);
+                pdf.text(`ID da Aula: ${aulaId}`, 25, 40);
+                pdf.text(`Descrição da Aula: ${descricaoAula}`, 25, 50);
+                pdf.text(`Período da Chamada: ${periodoChamada}`, 25, 60);
+                pdf.text(`CHAMADA:`, 20, 70);
 
                 students.forEach((student, index) => {
                     if (student.isPresent) {
-                        pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 20, 50 + index * 10);
+                        pdf.text(`${index + 1}. ${student.name} - Presente (${attendanceCounts[student.id] || 0} vezes)`, 25, 80 + index * 10);
                     }
                 });
 
@@ -162,8 +178,15 @@ const ChamadaTurma = () => {
             if (attendanceCounts[student.id] && contChamada !== 0) {
                 porcentagem = (attendanceCounts[student.id] / contChamada) * 100;
             }
-            // pdf.text(`${index + 1}. ${student.name} - Total de Presenças: ${attendanceCounts[student.id] || 0} vezes de ${contChamada} (${porcentagem.toFixed(2)}%)`, 20, 20 + index * 10);
-            pdf.text(`Aluno ${student.name} - Total de Presenças:  ${porcentagem.toFixed(2)}%`, 20, 20 + index * 10);
+
+            // Ajuste das coordenadas para exibir os dados corretamente
+            const yPos = 40 + index * 30;
+
+            pdf.text(`Aluno: ${student.name}`, 20, yPos);
+            // pdf.text(`: ${contChamada} Horas`, 20, yPos + 10);
+            pdf.text(`Carga horária: ${attendanceCounts[student.id] || 0} Horas`, 20, yPos + 10);
+            pdf.text(`Porcentagem de Presença: ${porcentagem.toFixed(2)}%`, 20, yPos + 20);
+            // pdf.text(`------------------------------`, 40, yPos + 40);
         });
 
         const timestamp = moment().format("YYYY-MM-DD HH:mm:ss");
@@ -197,13 +220,22 @@ const ChamadaTurma = () => {
         }
     };
 
+
     const handlePhotoChange = (e) => {
         if (e.target.files.length > 0) {
             const photo = e.target.files[0];
             setNewStudentPhoto(photo);
         }
     };
-
+    const confirmReset = () => {
+        const resetAttendance = students.map(student => ({
+            ...student,
+            isPresent: false
+        }));
+        setStudents(resetAttendance);
+        setAttendanceCounts({});
+        setIsConfirmationOpen(false);
+    };
 
     const handleAddStudent = async () => {
         if (newStudentName.trim() !== "") {
@@ -244,6 +276,14 @@ const ChamadaTurma = () => {
         toast.info("ID da turma copiado para a área de transferência!");
     };
 
+    const handleResetAttendance = () => {
+        setIsConfirmationOpen(true);
+    };
+
+    const closeConfirmation = () => {
+        setIsConfirmationOpen(false);
+    };
+
     return (
         <div className="container">
             <ToastContainer />
@@ -276,20 +316,32 @@ const ChamadaTurma = () => {
                     ))}
                 </tbody>
             </table>
-            <label>ID da Aula:</label>
+            <label style={{ marginTop: '10px' }}>ID da Aula:</label>
             <input
                 type="text"
-                placeholder="id da aula para puxar conteúdo"
+                placeholder="id da aula para puxar conteúdo" className="form-control input-add-new-aluno"
                 value={aulaId}
                 onChange={(e) => setAulaId(e.target.value)}
             />
-            <label>Descrição da Aula:</label>
+            <label style={{ marginTop: '10px' }}>Descrição da Aula:</label>
             <input
-                type="text"
+                type="text" className="form-control input-add-new-aluno"
                 placeholder="Descrição da aula"
                 value={descricaoAula}
                 onChange={(e) => setDescricaoAula(e.target.value)}
             />
+            <label style={{ marginTop: '10px' }}>Período chamada:</label>
+            <input list="data-list-mes"
+                type="text"
+                placeholder="Janeiro, Fevereiro, Março..." className="form-control input-add-new-aluno"
+                value={periodoChamada} style={{ marginBottom: '10px' }}
+                onChange={(e) => setPeriodoChamada(e.target.value)}
+            />
+            <datalist id="data-list-mes">
+                <option value="Janeiro" />
+                <option value="Fevereiro" />
+                <option value="Março" />
+            </datalist>
             <button onClick={handleGeneratePDF} className="btn btn-primary" style={{ width: '100%' }}>Gerar PDF</button>
 
             <div>
@@ -326,7 +378,28 @@ const ChamadaTurma = () => {
 
             <div className="text-center">
                 <button onClick={handleGenerateConsolidatedPDF} style={{ width: '100%' }} className="btn btn-info">Gerar PDF Consolidado</button>
+                <button onClick={handleResetAttendance} style={{ width: '100%', marginTop: '10px' }} className="btn btn-danger">Zerar presenças</button>
             </div>
+
+
+
+            <Modal show={isConfirmationOpen} onHide={closeConfirmation}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmar Zerar Presenças</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Deseja realmente zerar a chamada?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={closeConfirmation}>
+                        Não
+                    </Button>
+                    <Button variant="danger" onClick={confirmReset}>
+                        Sim
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </div>
     );
 };

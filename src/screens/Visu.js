@@ -11,6 +11,7 @@ export default function Visu() {
     const [items, setItems] = useState([]);
     const [inputId, setInputId] = useState('');
     const [mensagem, setMensagem] = useState('');
+    const [containerVisualizar, setContainerVisualizar] = useState(false);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -178,7 +179,7 @@ export default function Visu() {
                         <li key={item.id} style={{ display: 'none' }} id="aulaa">
                             {item.id}
                             {/* <button className="btn btn-secondary ms-2" onClick={() => handlePresent(item.id)}>Apresentar</button> */}
-                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#apresentacao-aula" onClick={() => setAparecerContainer(!aparecerContainer)}>Apresentar</a></button>
+                            <button className="btn btn-secondary ms-2 style-button" onClick={() => handlePresent(item.id)} ><a href="#blabla" onClick={() => setAparecerContainer(!aparecerContainer)}>Apresentar</a></button>
 
                         </li>
                     ))}
@@ -188,7 +189,8 @@ export default function Visu() {
             {/* <button onClick={() => setMudarTamanho(!mudarTamanho)} >Virar</button> */}
             {/* <div id="apresentacao-aula" style={{ marginTop: '100px', rotate: mudarTamanho ? '0deg' : '90deg', width: mudarTamanho ? 'absolute' : 'absolute', width: '100%', left: '0px', top: '0px', paddingTop: '52%', height: mudarTamanho ? '90vh' : '50vh', boxShadow: aparecerContainer ? '5px 5px 10px black' : '' }} >
             </div> */}
-            <div id="apresentacao-aula" style={{ marginTop: '100px' }}>
+            <p id="blabla"></p>
+            <div id="apresentacao-aula" style={{ marginTop: '100px', position: containerVisualizar ? 'absolute' : 'none', top: '0px', background: 'white', width: '100%', height: '100vh' }}>
             </div>
 
             {/* <button onClick={() => setMudarTamanho(!mudarTamanho)}> Sair</button> */}

@@ -1565,23 +1565,21 @@ export default function ModeloFinal() {
                         <label className="form-label mt-2">Áudio :</label>
                         <input type="file" className="form-control" value={tempoAudio1} onChange={(e) => setTempoAudio1(e.target.value)} placeholder=" " />
                     </div> */}
-                    <label>Áudio:</label>
+                    <label>Áudio ok!!:</label>
                     <input
                         type="file"
                         onChange={(e) => setAudioAula(e.target.files[0])}
                     />
-                    <label>Áudio:</label>
+                    <label>Áudio ok!!:</label>
                     <input
                         type="file"
                         onChange={(e) => setAudioAula2(e.target.files[0])}
                     />
-
-
-
-                    {/* <div className="containerAudio">
+                    <div className="containerAudio">
                         <label className="form-label mt-2">Áudio :</label>
                         <input type="file" className="form-control" onChange={(e) => setAudioFile(e.target.files[0])} />
-                    </div> */}
+                        {/* Se desejar, você pode adicionar atributos para limitar o tipo de arquivo aceito, como accept="audio/*" */}
+                    </div>
 
 
 

@@ -102,10 +102,8 @@ export default function ModeloFinal() {
     const [tempoVideo, setTempoVideo] = useState();
     const [videoUrl2, setVideoUrl2] = useState("");
     const [videoUrl3, setVideoUrl3] = useState("");
-    const [videoUrl4, setVideoUrl4] = useState("");
     const [tempoVideo2, setTempoVideo2] = useState();
     const [tempoVideo3, setTempoVideo3] = useState();
-    const [tempoVideo4, setTempoVideo4] = useState();
 
     const [tempoCronometro1, setTempoCronometro1] = useState();
     const [tempoCronometro2, setTempoCronometro2] = useState();
@@ -151,7 +149,7 @@ export default function ModeloFinal() {
     const handlePresent = (itemId) => {
         const item = items.find(item => item.id === itemId);
         if (item) {
-            apresentarItem(item, item.audioURL, item.audioURL2);
+            apresentarItem(item, item.audioURL); // Passando audioURL
             setContainerNone(!containerNone);
         }
     };
@@ -192,22 +190,12 @@ export default function ModeloFinal() {
             setLoading(true);
         }
         try {
-            const uploadAudio = async (audioFile) => {
-                const storageRef = storage.ref();
-                const audioFileRef = storageRef.child(`audios/${audioFile.name}`);
-                await audioFileRef.put(audioFile);
-                return await audioFileRef.getDownloadURL();
-            };
             const classID = id;
-            const audioUrl = await uploadAudio(audioAula);
-            const uploadAudio2 = async (audioFile) => {
-                const storageRef = storage.ref();
-                const audioFileName = `${new Date().getTime()}_${audioFile.name}`; // Nome único para o arquivo
-                const audioFileRef = storageRef.child(`audios/${audioFileName}`);
-                await audioFileRef.put(audioFile);
-                return await audioFileRef.getDownloadURL();
-            };
-            const audioUrl2 = await uploadAudio2(audioAula2);
+            const storageRef = storage.ref();
+            const audioFileRef = storageRef.child(`audios/${audioAula.name}`);
+            await audioFileRef.put(audioAula);
+
+            const audioUrl = await audioFileRef.getDownloadURL();
 
             const docRef = await db.collection("seuColecao").add({
                 classID,
@@ -215,7 +203,6 @@ export default function ModeloFinal() {
                 descricaoAula,
                 texto1,
                 audioURL: audioUrl,
-                audioURL2: audioUrl2,
                 imagem1Url: "",
                 tempoTexto1: tempoTexto1 / 1000, // Convertendo segundos para milissegundos
                 tempoImagem1: tempoImagem1 / 1000, // Convertendo segundos para milissegundos
@@ -277,8 +264,6 @@ export default function ModeloFinal() {
                 tempoImagem10: tempoImagem10 / 1000, // Convertendo segundos para milissegundos
                 videoUrl, // Inicialmente vazio, pois o vídeo ainda não foi carregado
                 videoUrl2, // Inicialmente vazio, pois o vídeo ainda não foi carregado
-                videoUrl3, // Inicialmente vazio, pois o vídeo ainda não foi carregado
-                videoUrl4, // Inicialmente vazio, pois o vídeo ainda não foi carregado
                 tempoVideo: tempoVideo / 1000, // Convertendo segundos para milissegundos
                 tempoVideo2: tempoVideo2 / 1000, // Convertendo segundos para milissegundos
                 tempoVideo3: tempoVideo3 / 1000, // Convertendo segundos para milissegundos
@@ -379,7 +364,6 @@ export default function ModeloFinal() {
             setTempoVideo(0);
             setTempoVideo2(0);
             setTempoVideo3(0);
-            setTempoVideo4(0);
 
             setTempoCronometro1(0);
             setTempoCronometro2(0);
@@ -728,7 +712,7 @@ export default function ModeloFinal() {
     }
 
 
-    const apresentarItem = async (item, audioURL, audioURL2) => {
+    const apresentarItem = async (item, audioURL) => {
         const apresentacaoDiv = document.getElementById("apresentacao-aula");
         apresentacaoDiv.innerHTML = "";
         apresentacaoDiv.style.marginTop = "220px";
@@ -749,13 +733,13 @@ export default function ModeloFinal() {
 
         }
 
-        // if (item.imagem1Url) {
-        //     // NÃO ENTENDI POR QUE CARREGAR UM ÁUDIO SE TIVER IMAGEM1URL....
-        //     <audio controls >
-        //         <source src={audioAula} type="audio/mpeg" />
-        //         Your browser does not support the audio element.
-        //     </audio>
-        // }
+        if (item.imagem1Url) {
+            // NÃO ENTENDI POR QUE CARREGAR UM ÁUDIO SE TIVER IMAGEM1URL....
+            <audio controls >
+                <source src={audioAula} type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+        }
 
         const videoDiv = document.createElement("div");
         const video = document.createElement("iframe");
@@ -873,6 +857,18 @@ export default function ModeloFinal() {
             apresentacaoFlashCard1.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
         }
 
+        if (audioURL) {
+            const audio = document.createElement("audio");
+            audio.src = audioURL;
+            audio.controls = true;
+            audio.autoplay = true;
+            apresentacaoDiv.appendChild(audio);
+            await new Promise(resolve => {
+                audio.onended = resolve; // Resolve a promessa quando o áudio terminar
+            });
+            apresentacaoDiv.removeChild(audio);
+        }
+
         if (item.tempoFlashCard2) {
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo1 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
@@ -911,23 +907,6 @@ export default function ModeloFinal() {
             await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard3 * 1000));
 
             apresentacaoFlashCard3.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
-        }
-
-        if (audioURL) {
-            const audioContainer = document.createElement("div"); // Cria a div para o áudio
-            const audio = document.createElement("audio");
-            audio.src = audioURL;
-            audio.controls = true;
-            audio.autoplay = true;
-            audioContainer.appendChild(audio); // Adiciona o elemento de áudio à div
-
-            apresentacaoDiv.appendChild(audioContainer); // Adiciona a div ao DOM
-
-            await new Promise(resolve => {
-                audio.onended = resolve; // Resolve a promessa quando o áudio terminar
-            });
-
-            apresentacaoDiv.removeChild(audioContainer); // Remove a div após o áudio terminar
         }
 
         await apresentarConteudo(item.texto2, item.tempoTexto2);
@@ -1060,19 +1039,6 @@ export default function ModeloFinal() {
             apresentacaoFlashCard6.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
         }
 
-
-        if (audioURL2) {
-            const audio2 = document.createElement("audio");
-            audio2.src = audioURL2;
-            audio2.controls = true;
-            audio2.autoplay = true;
-            apresentacaoDiv.appendChild(audio2);
-            await new Promise(resolve => {
-                audio2.onended = resolve; // Resolve a promessa quando o áudio terminar
-            });
-            apresentacaoDiv.removeChild(audio2);
-        }
-
         await apresentarConteudo(item.texto3, item.tempoTexto3);
         if (item.imagem3Url) {
             const imagem3Tag = document.createElement("img");
@@ -1098,48 +1064,90 @@ export default function ModeloFinal() {
             apresentacaoDiv.appendChild(videoDiv3);
             await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguarda pelo tempo do vídeo
             apresentacaoDiv.removeChild(videoDiv3);
+
         }
 
-        if (item.tempoCronometro3) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
 
-            const apresentacaoCronometro3 = document.getElementById("apresentacao-cronometro-3");
-            apresentacaoCronometro3.innerHTML = ""; // Remover o componente Cronômetro 1
 
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Cronômetro 1 seja desmontado e removido completamente
 
-            const cronometroContainer3 = document.createElement("div"); // Criar um novo elemento para o componente Cronômetro 1
-            apresentacaoCronometro3.appendChild(cronometroContainer3); // Adicionar o elemento ao DOM
 
-            ReactDOM.render(<Cronometro />, cronometroContainer3); // Renderizar o componente Cronômetro 1 no novo elemento
 
-            apresentacaoCronometro3.style.display = "block"; // Exibir o componente Cronômetro 1
 
-            await new Promise(resolve => setTimeout(resolve, item.tempoCronometro3 * 1000));
 
-            apresentacaoCronometro3.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (item.imagem4Url) {
+            const imagem4Tag = document.createElement("img");
+            imagem4Tag.src = item.imagem4Url;
+            apresentacaoDiv.appendChild(imagem4Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem4 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem4Tag); // Remover a imagem após o tempo
         }
 
-        if (item.tempoMetronomo3) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
 
-            const apresentacaoMetronomo3 = document.getElementById("apresentacao-metronomo-3");
-            apresentacaoMetronomo3.innerHTML = ""; // Remover o componente Metrônomo 1
 
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Metrônomo 1 seja desmontado e removido completamente
 
-            const metronomoContainer3 = document.createElement("div"); // Criar um novo elemento para o componente Metrônomo 1
-            apresentacaoMetronomo3.appendChild(metronomoContainer3); // Adicionar o elemento ao DOM
 
-            ReactDOM.render(<Metronomo />, metronomoContainer3); // Renderizar o componente Metrônomo 1 no novo elemento
-
-            apresentacaoMetronomo3.style.display = "block"; // Exibir o componente Metrônomo 1
-            // apresentacaoMetronomo1.style.marginTop = "-300px"; // Definir marginTop
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo3 * 1000));
-
-            apresentacaoMetronomo3.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
+        await apresentarConteudo(item.texto4, item.tempoTexto4);
+        await apresentarConteudo(item.texto5, item.tempoTexto5);
+        if (item.imagem5Url) {
+            const imagem5Tag = document.createElement("img");
+            imagem5Tag.src = item.imagem5Url;
+            apresentacaoDiv.appendChild(imagem5Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem5 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem5Tag); // Remover a imagem após o tempo
         }
+        await apresentarConteudo(item.texto6, item.tempoTexto6);
+        if (item.imagem6Url) {
+            const imagem6Tag = document.createElement("img");
+            imagem6Tag.src = item.imagem6Url;
+            apresentacaoDiv.appendChild(imagem6Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem6 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem6Tag); // Remover a imagem após o tempo
+        }
+        if (item.imagem7Url) {
+            const imagem7Tag = document.createElement("img");
+            imagem7Tag.src = item.imagem7Url;
+            apresentacaoDiv.appendChild(imagem7Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem7 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem7Tag); // Remover a imagem após o tempo
+        }
+        if (item.imagem8Url) {
+            const imagem8Tag = document.createElement("img");
+            imagem8Tag.src = item.imagem8Url;
+            apresentacaoDiv.appendChild(imagem8Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem8 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem8Tag); // Remover a imagem após o tempo
+        }
+        if (item.imagem9Url) {
+            const imagem9Tag = document.createElement("img");
+            imagem9Tag.src = item.imagem9Url;
+            apresentacaoDiv.appendChild(imagem9Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem9 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem9Tag); // Remover a imagem após o tempo
+        }
+        if (item.imagem10Url) {
+            const imagem10Tag = document.createElement("img");
+            imagem10Tag.src = item.imagem10Url;
+            apresentacaoDiv.appendChild(imagem10Tag);
+            await new Promise(resolve => setTimeout(resolve, item.tempoImagem10 * 1000)); // Aguardar pelo tempo da imagem
+            apresentacaoDiv.removeChild(imagem10Tag); // Remover a imagem após o tempo
+        }
+
         if (item.tempoFlashCard7) {
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo7 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
@@ -1200,55 +1208,46 @@ export default function ModeloFinal() {
             apresentacaoFlashCard9.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
         }
 
-        await apresentarConteudo(item.texto4, item.tempoTexto4);
+        if (item.tempoFlashCard10) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo10 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-        if (item.imagem4Url) {
-            const imagem4Tag = document.createElement("img");
-            imagem4Tag.src = item.imagem4Url;
-            apresentacaoDiv.appendChild(imagem4Tag);
-            await new Promise(resolve => setTimeout(resolve, item.tempoImagem4 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem4Tag); // Remover a imagem após o tempo
+            const apresentacaoFlashCard10 = document.getElementById("apresentacao-flashcard-10");
+            apresentacaoFlashCard10.innerHTML = ""; // Remover o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+            const flashCardContainer10 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+            apresentacaoFlashCard10.appendChild(flashCardContainer10); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<FlashCardImagem />, flashCardContainer10); // Renderizar o componente FlashCard 1 no novo elemento
+
+            apresentacaoFlashCard10.style.display = "block"; // Exibir o componente FlashCard 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard10 * 1000));
+
+            apresentacaoFlashCard10.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
         }
 
-
-        if (item.videoUrl4) {
-            const videoDiv4 = document.createElement("div");
-            const video4 = document.createElement("iframe");
-            video4.width = "560";
-            video4.height = "315";
-            video4.style.marginTop = "-200px";
-
-            const videoId = extractVideoId(item.videoUrl4);
-            video4.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            video4.frameBorder = "0";
-            video4.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-            video4.allowFullScreen = true;
-            videoDiv4.appendChild(video4);
-            apresentacaoDiv.appendChild(videoDiv4);
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguarda pelo tempo do vídeo
-            apresentacaoDiv.removeChild(videoDiv4);
-        }
-
-        if (item.tempoCronometro4) {
+        if (item.tempoMetronomo3) {
             await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
 
-            const apresentacaoCronometro4 = document.getElementById("apresentacao-cronometro-4");
-            apresentacaoCronometro4.innerHTML = ""; // Remover o componente Cronômetro 1
+            const apresentacaoMetronomo3 = document.getElementById("apresentacao-metronomo-3");
+            apresentacaoMetronomo3.innerHTML = ""; // Remover o componente Metrônomo 1
 
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Cronômetro 1 seja desmontado e removido completamente
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Metrônomo 1 seja desmontado e removido completamente
 
-            const cronometroContainer4 = document.createElement("div"); // Criar um novo elemento para o componente Cronômetro 1
-            apresentacaoCronometro4.appendChild(cronometroContainer4); // Adicionar o elemento ao DOM
+            const metronomoContainer3 = document.createElement("div"); // Criar um novo elemento para o componente Metrônomo 1
+            apresentacaoMetronomo3.appendChild(metronomoContainer3); // Adicionar o elemento ao DOM
 
-            ReactDOM.render(<Cronometro />, cronometroContainer4); // Renderizar o componente Cronômetro 1 no novo elemento
+            ReactDOM.render(<Metronomo />, metronomoContainer3); // Renderizar o componente Metrônomo 1 no novo elemento
 
-            apresentacaoCronometro4.style.display = "block"; // Exibir o componente Cronômetro 1
+            apresentacaoMetronomo3.style.display = "block"; // Exibir o componente Metrônomo 1
+            // apresentacaoMetronomo1.style.marginTop = "-300px"; // Definir marginTop
 
-            await new Promise(resolve => setTimeout(resolve, item.tempoCronometro4 * 1000));
+            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo3 * 1000));
 
-            apresentacaoCronometro4.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
+            apresentacaoMetronomo3.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
         }
-
         if (item.tempoMetronomo4) {
             await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
 
@@ -1270,85 +1269,6 @@ export default function ModeloFinal() {
             apresentacaoMetronomo4.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
         }
 
-        if (item.tempoFlashCard10) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo10 * 1000)); // Aguardar pelo tempo do metrônomo 01
-
-            const apresentacaoFlashCard10 = document.getElementById("apresentacao-flashcard-10");
-            apresentacaoFlashCard10.innerHTML = ""; // Remover o componente FlashCard 1
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
-
-            const flashCardContainer10 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
-            apresentacaoFlashCard10.appendChild(flashCardContainer10); // Adicionar o elemento ao DOM
-
-            ReactDOM.render(<FlashCardImagem />, flashCardContainer10); // Renderizar o componente FlashCard 1 no novo elemento
-
-            apresentacaoFlashCard10.style.display = "block"; // Exibir o componente FlashCard 1
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard10 * 1000));
-
-            apresentacaoFlashCard10.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
-        }
-
-
-
-
-
-
-
-
-
-        await apresentarConteudo(item.texto5, item.tempoTexto5);
-        if (item.imagem5Url) {
-            const imagem5Tag = document.createElement("img");
-            imagem5Tag.src = item.imagem5Url;
-            apresentacaoDiv.appendChild(imagem5Tag);
-            await new Promise(resolve => setTimeout(resolve, item.tempoImagem5 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem5Tag); // Remover a imagem após o tempo
-        }
-        await apresentarConteudo(item.texto6, item.tempoTexto6);
-        if (item.imagem6Url) {
-            const imagem6Tag = document.createElement("img");
-            imagem6Tag.src = item.imagem6Url;
-            apresentacaoDiv.appendChild(imagem6Tag);
-            await new Promise(resolve => setTimeout(resolve, item.tempoImagem6 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem6Tag); // Remover a imagem após o tempo
-        }
-        if (item.imagem7Url) {
-            const imagem7Tag = document.createElement("img");
-            imagem7Tag.src = item.imagem7Url;
-            apresentacaoDiv.appendChild(imagem7Tag);
-            await new Promise(resolve => setTimeout(resolve, item.tempoImagem7 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem7Tag); // Remover a imagem após o tempo
-        }
-        if (item.imagem8Url) {
-            const imagem8Tag = document.createElement("img");
-            imagem8Tag.src = item.imagem8Url;
-            apresentacaoDiv.appendChild(imagem8Tag);
-            await new Promise(resolve => setTimeout(resolve, item.tempoImagem8 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem8Tag); // Remover a imagem após o tempo
-        }
-        if (item.imagem9Url) {
-            const imagem9Tag = document.createElement("img");
-            imagem9Tag.src = item.imagem9Url;
-            apresentacaoDiv.appendChild(imagem9Tag);
-            await new Promise(resolve => setTimeout(resolve, item.tempoImagem9 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem9Tag); // Remover a imagem após o tempo
-        }
-        if (item.imagem10Url) {
-            const imagem10Tag = document.createElement("img");
-            imagem10Tag.src = item.imagem10Url;
-            apresentacaoDiv.appendChild(imagem10Tag);
-            await new Promise(resolve => setTimeout(resolve, item.tempoImagem10 * 1000)); // Aguardar pelo tempo da imagem
-            apresentacaoDiv.removeChild(imagem10Tag); // Remover a imagem após o tempo
-        }
-
-
-
-
-
-
-
         await apresentarConteudo(item.texto7, item.tempoTexto7);
         await apresentarConteudo(item.texto8, item.tempoTexto8);
         await apresentarConteudo(item.texto9, item.tempoTexto9);
@@ -1368,25 +1288,59 @@ export default function ModeloFinal() {
 
 
 
+        if (item.tempoCronometro3) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
 
+            const apresentacaoCronometro3 = document.getElementById("apresentacao-cronometro-3");
+            apresentacaoCronometro3.innerHTML = ""; // Remover o componente Cronômetro 1
 
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Cronômetro 1 seja desmontado e removido completamente
 
-        // if (item.audioUrl) {
-        //     const audio = new Audio(item.audioUrl);
-        //     audio.play();
-        //     await new Promise(resolve => audio.addEventListener('ended', resolve));
-        // }
+            const cronometroContainer3 = document.createElement("div"); // Criar um novo elemento para o componente Cronômetro 1
+            apresentacaoCronometro3.appendChild(cronometroContainer3); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<Cronometro />, cronometroContainer3); // Renderizar o componente Cronômetro 1 no novo elemento
+
+            apresentacaoCronometro3.style.display = "block"; // Exibir o componente Cronômetro 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoCronometro3 * 1000));
+
+            apresentacaoCronometro3.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
+        }
+        if (item.tempoCronometro4) {
+            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
+
+            const apresentacaoCronometro4 = document.getElementById("apresentacao-cronometro-4");
+            apresentacaoCronometro4.innerHTML = ""; // Remover o componente Cronômetro 1
+
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Cronômetro 1 seja desmontado e removido completamente
+
+            const cronometroContainer4 = document.createElement("div"); // Criar um novo elemento para o componente Cronômetro 1
+            apresentacaoCronometro4.appendChild(cronometroContainer4); // Adicionar o elemento ao DOM
+
+            ReactDOM.render(<Cronometro />, cronometroContainer4); // Renderizar o componente Cronômetro 1 no novo elemento
+
+            apresentacaoCronometro4.style.display = "block"; // Exibir o componente Cronômetro 1
+
+            await new Promise(resolve => setTimeout(resolve, item.tempoCronometro4 * 1000));
+
+            apresentacaoCronometro4.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
+        }
+
+        if (item.audioUrl) {
+            const audio = new Audio(item.audioUrl);
+            audio.play();
+            await new Promise(resolve => audio.addEventListener('ended', resolve));
+        }
 
         // Mesmo processo para os cronômetros 2 e 3
         // Mesmo processo para os metrônomos 2 e 3
         // Mesmo processo para os FlashCards 2 e 3
-
     };
 
 
     const [audioPlayerVisible, setAudioPlayerVisible] = useState(false);
     const [audioAula, setAudioAula] = useState(null);
-    const [audioAula2, setAudioAula2] = useState(null);
 
 
     return (
@@ -1518,11 +1472,6 @@ export default function ModeloFinal() {
                         <input type="text" className="form-control" value={videoUrl3} onChange={(e) => setVideoUrl3(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
                         <input type="number" className="form-control mt-1" value={tempoVideo3} onChange={(e) => setTempoVideo3(e.target.value)} placeholder=" " />
                     </div>
-                    <div className="containerVideo">
-                        <label className="form-label mt-2">Vídeo YT :</label>
-                        <input type="text" className="form-control" value={videoUrl4} onChange={(e) => setVideoUrl4(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
-                        <input type="number" className="form-control mt-1" value={tempoVideo4} onChange={(e) => setTempoVideo4(e.target.value)} placeholder=" " />
-                    </div>
 
 
 
@@ -1565,23 +1514,16 @@ export default function ModeloFinal() {
                         <label className="form-label mt-2">Áudio :</label>
                         <input type="file" className="form-control" value={tempoAudio1} onChange={(e) => setTempoAudio1(e.target.value)} placeholder=" " />
                     </div> */}
-                    <label>Áudio:</label>
+                    <label>Áudio ok!!:</label>
                     <input
                         type="file"
                         onChange={(e) => setAudioAula(e.target.files[0])}
                     />
-                    <label>Áudio:</label>
-                    <input
-                        type="file"
-                        onChange={(e) => setAudioAula2(e.target.files[0])}
-                    />
-
-
-
-                    {/* <div className="containerAudio">
+                    <div className="containerAudio">
                         <label className="form-label mt-2">Áudio :</label>
                         <input type="file" className="form-control" onChange={(e) => setAudioFile(e.target.files[0])} />
-                    </div> */}
+                        {/* Se desejar, você pode adicionar atributos para limitar o tipo de arquivo aceito, como accept="audio/*" */}
+                    </div>
 
 
 
@@ -1828,12 +1770,12 @@ export default function ModeloFinal() {
             </div>
             <div id="subir" style={{ marginLeft: '-7px', background: 'white', height: '100%', width: '100%', position: 'absolute', top: '0px', zIndex: '0', display: containerNone ? 'block' : 'none' }}>
                 <div id="apresentacao-aula" style={{ transform: `rotate(${rotacao}deg)` }}></div>
-                {/* {audioPlayerVisible && (
+                {audioPlayerVisible && (
                     <audio controls style={{ marginTop: '200px !important' }}>
                         <source src={audioAula} type="audio/mpeg" />
                         Your browser does not support the audio element.
                     </audio>
-                )} */}
+                )}
 
                 {/* Divs para os cronômetros */}
                 <div id="apresentacao-cronometro-1" className="mt-4 cronometro-abposoule" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }} >

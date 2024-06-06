@@ -104,25 +104,16 @@ export default function ModeloFinal() {
     const [videoUrl3, setVideoUrl3] = useState("");
     const [videoUrl4, setVideoUrl4] = useState("");
     const [videoUrl5, setVideoUrl5] = useState("");
-    const [videoUrl6, setVideoUrl6] = useState("");
-    const [videoUrl7, setVideoUrl7] = useState("");
-    const [videoUrl8, setVideoUrl8] = useState("");
     const [tempoVideo2, setTempoVideo2] = useState();
     const [tempoVideo3, setTempoVideo3] = useState();
     const [tempoVideo4, setTempoVideo4] = useState();
     const [tempoVideo5, setTempoVideo5] = useState();
-    const [tempoVideo6, setTempoVideo6] = useState();
-    const [tempoVideo7, setTempoVideo7] = useState();
-    const [tempoVideo8, setTempoVideo8] = useState();
 
     const [tempoCronometro1, setTempoCronometro1] = useState();
     const [tempoCronometro2, setTempoCronometro2] = useState();
     const [tempoCronometro3, setTempoCronometro3] = useState();
     const [tempoCronometro4, setTempoCronometro4] = useState();
     const [tempoCronometro5, setTempoCronometro5] = useState();
-    const [tempoCronometro6, setTempoCronometro6] = useState();
-    const [tempoCronometro7, setTempoCronometro7] = useState();
-    const [tempoCronometro8, setTempoCronometro8] = useState();
 
     const [tempoMetronomo1, setTempoMetronomo1] = useState();
     const [tempoMetronomo1DE120, setTempoMetronomo1DE120] = useState();
@@ -130,9 +121,6 @@ export default function ModeloFinal() {
     const [tempoMetronomo3, setTempoMetronomo3] = useState();
     const [tempoMetronomo4, setTempoMetronomo4] = useState();
     const [tempoMetronomo5, setTempoMetronomo5] = useState();
-    const [tempoMetronomo6, setTempoMetronomo6] = useState();
-    const [tempoMetronomo7, setTempoMetronomo7] = useState();
-    const [tempoMetronomo8, setTempoMetronomo8] = useState();
     const [tempoAudio1, setTempoAudio1] = useState();
 
     const [tempoFlashCard1, setTempoFlashCard1] = useState();
@@ -172,7 +160,7 @@ export default function ModeloFinal() {
     const handlePresent = (itemId) => {
         const item = items.find(item => item.id === itemId);
         if (item) {
-            apresentarItem(item, item.audioURL, item.audioURL2, item.audioURL3, item.audioURL4, item.audioURL5, item.audioURL6, item.audioURL7, item.audioURL8);
+            apresentarItem(item, item.audioURL, item.audioURL2, item.audioURL3, item.audioURL4, item.audioURL5);
             setContainerNone(!containerNone);
         }
     };
@@ -254,60 +242,11 @@ export default function ModeloFinal() {
             };
 
             let audioUrl = null;
-            let audioUrl2 = null;
-            let audioUrl3 = null;
-            let audioUrl4 = null;
-            let audioUrl5 = null;
-            let audioUrl6 = null;
-            let audioUrl7 = null;
-            let audioUrl8 = null;
 
 
             if (audioAula) {
 
                 audioUrl = await uploadAudio(audioAula);
-
-                // audioUrls.audioURL = await uploadAudio(audioAula);
-            }
-            if (audioAula2) {
-
-                audioUrl2 = await uploadAudio2(audioAula2);
-
-                // audioUrls.audioURL = await uploadAudio(audioAula);
-            }
-            if (audioAula3) {
-
-                audioUrl3 = await uploadAudio3(audioAula3);
-
-                // audioUrls.audioURL = await uploadAudio(audioAula);
-            }
-            if (audioAula4) {
-
-                audioUrl4 = await uploadAudio3(audioAula4);
-
-                // audioUrls.audioURL = await uploadAudio(audioAula);
-            }
-            if (audioAula5) {
-
-                audioUrl5 = await uploadAudio3(audioAula5);
-
-                // audioUrls.audioURL = await uploadAudio(audioAula);
-            }
-            if (audioAula6) {
-
-                audioUrl7 = await uploadAudio3(audioAula6);
-
-                // audioUrls.audioURL = await uploadAudio(audioAula);
-            }
-            if (audioAula7) {
-
-                audioUrl7 = await uploadAudio3(audioAula7);
-
-                // audioUrls.audioURL = await uploadAudio(audioAula);
-            }
-            if (audioAula8) {
-
-                audioUrl8 = await uploadAudio3(audioAula8);
 
                 // audioUrls.audioURL = await uploadAudio(audioAula);
             }
@@ -323,13 +262,10 @@ export default function ModeloFinal() {
                 descricaoAula,
                 texto1,
                 audioURL: audioUrl,
-                audioURL2: audioUrl2,
-                audioURL3: audioUrl3,
-                audioURL4: audioUrl4,
-                audioURL5: audioUrl5,
-                audioURL6: audioUrl6,
-                audioURL7: audioUrl7,
-                audioURL8: audioUrl8,
+                // audioURL2: audioUrl2,
+                // audioURL3: audioUrl3,
+                // audioURL4: audioUrl4,
+                // audioURL5: audioUrl5,
                 imagem1Url: "",
                 tempoTexto1: tempoTexto1 / 1000, // Convertendo segundos para milissegundos
                 tempoImagem1: tempoImagem1 / 1000, // Convertendo segundos para milissegundos
@@ -394,9 +330,6 @@ export default function ModeloFinal() {
                 videoUrl3, // Inicialmente vazio, pois o vídeo ainda não foi carregado
                 videoUrl4, // Inicialmente vazio, pois o vídeo ainda não foi carregado
                 videoUrl5, // Inicialmente vazio, pois o vídeo ainda não foi carregado
-                videoUrl6, // Inicialmente vazio, pois o vídeo ainda não foi carregado
-                videoUrl7, // Inicialmente vazio, pois o vídeo ainda não foi carregado
-                videoUrl8, // Inicialmente vazio, pois o vídeo ainda não foi carregado
                 tempoVideo: tempoVideo / 1000, // Convertendo segundos para milissegundos
                 tempoVideo2: tempoVideo2 / 1000, // Convertendo segundos para milissegundos
                 tempoVideo3: tempoVideo3 / 1000, // Convertendo segundos para milissegundos
@@ -405,17 +338,11 @@ export default function ModeloFinal() {
                 tempoCronometro3: tempoCronometro3 / 1000, // Convertendo segundos para milissegundos
                 tempoCronometro4: tempoCronometro4 / 1000, // Convertendo segundos para milissegundos
                 tempoCronometro5: tempoCronometro5 / 1000, // Convertendo segundos para milissegundos
-                tempoCronometro6: tempoCronometro6 / 1000, // Convertendo segundos para milissegundos
-                tempoCronometro7: tempoCronometro7 / 1000, // Convertendo segundos para milissegundos
-                tempoCronometro8: tempoCronometro8 / 1000, // Convertendo segundos para milissegundos
                 tempoMetronomo1: tempoMetronomo1 / 1000, // Convertendo segundos para milissegundos
                 tempoMetronomo2: tempoMetronomo2 / 1000, // Convertendo segundos para milissegundos
                 tempoMetronomo3: tempoMetronomo3 / 1000, // Convertendo segundos para milissegundos
                 tempoMetronomo4: tempoMetronomo4 / 1000, // Convertendo segundos para milissegundos
                 tempoMetronomo5: tempoMetronomo5 / 1000, // Convertendo segundos para milissegundos
-                tempoMetronomo6: tempoMetronomo6 / 1000, // Convertendo segundos para milissegundos
-                tempoMetronomo7: tempoMetronomo7 / 1000, // Convertendo segundos para milissegundos
-                tempoMetronomo8: tempoMetronomo8 / 1000, // Convertendo segundos para milissegundos
                 tempoFlashCard1: tempoFlashCard1 / 1000, // Convertendo segundos para milissegundos
                 tempoFlashCard2: tempoFlashCard2 / 1000, // Convertendo segundos para milissegundos
                 tempoFlashCard3: tempoFlashCard3 / 1000,
@@ -861,7 +788,7 @@ export default function ModeloFinal() {
     }
 
 
-    const apresentarItem = async (item, audioURL, audioURL2, audioURL3, audioURL4, audioURL5, audioURL6, audioURL7, audioURL8) => {
+    const apresentarItem = async (item, audioURL, audioURL2, audioURL3, audioURL4, audioURL5) => {
         const apresentacaoDiv = document.getElementById("apresentacao-aula");
         apresentacaoDiv.innerHTML = "";
         apresentacaoDiv.style.marginTop = "220px";
@@ -1649,6 +1576,56 @@ export default function ModeloFinal() {
             apresentacaoDiv.removeChild(audio5);
         }
 
+        // if (item.tempoFlashCard11) {
+        //     await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo10 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+        //     const apresentacaoFlashCard10 = document.getElementById("apresentacao-flashcard-8");
+        //     apresentacaoFlashCard10.innerHTML = ""; // Remover o componente FlashCard 1
+
+        //     await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+        //     const flashCardContainer10 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+        //     apresentacaoFlashCard10.appendChild(flashCardContainer10); // Adicionar o elemento ao DOM
+
+        //     ReactDOM.render(<FlashCardTexto />, flashCardContainer10); // Renderizar o componente FlashCard 1 no novo elemento
+
+        //     apresentacaoFlashCard10.style.display = "block"; // Exibir o componente FlashCard 1
+
+        //     await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard11 * 1000));
+
+        //     apresentacaoFlashCard10.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        // }
+
+        // if (item.tempoFlashCard12) {
+        //     await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo12 * 1000)); // Aguardar pelo tempo do metrônomo 01
+
+        //     const apresentacaoFlashCard12 = document.getElementById("apresentacao-flashcard-9");
+        //     apresentacaoFlashCard12.innerHTML = ""; // Remover o componente FlashCard 1
+
+        //     await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
+
+        //     const flashCardContainer12 = document.createElement("div"); // Criar um novo elemento para o componente FlashCard 1
+        //     apresentacaoFlashCard12.appendChild(flashCardContainer12); // Adicionar o elemento ao DOM
+
+        //     ReactDOM.render(<FlashCardAudio />, flashCardContainer12); // Renderizar o componente FlashCard 1 no novo elemento
+
+        //     apresentacaoFlashCard12.style.display = "block"; // Exibir o componente FlashCard 1
+
+        //     await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard12 * 1000));
+
+        //     apresentacaoFlashCard12.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+        // }
+
+
+
+
+
+
+
+
+
+
+
         await apresentarConteudo(item.texto6, item.tempoTexto6);
         if (item.imagem6Url) {
             const imagem6Tag = document.createElement("img");
@@ -1657,270 +1634,6 @@ export default function ModeloFinal() {
             await new Promise(resolve => setTimeout(resolve, item.tempoImagem6 * 1000)); // Aguardar pelo tempo da imagem
             apresentacaoDiv.removeChild(imagem6Tag); // Remover a imagem após o tempo
         }
-
-        if (item.videoUrl6) {
-            const videoDiv6 = document.createElement("div");
-            const video6 = document.createElement("iframe");
-            video6.width = "560";
-            video6.height = "315";
-            video6.style.marginTop = "-200px";
-
-            const videoId = extractVideoId(item.videoUrl6);
-            video6.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            video6.frameBorder = "0";
-            video6.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-            video6.allowFullScreen = true;
-            videoDiv6.appendChild(video6);
-            apresentacaoDiv.appendChild(videoDiv6);
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguarda pelo tempo do vídeo
-            apresentacaoDiv.removeChild(videoDiv6);
-        }
-
-        if (item.tempoCronometro6) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
-
-            const apresentacaoCronometro6 = document.getElementById("apresentacao-cronometro-3");
-            apresentacaoCronometro6.innerHTML = ""; // Remover o componente Cronômetro 1
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Cronômetro 1 seja desmontado e removido completamente
-
-            const cronometroContainer6 = document.createElement("div"); // Criar um novo elemento para o componente Cronômetro 1
-            apresentacaoCronometro6.appendChild(cronometroContainer6); // Adicionar o elemento ao DOM
-
-            ReactDOM.render(<Cronometro />, cronometroContainer6); // Renderizar o componente Cronômetro 1 no novo elemento
-
-            apresentacaoCronometro6.style.display = "block"; // Exibir o componente Cronômetro 1
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoCronometro6 * 1000));
-
-            apresentacaoCronometro6.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
-        }
-
-        if (item.tempoMetronomo6) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
-
-            const apresentacaoMetronomo6 = document.getElementById("apresentacao-metronomo-2");
-            apresentacaoMetronomo6.innerHTML = ""; // Remover o componente Metrônomo 1
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Metrônomo 1 seja desmontado e removido completamente
-
-            const metronomoContainer6 = document.createElement("div"); // Criar um novo elemento para o componente Metrônomo 1
-            apresentacaoMetronomo6.appendChild(metronomoContainer6); // Adicionar o elemento ao DOM
-
-            ReactDOM.render(<Metronomo />, metronomoContainer6); // Renderizar o componente Metrônomo 1 no novo elemento
-
-            apresentacaoMetronomo6.style.display = "block"; // Exibir o componente Metrônomo 1
-            // apresentacaoMetronomo1.style.marginTop = "-300px"; // Definir marginTop
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo6 * 1000));
-
-            apresentacaoMetronomo6.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
-        }
-
-
-
-
-
-
-
-
-        if (audioURL6) {
-            const audio6 = document.createElement("audio");
-            audio6.src = audioURL6;
-            audio6.controls = true;
-            audio6.autoplay = true;
-            apresentacaoDiv.appendChild(audio6);
-            await new Promise(resolve => {
-                audio6.onended = resolve; // Resolve a promessa quando o áudio terminar
-            });
-            apresentacaoDiv.removeChild(audio6);
-        }
-
-
-        if (audioURL7) {
-            const audio7 = document.createElement("audio");
-            audio7.src = audioURL7;
-            audio7.controls = true;
-            audio7.autoplay = true;
-            apresentacaoDiv.appendChild(audio7);
-            await new Promise(resolve => {
-                audio7.onended = resolve; // Resolve a promessa quando o áudio terminar
-            });
-            apresentacaoDiv.removeChild(audio7);
-        }
-        if (audioURL8) {
-            const audio8 = document.createElement("audio");
-            audio8.src = audioURL8;
-            audio8.controls = true;
-            audio8.autoplay = true;
-            apresentacaoDiv.appendChild(audio8);
-            await new Promise(resolve => {
-                audio8.onended = resolve; // Resolve a promessa quando o áudio terminar
-            });
-            apresentacaoDiv.removeChild(audio8);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (item.tempoMetronomo7) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
-
-            const apresentacaoMetronomo7 = document.getElementById("apresentacao-metronomo-2");
-            apresentacaoMetronomo7.innerHTML = ""; // Remover o componente Metrônomo 1
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Metrônomo 1 seja desmontado e removido completamente
-
-            const metronomoContainer7 = document.createElement("div"); // Criar um novo elemento para o componente Metrônomo 1
-            apresentacaoMetronomo7.appendChild(metronomoContainer7); // Adicionar o elemento ao DOM
-
-            ReactDOM.render(<Metronomo />, metronomoContainer7); // Renderizar o componente Metrônomo 1 no novo elemento
-
-            apresentacaoMetronomo7.style.display = "block"; // Exibir o componente Metrônomo 1
-            // apresentacaoMetronomo1.style.marginTop = "-300px"; // Definir marginTop
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo7 * 1000));
-
-            apresentacaoMetronomo7.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
-        }
-
-
-        if (item.tempoMetronomo8) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
-
-            const apresentacaoMetronomo8 = document.getElementById("apresentacao-metronomo-2");
-            apresentacaoMetronomo8.innerHTML = ""; // Remover o componente Metrônomo 1
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Metrônomo 1 seja desmontado e removido completamente
-
-            const metronomoContainer8 = document.createElement("div"); // Criar um novo elemento para o componente Metrônomo 1
-            apresentacaoMetronomo8.appendChild(metronomoContainer8); // Adicionar o elemento ao DOM
-
-            ReactDOM.render(<Metronomo />, metronomoContainer8); // Renderizar o componente Metrônomo 1 no novo elemento
-
-            apresentacaoMetronomo8.style.display = "block"; // Exibir o componente Metrônomo 1
-            // apresentacaoMetronomo1.style.marginTop = "-300px"; // Definir marginTop
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo8 * 1000));
-
-            apresentacaoMetronomo8.style.display = "none"; // Ocultar o componente Metrônomo 1 após o tempo definido
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        if (item.tempoCronometro7) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
-
-            const apresentacaoCronometro7 = document.getElementById("apresentacao-cronometro-3");
-            apresentacaoCronometro7.innerHTML = ""; // Remover o componente Cronômetro 1
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Cronômetro 1 seja desmontado e removido completamente
-
-            const cronometroContainer7 = document.createElement("div"); // Criar um novo elemento para o componente Cronômetro 1
-            apresentacaoCronometro7.appendChild(cronometroContainer7); // Adicionar o elemento ao DOM
-
-            ReactDOM.render(<Cronometro />, cronometroContainer7); // Renderizar o componente Cronômetro 1 no novo elemento
-
-            apresentacaoCronometro7.style.display = "block"; // Exibir o componente Cronômetro 1
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoCronometro7 * 1000));
-
-            apresentacaoCronometro7.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
-        }
-
-        if (item.tempoCronometro8) {
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguardar pelo tempo do vídeo YT
-
-            const apresentacaoCronometro8 = document.getElementById("apresentacao-cronometro-3");
-            apresentacaoCronometro8.innerHTML = ""; // Remover o componente Cronômetro 1
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente Cronômetro 1 seja desmontado e removido completamente
-
-            const cronometroContainer8 = document.createElement("div"); // Criar um novo elemento para o componente Cronômetro 1
-            apresentacaoCronometro8.appendChild(cronometroContainer8); // Adicionar o elemento ao DOM
-
-            ReactDOM.render(<Cronometro />, cronometroContainer8); // Renderizar o componente Cronômetro 1 no novo elemento
-
-            apresentacaoCronometro8.style.display = "block"; // Exibir o componente Cronômetro 1
-
-            await new Promise(resolve => setTimeout(resolve, item.tempoCronometro8 * 1000));
-
-            apresentacaoCronometro8.style.display = "none"; // Ocultar o componente Cronômetro 1 após o tempo definido
-        }
-
-
-
-        if (item.videoUrl7) {
-            const videoDiv7 = document.createElement("div");
-            const video7 = document.createElement("iframe");
-            video7.width = "560";
-            video7.height = "315";
-            video7.style.marginTop = "-200px";
-
-            const videoId = extractVideoId(item.videoUrl7);
-            video7.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            video7.frameBorder = "0";
-            video7.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-            video7.allowFullScreen = true;
-            videoDiv7.appendChild(video7);
-            apresentacaoDiv.appendChild(videoDiv7);
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguarda pelo tempo do vídeo
-            apresentacaoDiv.removeChild(videoDiv7);
-        }
-        if (item.videoUrl8) {
-            const videoDiv8 = document.createElement("div");
-            const video8 = document.createElement("iframe");
-            video8.width = "560";
-            video8.height = "315";
-            video8.style.marginTop = "-200px";
-
-            const videoId = extractVideoId(item.videoUrl8);
-            video8.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            video8.frameBorder = "0";
-            video8.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-            video8.allowFullScreen = true;
-            videoDiv8.appendChild(video8);
-            apresentacaoDiv.appendChild(videoDiv8);
-            await new Promise(resolve => setTimeout(resolve, item.tempoVideo * 1000)); // Aguarda pelo tempo do vídeo
-            apresentacaoDiv.removeChild(videoDiv8);
-        }
-
-
-
-
-
-
-
         if (item.imagem7Url) {
             const imagem7Tag = document.createElement("img");
             imagem7Tag.src = item.imagem7Url;
@@ -1998,8 +1711,6 @@ export default function ModeloFinal() {
     const [audioAula4, setAudioAula4] = useState(null);
     const [audioAula5, setAudioAula5] = useState(null);
     const [audioAula6, setAudioAula6] = useState(null);
-    const [audioAula7, setAudioAula7] = useState(null);
-    const [audioAula8, setAudioAula8] = useState(null);
 
 
     return (
@@ -2141,21 +1852,6 @@ export default function ModeloFinal() {
                         <input type="text" className="form-control" value={videoUrl5} onChange={(e) => setVideoUrl5(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
                         <input type="number" className="form-control mt-1" value={tempoVideo5} onChange={(e) => setTempoVideo5(e.target.value)} placeholder=" " />
                     </div>
-                    <div className="containerVideo">
-                        <label className="form-label mt-2">Vídeo YT :</label>
-                        <input type="text" className="form-control" value={videoUrl6} onChange={(e) => setVideoUrl6(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
-                        <input type="number" className="form-control mt-1" value={tempoVideo6} onChange={(e) => setTempoVideo6(e.target.value)} placeholder=" " />
-                    </div>
-                    <div className="containerVideo">
-                        <label className="form-label mt-2">Vídeo YT :</label>
-                        <input type="text" className="form-control" value={videoUrl7} onChange={(e) => setVideoUrl7(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
-                        <input type="number" className="form-control mt-1" value={tempoVideo7} onChange={(e) => setTempoVideo7(e.target.value)} placeholder=" " />
-                    </div>
-                    <div className="containerVideo">
-                        <label className="form-label mt-2">Vídeo YT :</label>
-                        <input type="text" className="form-control" value={videoUrl8} onChange={(e) => setVideoUrl8(e.target.value)} placeholder="Adicione aqui o Link do vídeo do Youtube" />
-                        <input type="number" className="form-control mt-1" value={tempoVideo8} onChange={(e) => setTempoVideo8(e.target.value)} placeholder=" " />
-                    </div>
 
 
 
@@ -2218,18 +1914,6 @@ export default function ModeloFinal() {
                         <label className="form-label mt-2">Metrônomo :</label>
                         <input type="number" className="form-control" value={tempoMetronomo5} onChange={(e) => setTempoMetronomo5(e.target.value)} placeholder=" " />
                     </div>
-                    <div className="containerMetronomo">
-                        <label className="form-label mt-2">Metrônomo :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo6} onChange={(e) => setTempoMetronomo6(e.target.value)} placeholder=" " />
-                    </div>
-                    <div className="containerMetronomo">
-                        <label className="form-label mt-2">Metrônomo :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo7} onChange={(e) => setTempoMetronomo7(e.target.value)} placeholder=" " />
-                    </div>
-                    <div className="containerMetronomo">
-                        <label className="form-label mt-2">Metrônomo :</label>
-                        <input type="number" className="form-control" value={tempoMetronomo8} onChange={(e) => setTempoMetronomo8(e.target.value)} placeholder=" " />
-                    </div>
                     {/* <div className="containerAudio">
                         <label className="form-label mt-2">Áudio :</label>
                         <input type="file" className="form-control" value={tempoAudio1} onChange={(e) => setTempoAudio1(e.target.value)} placeholder=" " />
@@ -2258,21 +1942,6 @@ export default function ModeloFinal() {
                     <input
                         type="file"
                         onChange={(e) => setAudioAula5(e.target.files[0])}
-                    />
-                    <label>Áudio 6:</label>
-                    <input
-                        type="file"
-                        onChange={(e) => setAudioAula6(e.target.files[0])}
-                    />
-                    <label>Áudio 7:</label>
-                    <input
-                        type="file"
-                        onChange={(e) => setAudioAula7(e.target.files[0])}
-                    />
-                    <label>Áudio 8:</label>
-                    <input
-                        type="file"
-                        onChange={(e) => setAudioAula8(e.target.files[0])}
                     />
 
 
@@ -2322,18 +1991,6 @@ export default function ModeloFinal() {
                     <div className="containerCronometro">
                         <label className="form-label mt-2">Cronometro :</label>
                         <input type="number" className="form-control" value={tempoCronometro5} onChange={(e) => setTempoCronometro5(e.target.value)} placeholder=" " />
-                    </div>
-                    <div className="containerCronometro">
-                        <label className="form-label mt-2">Cronometro :</label>
-                        <input type="number" className="form-control" value={tempoCronometro6} onChange={(e) => setTempoCronometro6(e.target.value)} placeholder=" " />
-                    </div>
-                    <div className="containerCronometro">
-                        <label className="form-label mt-2">Cronometro :</label>
-                        <input type="number" className="form-control" value={tempoCronometro7} onChange={(e) => setTempoCronometro7(e.target.value)} placeholder=" " />
-                    </div>
-                    <div className="containerCronometro">
-                        <label className="form-label mt-2">Cronometro :</label>
-                        <input type="number" className="form-control" value={tempoCronometro8} onChange={(e) => setTempoCronometro8(e.target.value)} placeholder=" " />
                     </div>
 
 

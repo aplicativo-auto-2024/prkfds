@@ -1007,6 +1007,7 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard2) {
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo1 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
             const apresentacaoFlashCard2 = document.getElementById("apresentacao-flashcard-2");
@@ -1023,10 +1024,15 @@ export default function ModeloFinal() {
 
             await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard2 * 1000));
 
-            apresentacaoFlashCard2.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+            apresentacaoFlashCard2.style.display = "none";
+
+            flashCardContainer2.style.display = "none";
+            // Ocultar o componente FlashCard 1 após o tempo definido
+
         }
 
         if (item.tempoFlashCard3) {
+            document.getElementById("apresentacao-flashcard-3").style.display = "none";
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo1 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
             const apresentacaoFlashCard3 = document.getElementById("apresentacao-flashcard-3");
@@ -1044,7 +1050,10 @@ export default function ModeloFinal() {
             await new Promise(resolve => setTimeout(resolve, item.tempoFlashCard3 * 1000));
 
             apresentacaoFlashCard3.style.display = "none"; // Ocultar o componente FlashCard 1 após o tempo definido
+
+
         }
+
         const playAudio = async (audioURL, container) => {
             return new Promise((resolve, reject) => {
                 const audioContainer = document.createElement("div");
@@ -1153,9 +1162,10 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard4) {
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo4 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard4 = document.getElementById("apresentacao-flashcard-4");
+            const apresentacaoFlashCard4 = document.getElementById("apresentacao-flashcard-2");
             apresentacaoFlashCard4.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -1193,9 +1203,11 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard6) {
+            document.getElementById("apresentacao-flashcard-3").style.display = "none";
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo6 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard6 = document.getElementById("apresentacao-flashcard-6");
+            const apresentacaoFlashCard6 = document.getElementById("apresentacao-flashcard-3");
             apresentacaoFlashCard6.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -1313,9 +1325,10 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard8) {
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo8 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard8 = document.getElementById("apresentacao-flashcard-8");
+            const apresentacaoFlashCard8 = document.getElementById("apresentacao-flashcard-1");
             apresentacaoFlashCard8.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -1333,9 +1346,11 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard9) {
+            document.getElementById("apresentacao-flashcard-3").style.display = "none";
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo9 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard9 = document.getElementById("apresentacao-flashcard-9");
+            const apresentacaoFlashCard9 = document.getElementById("apresentacao-flashcard-3");
             apresentacaoFlashCard9.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -1354,6 +1369,8 @@ export default function ModeloFinal() {
 
         // OKOK
         if (audioURL3) {
+            document.getElementById("apresentacao-flashcard-9").style.display = "none";
+
             const audio3 = document.createElement("audio");
             audio3.src = audioURL3;
             audio3.controls = true;
@@ -1437,9 +1454,10 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard10) {
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo10 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard10 = document.getElementById("apresentacao-flashcard-10");
+            const apresentacaoFlashCard10 = document.getElementById("apresentacao-flashcard-1");
             apresentacaoFlashCard10.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -1477,9 +1495,11 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard12) {
+            document.getElementById("apresentacao-flashcard-3").style.display = "none";
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo12 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard12 = document.getElementById("apresentacao-flashcard-9");
+            const apresentacaoFlashCard12 = document.getElementById("apresentacao-flashcard-3");
             apresentacaoFlashCard12.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -1598,9 +1618,10 @@ export default function ModeloFinal() {
 
 
         if (item.tempoFlashCard14) {
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo14 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard14 = document.getElementById("apresentacao-flashcard-8");
+            const apresentacaoFlashCard14 = document.getElementById("apresentacao-flashcard-2");
             apresentacaoFlashCard14.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -1618,9 +1639,11 @@ export default function ModeloFinal() {
         }
 
         if (item.tempoFlashCard15) {
+            document.getElementById("apresentacao-flashcard-3").style.display = "none";
+
             await new Promise(resolve => setTimeout(resolve, item.tempoMetronomo15 * 1000)); // Aguardar pelo tempo do metrônomo 01
 
-            const apresentacaoFlashCard15 = document.getElementById("apresentacao-flashcard-9");
+            const apresentacaoFlashCard15 = document.getElementById("apresentacao-flashcard-3");
             apresentacaoFlashCard15.innerHTML = ""; // Remover o componente FlashCard 1
 
             await new Promise(resolve => setTimeout(resolve, 100)); // Tempo para garantir que o componente FlashCard 1 seja desmontado e removido completamente
@@ -2583,8 +2606,7 @@ export default function ModeloFinal() {
                 <div id="apresentacao-flashcard-2" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
                     <FlashCardTexto />
                 </div>
-                <div id="apresentacao-flashcard-3" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
-                    <FlashCardAudio />
+                <div id="apresentacao-flashcard-3" style={{ display: "none", transform: `rotate(${rotacao}deg)`, position: 'absolute', top: '50px', marginTop: '0px', width: '100%', height: '100%' }}>
                 </div>
                 <div id="apresentacao-flashcard-4" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
                     <FlashCardImagem />
@@ -2593,7 +2615,6 @@ export default function ModeloFinal() {
                     <FlashCardTexto />
                 </div>
                 <div id="apresentacao-flashcard-6" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
-                    <FlashCardAudio />
                 </div>
                 <div id="apresentacao-flashcard-7" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
                     <FlashCardImagem />
@@ -2602,7 +2623,6 @@ export default function ModeloFinal() {
                     <FlashCardTexto />
                 </div>
                 <div id="apresentacao-flashcard-9" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
-                    <FlashCardAudio />
                 </div>
                 <div id="apresentacao-flashcard-10" style={{ display: "none", transform: `rotate(${rotacao}deg)`, marginTop: '-200px', width: '100%', height: '100%' }}>
                     <FlashCardImagem />

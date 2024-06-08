@@ -3,12 +3,13 @@ import { db, storage } from "../../firebase";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
-export default function FlashCard() {
+export default function FlashCardAudio() {
     const [audioAtual, setAudioAtual] = useState("");
     const [tempoParaMostrarResposta, setTempoParaMostrarResposta] = useState();
     const [novoAudio, setNovoAudio] = useState(null);
     const [tempoNovoAudio, setTempoNovoAudio] = useState(0);
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [reproducaoAutomatica, setReproducaoAutomatica] = useState(true);
 
     useEffect(() => {
         obterAudioAleatorioETocar();
@@ -24,10 +25,13 @@ export default function FlashCard() {
 
             setAudioAtual(audioAleatorio.audioResposta || null);
 
-            setTimeout(() => {
-                setAudioAtual(null); // Limpa o áudio após o tempo definido
-                setTimeout(obterAudioAleatorioETocar, 1000); // Inicia o processo novamente
-            }, tempo);
+            if (reproducaoAutomatica) {
+                const id = setTimeout(() => {
+                    setAudioAtual(null); // Limpa o áudio após o tempo definido
+                    setTimeout(obterAudioAleatorioETocar, 1000); // Inicia o processo novamente
+                }, tempo);
+                return () => clearTimeout(id);
+            }
         } catch (error) {
             console.error("Erro ao obter áudio do Firebase:", error);
         }
@@ -86,16 +90,23 @@ export default function FlashCard() {
         }
     };
 
+    const toggleReproducaoAutomatica = () => {
+        setReproducaoAutomatica(!reproducaoAutomatica);
+    };
+
     return (
-        <div className="container mt-5">
+        <div className="container mt-5" >
             <div className="card p-4">
-                <h2 className="mb-3" style={{ textAlign: 'center', padding: '0 50px' }}></h2>
+                <h2 className="mb-3" style={{ textAlign: 'center', padding: '0 50px', height: '150px' }}></h2>
                 {audioAtual && (
-                    <audio controls autoPlay style={{ margin: '40px auto' }}>
+                    <audio controls autoPlay={reproducaoAutomatica} style={{ margin: '40px auto' }}>
                         <source src={audioAtual} type="audio/mpeg" />
                         Seu navegador não suporta o elemento de áudio.
                     </audio>
                 )}
+                <Button onClick={toggleReproducaoAutomatica} style={{ display: 'block', margin: '20px auto' }}>
+                    {reproducaoAutomatica ? "Pausar Reprodução Automática" : "Retomar Reprodução Automática"}
+                </Button>
             </div>
 
             <div className="card mt-3 p-4">

@@ -21,12 +21,12 @@ import iconChamada from "../icons/icon-chamada.png";
 import iconAssistirAula from "../icons/icon-assistir-aula.png";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDo2Z29tKqwpL2k4L3byAuVATaEhZuWBDI",
-  authDomain: "bruno-new-app-a3547.firebaseapp.com",
-  projectId: "bruno-new-app-a3547",
-  storageBucket: "bruno-new-app-a3547.appspot.com",
-  messagingSenderId: "591103658956",
-  appId: "1:591103658956:web:b4019b42c97838f148ab69"
+  apiKey: "AIzaSyAJPFjUXKvLWuVO0Q7Ym63ucqjBs9aFc-4",
+  authDomain: "site-bruno-25206.firebaseapp.com",
+  projectId: "site-bruno-25206",
+  storageBucket: "site-bruno-25206.appspot.com",
+  messagingSenderId: "375748976839",
+  appId: "1:375748976839:web:6a8281c7980d696da95ee2"
 };
 
 const app = initializeApp(firebaseConfig);
